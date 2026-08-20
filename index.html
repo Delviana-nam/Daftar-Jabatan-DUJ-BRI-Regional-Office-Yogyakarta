@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deskripsi Jabatan BRI - Regional Office Yogyakarta</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header class="topbar">
+  <button id="menuBtn" class="hamburger-btn" aria-label="Buka menu daftar isi">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <h1 class="topbar-title">DESKRIPSI JABATAN BRI</h1>
+
+  <div class="topbar-right-logos">
+     <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara">
+     <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri">
+  </div>
+</header>
+  <!-- ============ SIDEBAR / DAFTAR ISI ============ -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-head">
+      <span>Daftar Isi</span>
+      <button id="closeSidebarBtn" class="close-btn" aria-label="Tutup menu">&times;</button>
+    </div>
+    <ul id="sidebarList" class="sidebar-list">
+    </ul>
+  </nav>
+
+  <!-- ================= MAIN VIEW ================= -->
+  <main id="mainView">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <h2>HUMAN CAPITAL BUSINESS PARTNER</h2>
+        <h2>RO YOGYAKARTA</h2>
+        <p class="hero-sub">(Portal pencarian Deskripsi Jabatan (DUJ) BRI Regional Office Yogyakarta)</p>
+      </div>
+    </section>
+
+    <!-- JUDUL SECTION -->
+    <div class="section-title-box">
+      <p class="section-title-link"> Materi Sosialisasi Daftar Jabatan (DUJ) BRI Regional Office Yogyakarta
+        </p>
+    </div>
+
+    <!-- GRID DIVISI (diisi otomatis lewat script.js) -->
+    <section id="cardsGrid" class="cards-grid"></section>
+
+  </main>
+
+  <!-- ================= DETAIL VIEW ================= -->
+<section id="detailView" class="detail-view">
+  <div class="detail-topbar">
+    <h3 id="detailTitle">Judul Jabatan</h3>
+  </div>
+  <div class="detail-pdf-wrap">
+    <iframe id="detailFrame" src="" title="Detail Jabatan" allow="autoplay" allowfullscreen></iframe>
+    <button id="backBtn" class="back-btn">
+      <span class="back-arrow">&#8592;</span> Back
+    </button>
+  </div>
+</section>
+
+  <script src="divisions_data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
