@@ -33,7 +33,7 @@ const divisions = [
   {
     "id": "regional-funding-retail-transaction-banking",
     "title": "REGIONAL FUNDING & RETAIL TRANSACTION BANKING",
-    "downloadId": "files/Regional Funding & Retail Transaction Banking.pdf",
+    "downloadId": "files/Regional Funding & Retail Banking.pdf",
     "points": [
       { "title": "REGIONAL FUNDING TRANSACTION BANKING HEAD", "fileId": "images/14.jpg" },
       { "title": "MASS FUNDING DEPARTMENT HEAD", "fileId": "images/15.jpg" },
