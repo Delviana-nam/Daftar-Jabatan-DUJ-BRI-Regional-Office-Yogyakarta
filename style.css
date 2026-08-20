@@ -334,8 +334,17 @@ body {
 }
 
 /* ================= RESPONSIVE ================= */
+@media (max-width: 900px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 600px) {
   .hero-text h2 { font-size: 22px; }
-  .cards-grid { padding: 0 20px 40px; }
+  .cards-grid { grid-template-columns: 1fr; padding: 0 20px 40px; }
   .section-title-link { font-size: 16px; padding: 12px 18px; }
+
+  .topbar { flex-wrap: wrap; padding: 10px 14px; }
+  .topbar-title { font-size: 15px; }
+  .topbar-logo-bri { height: 40px; }
+  .topbar-logo-danantara { height: 24px; }
 }
