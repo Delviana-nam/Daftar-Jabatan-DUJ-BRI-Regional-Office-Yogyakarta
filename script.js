@@ -18,10 +18,9 @@ const toggleUker = document.getElementById("toggleUker");
 
 const kpiBody = document.getElementById("kpiBody");
 const toggleKPI = document.getElementById("toggleKPI");
-const kpiFrame = document.getElementById("kpiFrame");
+const kpiImage = document.getElementById("kpiImage");
+const kpiImagePath = "images/KPI.jpg";
 
-/* Ganti path ini kalau nama/lokasi file PDF-nya berbeda */
-const kpiPdfPath = "files/KPI_Regional_Office_Area KC, KCP dan BRI Unit.pdf";
 /*img preview gambar */
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
@@ -271,7 +270,7 @@ function setupToggle(btn, body, onOpen) {
 setupToggle(toggleRO, roBody);
 setupToggle(toggleUker, ukerBody);
 setupToggle(toggleKPI, kpiBody);
-kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
+kpiImage.src = resolvePreviewUrl(kpiImagePath);
 
 
 /*TAMPILAN DETAIL JABATAN*/
