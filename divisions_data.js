@@ -86,3 +86,85 @@ const divisions = [
     ]
   }
 ];
+
+
+// Data untuk section "Unit Kerja Operasional"
+const divisionsUker = [
+  {
+    "id": "pemimpin-uker",
+    "title": "PEMIMPIN UKER",
+    "downloadId": "files/pemimpin uker.pdf",
+    "points": [
+      { "title": "PEMIMPIN CABANG", "fileId": "images/45.jpg" },
+      { "title": "PEMIMPIN CABANG PEMBANTU", "fileId": "images/46.jpg" },
+      { "title": "KEPALA UNIT", "fileId": "images/47.jpg" }
+    ]
+  },
+  {
+    "id": "manajer-uker",
+    "title": "MANAJER UKER",
+    "downloadId": "files/Manajer UKER.pdf",
+    "points": [
+      { "title": "MANAJER BISNIS KECIL", "fileId": "images/52.jpg" },
+      { "title": "MANAJER BISNIS MIKRO", "fileId": "images/54.jpg" },
+      { "title": "MANAJER BISNIS MIKRO (MBA)", "fileId": "images/56.jpg" },
+      { "title": "MANAJER BISNIS KONSUMER", "fileId": "images/53.jpg" },
+      { "title": "MANAJER BANKING PRIORITY", "fileId": "images/50.jpg" },
+      { "title": "MANAJER DANA & TRANSAKSI", "fileId": "images/51.jpg" },
+      { "title": "MANAJER OPERASIONAL", "fileId": "images/55.jpg" },
+      { "title": "AST MANAJER OPERASIONAL & LAYANAN", "fileId": "images/49.jpg" }
+    ]
+  },
+  {
+    "id": "supervisor-uker",
+    "title": "SUPERVISOR UKER",
+    "downloadId": "file/Supervisor UKER.pdf",
+    "points": [
+      { "title": "SPV OPERASIONAL & LAYANAN", "fileId": "images/58.jpg" },
+      { "title": "SPV OPERASIONAL/LAYANAN ", "fileId": "images/59.jpg" },
+      { "title": "SPV OPERASIONAL KREDIT", "fileId": "images/60" },
+      { "title": "SPV PENUNJANG OPERASIONAL", "fileId": "images/61.jpg" }
+    ]
+  },
+  {
+    "id": "marketing",
+    "title": "MARKETING",
+    "downloadId": "files/Marketing.pdf",
+    "points": [
+      { "title": "RM BISNIS KECIL (SME)", "fileId": "images/66.jpg" },
+      { "title": "RM DANA & TRANSAKSI", "fileId": "images/68.jpg" },
+      { "title": "RM BISNIS KPR", "fileId": "images/67.jpg" },
+      { "title": "RM BISNIS BRIGUNA", "fileId": "images/65.jpg" },
+      { "title": "RM PRIORITY", "fileId": "images/69.jpg" },
+      { "title": "MANTRI", "fileId": "images/64.jpg" },
+      { "title": "RM CREDIT RESTRUCTURING & RECOVERY", "fileId": "images/63.jpg" }
+    ]
+  },
+  {
+    "id": "frontliner",
+    "title": "FRONTLINER",
+    "downloadId": "files/Frontliner.pdf",
+    "points": [
+      { "title": "PRIORITY BANKING ASISSTANT", "fileId": "images/71.jpg" },
+      { "title": "CUSTOMER SERVICE (RITEL)", "fileId": "images/72.jpg" },
+      { "title": "CUSTOMER SERVICE (UNIT)", "fileId": "images/73.jpg" },
+      { "title": "TELLER (RITEL)", "fileId": "images/74.jpg" },
+      { "title": "TELLER (UNIT)", "fileId": "images/75.jpg" },
+      { "title": "UNIVERSAL BANKER", "fileId": "images/76.jpg" }
+    ]
+  },
+  {
+    "id": "support",
+    "title": "SUPPORT",
+    "downloadId": "files/Support.pdf",
+    "points": [
+      { "title": "PET OPERASIONAL KREDIT", "fileId": "images/79.jpg" },
+      { "title": "PETUGAS TRANSAKSI", "fileId": "images/82.jpg" },
+      { "title": "PETUGAS IT & ECHANNEL", "fileId": "images/80.jpg" },
+      { "title": "PET PENUNJANG OPERASIONAL", "fileId": "images/84.jpg" },
+      { "title": "SEKRETARIS", "fileId": "images/83.jpg" },
+      { "title": "PET PENUNJANG BISNIS", "fileId": "images/81.jpg" },
+      { "title": "PET PENUNJANG BISNIS KEAGENAN", "fileId": "images/78.jpg" }
+    ]
+  }
+];
