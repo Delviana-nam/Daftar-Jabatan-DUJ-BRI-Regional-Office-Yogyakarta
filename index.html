@@ -10,18 +10,19 @@
 
   <!-- ================= HEADER ================= -->
   <header class="topbar">
-  <button id="menuBtn" class="hamburger-btn" aria-label="Buka menu daftar isi">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-  <h1 class="topbar-title">DESKRIPSI JABATAN BRI</h1>
+    <button id="menuBtn" class="hamburger-btn" aria-label="Buka menu daftar isi">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <h1 class="topbar-title">DESKRIPSI JABATAN BRI</h1>
 
-  <div class="topbar-right-logos">
-     <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara">
-     <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri">
-  </div>
-</header>
+    <div class="topbar-right-logos">
+      <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara">
+      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri">
+    </div>
+  </header>
+
   <!-- ============ SIDEBAR / DAFTAR ISI ============ -->
   <div id="sidebarOverlay" class="sidebar-overlay"></div>
   <nav id="sidebar" class="sidebar">
@@ -30,6 +31,7 @@
       <button id="closeSidebarBtn" class="close-btn" aria-label="Tutup menu">&times;</button>
     </div>
     <ul id="sidebarList" class="sidebar-list">
+      <!-- 2 grup (RO & Uker) dibangun otomatis lewat script.js -->
     </ul>
   </nav>
 
@@ -45,29 +47,44 @@
       </div>
     </section>
 
-    <!-- JUDUL SECTION -->
+    <!-- ===== SECTION 1: REGIONAL OFFICE ===== -->
     <div class="section-title-box">
-      <p class="section-title-link"> Materi Sosialisasi Daftar Jabatan (DUJ) BRI Regional Office Yogyakarta
-        </p>
+      <button class="section-title-box-inner" id="toggleRO" aria-expanded="true">
+        <span class="section-title-link">Materi Sosialisasi Daftar Jabatan (DUJ) BRI Regional Office Yogyakarta</span>
+        <span class="toggle-arrow"></span>
+      </button>
     </div>
 
-    <!-- GRID DIVISI (diisi otomatis lewat script.js) -->
-    <section id="cardsGrid" class="cards-grid"></section>
+    <div id="roBody" class="collapsible-body">
+      <section id="cardsGrid" class="cards-grid"></section>
+    </div>
+
+    <!-- ===== SECTION 2: UNIT KERJA OPERASIONAL ===== -->
+    <div class="section-title-box">
+      <button class="section-title-box-inner" id="toggleUker" aria-expanded="true">
+        <span class="section-title-link">Materi Sosialisasi Daftar Jabatan (DUJ) Unit Kerja Operasional</span>
+        <span class="toggle-arrow"></span>
+      </button>
+    </div>
+
+    <div id="ukerBody" class="collapsible-body">
+      <section id="cardsGridUker" class="cards-grid"></section>
+    </div>
 
   </main>
 
   <!-- ================= DETAIL VIEW ================= -->
-<section id="detailView" class="detail-view">
-  <div class="detail-topbar">
-    <h3 id="detailTitle">Judul Jabatan</h3>
-  </div>
-  <div class="detail-pdf-wrap">
-    <iframe id="detailFrame" src="" title="Detail Jabatan" allow="autoplay" allowfullscreen></iframe>
-    <button id="backBtn" class="back-btn">
-      <span class="back-arrow">&#8592;</span> Back
-    </button>
-  </div>
-</section>
+  <section id="detailView" class="detail-view">
+    <div class="detail-topbar">
+      <h3 id="detailTitle">Judul Jabatan</h3>
+    </div>
+    <div class="detail-pdf-wrap">
+      <iframe id="detailFrame" src="" title="Detail Jabatan" allow="autoplay" allowfullscreen></iframe>
+      <button id="backBtn" class="back-btn">
+        <span class="back-arrow">&#8592;</span> Back
+      </button>
+    </div>
+  </section>
 
   <script src="divisions_data.js"></script>
   <script src="script.js"></script>
