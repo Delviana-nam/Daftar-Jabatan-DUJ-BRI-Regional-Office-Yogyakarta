@@ -1,4 +1,5 @@
 const cardsGrid = document.getElementById("cardsGrid");
+const cardsGridUker = document.getElementById("cardsGridUker");
 const sidebarList = document.getElementById("sidebarList");
 const sidebar = document.getElementById("sidebar");
 const sidebarOverlay = document.getElementById("sidebarOverlay");
@@ -9,6 +10,11 @@ const detailView = document.getElementById("detailView");
 const detailTitle = document.getElementById("detailTitle");
 const detailFrame = document.getElementById("detailFrame");
 const backBtn = document.getElementById("backBtn");
+
+const roBody = document.getElementById("roBody");
+const ukerBody = document.getElementById("ukerBody");
+const toggleRO = document.getElementById("toggleRO");
+const toggleUker = document.getElementById("toggleUker");
 
 //img preview gambar
 const detailImage = document.createElement("img");
@@ -32,14 +38,14 @@ function isLocalOrUrl(value) {
 
 function resolveDownloadUrl(id) {
   if (isLocalOrUrl(id)) {
-    return id; 
+    return id;
   }
   return `https://drive.usercontent.google.com/u/0/uc?id=${id}&export=download`;
 }
 
 function resolvePreviewUrl(id) {
   if (isLocalOrUrl(id)) {
-    return id; 
+    return id;
   }
   return `https://drive.google.com/file/d/${id}/preview`;
 }
@@ -49,23 +55,73 @@ function isImageFile(value) {
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
 }
 
-// side bar
-divisions.forEach(div => {
-  const li = document.createElement("li");
-  const a = document.createElement("a");
-  a.href = "#" + div.id;
-  a.textContent = div.title;
-  a.addEventListener("click", (e) => {
-    e.preventDefault();
-    closeSidebar();
-    showMain();
-    document.getElementById(div.id).scrollIntoView({ behavior: "smooth" });
-  });
-  li.appendChild(a);
-  sidebarList.appendChild(li);
-});
+/* =========================================================
+   SIDEBAR / DAFTAR ISI
+   Struktur: 2 grup besar (RO & Unit Kerja), tiap grup bisa
+   dibuka/ditutup (accordion), isinya link ke tiap divisi.
+========================================================= */
+const sectionMap = {};
+divisions.forEach(d => { sectionMap[d.id] = { body: roBody, btn: toggleRO }; });
+divisionsUker.forEach(d => { sectionMap[d.id] = { body: ukerBody, btn: toggleUker }; });
 
-// Card per divisi
+function expandSection(id) {
+  const sec = sectionMap[id];
+  if (sec && sec.body.classList.contains("collapsed")) {
+    sec.body.classList.remove("collapsed");
+    sec.btn.setAttribute("aria-expanded", "true");
+  }
+}
+
+function buildSidebarGroup(labelText, groupId, list) {
+  const groupLi = document.createElement("li");
+  groupLi.className = "sidebar-group";
+
+  const toggleBtn = document.createElement("button");
+  toggleBtn.className = "sidebar-group-toggle";
+  toggleBtn.innerHTML = `<span>${labelText}</span><span class="chevron">&#9662;</span>`;
+
+  const subUl = document.createElement("ul");
+  subUl.className = "sidebar-subgroup";
+  subUl.id = groupId;
+
+  list.forEach(div => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = "#" + div.id;
+    a.textContent = div.title;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeSidebar();
+      showMain();
+      expandSection(div.id);
+      requestAnimationFrame(() => {
+        document.getElementById(div.id).scrollIntoView({ behavior: "smooth" });
+      });
+    });
+    li.appendChild(a);
+    subUl.appendChild(li);
+  });
+
+  toggleBtn.addEventListener("click", () => {
+    const willOpen = !subUl.classList.contains("open");
+    subUl.classList.toggle("open", willOpen);
+    toggleBtn.classList.toggle("open", willOpen);
+  });
+
+  groupLi.appendChild(toggleBtn);
+  groupLi.appendChild(subUl);
+  sidebarList.appendChild(groupLi);
+}
+
+buildSidebarGroup("1. DUJ RO Jogja", "group-ro", divisions);
+buildSidebarGroup("2. DUJ Unit Kerja", "group-uker", divisionsUker);
+
+/* =========================================================
+   CARD PER DIVISI
+   Poin jabatan bisa berupa:
+   - fileId -> tampil di halaman detail (preview gambar/pdf + tombol Back)
+   - url    -> langsung buka link luar di tab baru
+========================================================= */
 function buildDivisionCard(div) {
   const card = document.createElement("div");
   card.className = "division-card";
@@ -76,7 +132,7 @@ function buildDivisionCard(div) {
     : "";
 
   card.innerHTML = `
-    <img src="${div.image}" alt="${div.title}" loading="lazy" onerror="this.style.display='none'">
+    <img src="${div.image || ''}" alt="${div.title}" loading="lazy" onerror="this.style.display='none'">
     <h4>${div.title}</h4>
     <a class="download-btn" href="${resolveDownloadUrl(div.downloadId)}" target="_blank" rel="noopener">DOWNLOAD</a>
     ${pointsHtml}
@@ -86,10 +142,19 @@ function buildDivisionCard(div) {
     const list = card.querySelector(".point-list");
     div.points.forEach(point => {
       const li = document.createElement("li");
-      const btn = document.createElement("button");
-      btn.textContent = point.title;
-      btn.addEventListener("click", () => openDetail(point));
-      li.appendChild(btn);
+      if (point.url) {
+        const a = document.createElement("a");
+        a.href = point.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = point.title;
+        li.appendChild(a);
+      } else {
+        const btn = document.createElement("button");
+        btn.textContent = point.title;
+        btn.addEventListener("click", () => openDetail(point));
+        li.appendChild(btn);
+      }
       list.appendChild(li);
     });
   }
@@ -97,7 +162,7 @@ function buildDivisionCard(div) {
   return card;
 }
 
-// RCEO sendiri ditengah atas grid
+// RCEO sendiri ditengah atas grid Regional Office
 const rceoDivision = divisions[0];
 const otherDivisions = divisions.slice(1);
 
@@ -107,12 +172,17 @@ const rceoCard = buildDivisionCard(rceoDivision);
 rceoWrap.appendChild(rceoCard);
 cardsGrid.parentNode.insertBefore(rceoWrap, cardsGrid);
 
-//grid card yang lainnya
+//grid card Regional Office lainnya
 otherDivisions.forEach(div => {
   cardsGrid.appendChild(buildDivisionCard(div));
 });
 
-//samain lebar card
+//grid card Unit Kerja Operasional
+divisionsUker.forEach(div => {
+  cardsGridUker.appendChild(buildDivisionCard(div));
+});
+
+//samain lebar card RCEO
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -137,17 +207,30 @@ menuBtn.addEventListener("click", openSidebar);
 closeSidebarBtn.addEventListener("click", closeSidebar);
 sidebarOverlay.addEventListener("click", closeSidebar);
 
+/* =========================================================
+   CIUTKAN / BUKA SECTION DI HALAMAN UTAMA
+   (klik judul "Materi Sosialisasi..." langsung show/hide card)
+========================================================= */
+function setupToggle(btn, body) {
+  btn.addEventListener("click", () => {
+    const willCollapse = !body.classList.contains("collapsed");
+    body.classList.toggle("collapsed", willCollapse);
+    btn.setAttribute("aria-expanded", String(!willCollapse));
+  });
+}
+setupToggle(toggleRO, roBody);
+setupToggle(toggleUker, ukerBody);
+
 // TAMPILAN DETAIL JABATAN
 function openDetail(point) {
   detailTitle.textContent = point.title;
 
-
-  if (isImageFile(point.fileId)) { //kalau dari gdrive
+  if (isImageFile(point.fileId)) {
     detailFrame.src = "";
     detailFrame.style.display = "none";
     detailImage.src = resolvePreviewUrl(point.fileId);
     detailImage.style.display = "block";
-  } else { //kalau dari local
+  } else {
     detailImage.src = "";
     detailImage.style.display = "none";
     detailFrame.style.display = "block";
