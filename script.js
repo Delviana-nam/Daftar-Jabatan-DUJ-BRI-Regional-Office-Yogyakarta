@@ -16,6 +16,12 @@ const ukerBody = document.getElementById("ukerBody");
 const toggleRO = document.getElementById("toggleRO");
 const toggleUker = document.getElementById("toggleUker");
 
+const kpiBody = document.getElementById("kpiBody");
+const toggleKPI = document.getElementById("toggleKPI");
+const kpiFrame = document.getElementById("kpiFrame");
+
+// Ganti path ini kalau nama/lokasi file PDF-nya berbeda
+const kpiPdfPath = "files/KPI_Regional_Office_Area KC, KCP dan BRI Unit.pdf";
 //img preview gambar
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
@@ -55,11 +61,7 @@ function isImageFile(value) {
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
 }
 
-/* =========================================================
-   SIDEBAR / DAFTAR ISI
-   Struktur: 2 grup besar (RO & Unit Kerja), tiap grup bisa
-   dibuka/ditutup (accordion), isinya link ke tiap divisi.
-========================================================= */
+//   SIDEBAR / DAFTAR ISI
 const sectionMap = {};
 divisions.forEach(d => { sectionMap[d.id] = { body: roBody, btn: toggleRO }; });
 divisionsUker.forEach(d => { sectionMap[d.id] = { body: ukerBody, btn: toggleUker }; });
@@ -116,12 +118,60 @@ function buildSidebarGroup(labelText, groupId, list) {
 buildSidebarGroup("1. DUJ RO Jogja", "group-ro", divisions);
 buildSidebarGroup("2. DUJ Unit Kerja", "group-uker", divisionsUker);
 
-/* =========================================================
-   CARD PER DIVISI
-   Poin jabatan bisa berupa:
-   - fileId -> tampil di halaman detail (preview gambar/pdf + tombol Back)
-   - url    -> langsung buka link luar di tab baru
-========================================================= */
+// 3. KPI
+function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
+  const groupLi = document.createElement("li");
+  groupLi.className = "sidebar-group";
+
+  const toggleBtn = document.createElement("button");
+  toggleBtn.className = "sidebar-group-toggle";
+  toggleBtn.innerHTML = `<span>${labelText}</span><span class="chevron">&#9662;</span>`;
+
+  const subUl = document.createElement("ul");
+  subUl.className = "sidebar-subgroup";
+  subUl.id = groupId;
+
+  const li = document.createElement("li");
+  const a = document.createElement("a");
+  a.href = "#kpiSection";
+  a.textContent = linkText;
+  a.addEventListener("click", (e) => {
+    e.preventDefault();
+    onClick();
+  });
+  li.appendChild(a);
+  subUl.appendChild(li);
+
+  toggleBtn.addEventListener("click", () => {
+    const willOpen = !subUl.classList.contains("open");
+    subUl.classList.toggle("open", willOpen);
+    toggleBtn.classList.toggle("open", willOpen);
+  });
+
+  groupLi.appendChild(toggleBtn);
+  groupLi.appendChild(subUl);
+  sidebarList.appendChild(groupLi);
+}
+
+buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
+  closeSidebar();
+  showMain();
+
+  //box KPI
+  if (kpiBody.classList.contains("collapsed")) {
+    kpiBody.classList.remove("collapsed");
+    toggleKPI.setAttribute("aria-expanded", "true");
+  }
+  if (!kpiFrame.src) {
+    kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
+  }
+
+  requestAnimationFrame(() => {
+    document.getElementById("kpiSection").scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+//   CARD PER DIVISI
 function buildDivisionCard(div) {
   const card = document.createElement("div");
   card.className = "division-card";
@@ -172,7 +222,7 @@ const rceoCard = buildDivisionCard(rceoDivision);
 rceoWrap.appendChild(rceoCard);
 cardsGrid.parentNode.insertBefore(rceoWrap, cardsGrid);
 
-//grid card Regional Office lainnya
+//grid card Regional Office
 otherDivisions.forEach(div => {
   cardsGrid.appendChild(buildDivisionCard(div));
 });
@@ -182,7 +232,7 @@ divisionsUker.forEach(div => {
   cardsGridUker.appendChild(buildDivisionCard(div));
 });
 
-//samain lebar card RCEO
+//card RCEO
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -194,7 +244,7 @@ window.addEventListener("resize", syncRceoCardWidth);
 window.addEventListener("load", syncRceoCardWidth);
 syncRceoCardWidth();
 
-// BUKA / TUTUP SIDEBAR
+// SIDEBAR
 function openSidebar() {
   sidebar.classList.add("open");
   sidebarOverlay.classList.add("show");
@@ -207,19 +257,26 @@ menuBtn.addEventListener("click", openSidebar);
 closeSidebarBtn.addEventListener("click", closeSidebar);
 sidebarOverlay.addEventListener("click", closeSidebar);
 
-/* =========================================================
-   CIUTKAN / BUKA SECTION DI HALAMAN UTAMA
-   (klik judul "Materi Sosialisasi..." langsung show/hide card)
-========================================================= */
-function setupToggle(btn, body) {
+// Trought up/ down
+function setupToggle(btn, body, onOpen) {
   btn.addEventListener("click", () => {
     const willCollapse = !body.classList.contains("collapsed");
     body.classList.toggle("collapsed", willCollapse);
     btn.setAttribute("aria-expanded", String(!willCollapse));
+    if (!willCollapse && typeof onOpen === "function") {
+      onOpen();
+    }
   });
 }
 setupToggle(toggleRO, roBody);
 setupToggle(toggleUker, ukerBody);
+
+// Section KPI
+setupToggle(toggleKPI, kpiBody, () => {
+  if (!kpiFrame.src) {
+    kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
+  }
+});
 
 // TAMPILAN DETAIL JABATAN
 function openDetail(point) {
