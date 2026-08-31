@@ -6,6 +6,7 @@
   --color-bg-section: #ece4dc;
   --color-white: #ffffff;
   --color-text: #333333;
+  --color-accent: #71c5e8; 
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,12 +17,13 @@ body {
   background: var(--color-white);
 }
 
-/* ================= HEADER ================= */
+/* ================= HEADER (dikecilkan) ================= */
 .topbar {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 20px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
   background: var(--color-header-bg);
   color: var(--color-white);
   position: sticky;
@@ -29,24 +31,18 @@ body {
   z-index: 50;
 }
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .topbar-right-logos {
   display: flex;
   align-items: center;
+  gap: px;
   margin-left: auto;
 }
 .topbar-logo-danantara {
-  height: 40px;
+  height: 36px;
   width: auto;
 }
-
 .topbar-logo-bri {
-  height: 95px; 
+  height: 85px;
   width: auto;
 }
 
@@ -60,16 +56,14 @@ body {
   padding: 6px;
 }
 .hamburger-btn span {
-  width: 26px;
+  width: 24px;
   height: 3px;
   background: var(--color-white);
   border-radius: 2px;
 }
 
-.topbar-logo { height: 30px; }
-
 .topbar-title {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -110,17 +104,63 @@ body {
   line-height: 1;
 }
 
-.sidebar-list { list-style: none; padding: 10px 0; }
-.sidebar-list li a {
-  display: block;
-  padding: 12px 20px;
+.sidebar-list { list-style: none; }
+
+/* Grup besar: "1. DUJ RO Jogja" / "2. DUJ Unit Kerja" */
+.sidebar-group { border-bottom: 1px solid #eee; }
+
+.sidebar-group-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 16px 20px;
+  font-weight: 700;
+  font-size: 15px;
   color: var(--color-blue);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
 }
-.sidebar-list li a:hover { background: #f5f0ea; }
+.sidebar-group-toggle:hover,
+.sidebar-group-toggle:active {
+  color: var(--color-accent);
+  background: #fff6ec;
+}
+.sidebar-group-toggle .chevron {
+  font-size: 12px;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+.sidebar-group-toggle.open .chevron { transform: rotate(180deg); }
+
+/* Sub-list (nama-nama divisi) di dalam tiap grup */
+.sidebar-subgroup {
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  background: #faf8f6;
+}
+.sidebar-subgroup.open { max-height: 1200px; }
+
+.sidebar-subgroup li a {
+  display: block;
+  padding: 11px 20px 11px 34px;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 13.5px;
+  border-bottom: 1px solid #f0eeec;
+}
+.sidebar-subgroup li a:hover,
+.sidebar-subgroup li a:active {
+  color: var(--color-accent);
+  background: #fff6ec;
+}
 
 .sidebar-overlay {
   display: none;
@@ -137,7 +177,6 @@ body {
   padding: 50px 30px 40px;
   text-align: center;
   background: linear-gradient(180deg, #ffffff 0%, #f6f2ee 100%);
-  border-bottom: 6px solid var(--color-orange);
 }
 .hero-text h2 {
   color: var(--color-blue);
@@ -151,24 +190,67 @@ body {
   color: #555;
 }
 
-/* ================= SECTION TITLE ================= */
+/* ================= SECTION TITLE (collapsible, klik langsung buka/tutup card) ================= */
 .section-title-box {
+  width: 100%;
   background: var(--color-bg-section);
-  padding: 30px 20px;
-  text-align: center;
+  padding: 20px 20px;
+  display: flex;
+  justify-content: center;
 }
-.section-title-link {
-  display: inline-block;
+
+.section-title-box-inner {
+  width: 100%;
+  max-width: 620px;
   background: var(--color-white);
-  color: #307FE2;
-  font-size: 20px;
-  font-weight: 700;
-  padding: 16px 30px;
-  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px;
+  border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  text-decoration: none;
+  font-family: inherit;
 }
-.section-title-link:hover { filter: brightness(0.97); }
+.section-title-box-inner:hover .section-title-link { color: var(--color-accent); }
+
+.section-title-link {
+  color: #307FE2;
+  font-size: 16px;
+  font-weight: 700;
+  transition: color 0.15s ease;
+  text-align: left;
+}
+
+/* Panah berbentuk chevron (bukan segitiga) dibuat dari border, murni CSS */
+.toggle-arrow {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #307FE2;
+  border-bottom: 2px solid #307FE2;
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+  margin-top: -4px;
+}
+.section-title-box-inner[aria-expanded="false"] .toggle-arrow {
+  transform: rotate(-135deg);
+  margin-top: 4px;
+}
+
+/* Panel card yang bisa diciutkan/dibuka */
+.collapsible-body {
+  overflow: hidden;
+  max-height: 20000px;
+  opacity: 1;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+.collapsible-body.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
 
 /* ================= CARDS GRID ================= */
 .cards-grid {
@@ -243,7 +325,8 @@ body {
 .point-list li {
   margin-top: 10px;
 }
-.point-list button {
+.point-list button,
+.point-list a {
   background: none;
   border: none;
   text-align: left;
@@ -253,16 +336,25 @@ body {
   padding: 4px 0 4px 18px;
   position: relative;
   width: 100%;
+  display: block;
+  text-decoration: none;
+  font-family: inherit;
 }
-.point-list button::before {
-  content: "\25C6"; /* diamond bullet seperti di gambar */
+.point-list button::before,
+.point-list a::before {
+  content: "\25C6";
   color: var(--color-orange);
   position: absolute;
   left: 0;
   font-size: 11px;
   top: 7px;
 }
-.point-list button:hover { color: var(--color-orange); }
+.point-list button:hover,
+.point-list a:hover,
+.point-list button:active,
+.point-list a:active {
+  color: var(--color-accent);
+}
 
 /* ================= DETAIL VIEW ================= */
 .detail-view {
@@ -341,10 +433,12 @@ body {
 @media (max-width: 600px) {
   .hero-text h2 { font-size: 22px; }
   .cards-grid { grid-template-columns: 1fr; padding: 0 20px 40px; }
-  .section-title-link { font-size: 16px; padding: 12px 18px; }
+  .section-title-link { font-size: 14px; }
+  .section-title-box { padding: 14px 12px; }
+  .section-title-box-inner { padding: 12px 16px; gap: 10px; }
 
-  .topbar { flex-wrap: wrap; padding: 10px 14px; }
-  .topbar-title { font-size: 15px; }
+  .topbar { flex-wrap: wrap; padding: 8px 12px; }
+  .topbar-title { font-size: 14px; }
   .topbar-logo-bri { height: 40px; }
-  .topbar-logo-danantara { height: 24px; }
+  .topbar-logo-danantara { height: 20px; }
 }
