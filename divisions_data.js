@@ -93,7 +93,7 @@ const divisionsUker = [
   {
     "id": "pemimpin-uker",
     "title": "PEMIMPIN UKER",
-    "downloadId": "files/Pemimpin UKER.pdf",
+    "downloadId": "files/Pemimpin Unit Kerja.pdf",
     "points": [
       { "title": "PEMIMPIN CABANG", "fileId": "images/45.jpg" },
       { "title": "PEMIMPIN CABANG PEMBANTU", "fileId": "images/46.jpg" },
@@ -118,7 +118,7 @@ const divisionsUker = [
   {
     "id": "supervisor-uker",
     "title": "SUPERVISOR UKER",
-    "downloadId": "file/Supervisor UKER.pdf",
+    "downloadId": "file/Supervisor Unit Kerja.pdf",
     "points": [
       { "title": "SPV OPERASIONAL & LAYANAN", "fileId": "images/58.jpg" },
       { "title": "SPV OPERASIONAL/LAYANAN ", "fileId": "images/59.jpg" },
