@@ -275,8 +275,7 @@ body {
   background: var(--color-bg-section);
   display: flex;
   justify-content: center;
-  padding: 40px 40px 0;
-  margin-bottom: 30px;
+  padding: 40px 40px 30px;
 }
 .rceo-wrap .division-card {
   width: 100%;
