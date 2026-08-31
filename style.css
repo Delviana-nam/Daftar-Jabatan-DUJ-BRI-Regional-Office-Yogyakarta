@@ -276,6 +276,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 40px 40px 0;
+  margin-bottom: 30px;
 }
 .rceo-wrap .division-card {
   width: 100%;
@@ -355,10 +356,11 @@ body {
   color: var(--color-accent);
 }
 
-/* ================= PDF PREVIEW - SECTION KPI ================= */
+/* ================= SECTION KPI ================= */
 .pdf-preview-wrap {
   background: var(--color-bg-section);
   padding: 0 40px 60px;
+  -webkit-overflow-scrolling: touch;
 }
 .pdf-preview-frame {
   width: 100%;
@@ -368,6 +370,8 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   background: #fff;
   display: block;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 @media (max-width: 600px) {
@@ -451,7 +455,7 @@ body {
 
 @media (max-width: 600px) {
   .hero-text h2 { font-size: 22px; }
-  .cards-grid { grid-template-columns: 1fr; padding: 0 20px 40px; }
+  .cards-grid { grid-template-columns: 1fr; padding: 30px 20px 40px; }
   .section-title-link { font-size: 14px; }
   .section-title-box { padding: 14px 12px; }
   .section-title-box-inner { padding: 12px 16px; gap: 10px; }
