@@ -20,9 +20,9 @@ const kpiBody = document.getElementById("kpiBody");
 const toggleKPI = document.getElementById("toggleKPI");
 const kpiFrame = document.getElementById("kpiFrame");
 
-// Ganti path ini kalau nama/lokasi file PDF-nya berbeda
+/* Ganti path ini kalau nama/lokasi file PDF-nya berbeda */
 const kpiPdfPath = "files/KPI_Regional_Office_Area KC, KCP dan BRI Unit.pdf";
-//img preview gambar
+/*img preview gambar */
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
 detailImage.style.display = "none";
@@ -36,7 +36,7 @@ detailImage.style.maxWidth = "1100px";
 detailImage.style.margin = "0 auto";
 detailFrame.insertAdjacentElement("afterend", detailImage);
 
-//upload files agar dapat di download
+/*upload files agar dapat di download*/
 function isLocalOrUrl(value) {
   if (!value) return false;
   return value.startsWith("http") || value.includes("/") || value.includes(".");
@@ -61,7 +61,7 @@ function isImageFile(value) {
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
 }
 
-//   SIDEBAR / DAFTAR ISI
+/* SIDEBAR / DAFTAR ISI */
 const sectionMap = {};
 divisions.forEach(d => { sectionMap[d.id] = { body: roBody, btn: toggleRO }; });
 divisionsUker.forEach(d => { sectionMap[d.id] = { body: ukerBody, btn: toggleUker }; });
@@ -118,7 +118,7 @@ function buildSidebarGroup(labelText, groupId, list) {
 buildSidebarGroup("1. DUJ RO Jogja", "group-ro", divisions);
 buildSidebarGroup("2. DUJ Unit Kerja", "group-uker", divisionsUker);
 
-// 3. KPI
+/* 3. KPI */
 function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
   const groupLi = document.createElement("li");
   groupLi.className = "sidebar-group";
@@ -157,7 +157,7 @@ buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP da
   closeSidebar();
   showMain();
 
-  //box KPI
+  /* box KPI*/
   if (kpiBody.classList.contains("collapsed")) {
     kpiBody.classList.remove("collapsed");
     toggleKPI.setAttribute("aria-expanded", "true");
@@ -171,7 +171,7 @@ buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP da
   });
 });
 
-//   CARD PER DIVISI
+/* CARD PER DIVISI */
 function buildDivisionCard(div) {
   const card = document.createElement("div");
   card.className = "division-card";
@@ -212,7 +212,7 @@ function buildDivisionCard(div) {
   return card;
 }
 
-// RCEO sendiri ditengah atas grid Regional Office
+/* RCEO sendiri ditengah atas grid Regional Office */
 const rceoDivision = divisions[0];
 const otherDivisions = divisions.slice(1);
 
@@ -222,17 +222,17 @@ const rceoCard = buildDivisionCard(rceoDivision);
 rceoWrap.appendChild(rceoCard);
 cardsGrid.parentNode.insertBefore(rceoWrap, cardsGrid);
 
-//grid card Regional Office
+/*grid card Regional Office8*/
 otherDivisions.forEach(div => {
   cardsGrid.appendChild(buildDivisionCard(div));
 });
 
-//grid card Unit Kerja Operasional
+/*grid card Unit Kerja Operasional*/
 divisionsUker.forEach(div => {
   cardsGridUker.appendChild(buildDivisionCard(div));
 });
 
-//card RCEO
+/*card RCEO*/
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -244,7 +244,7 @@ window.addEventListener("resize", syncRceoCardWidth);
 window.addEventListener("load", syncRceoCardWidth);
 syncRceoCardWidth();
 
-// SIDEBAR
+/* SIDEBAR */
 function openSidebar() {
   sidebar.classList.add("open");
   sidebarOverlay.classList.add("show");
@@ -257,7 +257,7 @@ menuBtn.addEventListener("click", openSidebar);
 closeSidebarBtn.addEventListener("click", closeSidebar);
 sidebarOverlay.addEventListener("click", closeSidebar);
 
-// Trought up/ down
+/* Trought up/ down */
 function setupToggle(btn, body, onOpen) {
   btn.addEventListener("click", () => {
     const willCollapse = !body.classList.contains("collapsed");
@@ -277,8 +277,7 @@ setupToggle(toggleKPI, kpiBody, () => {
     kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
   }
 });
-
-// TAMPILAN DETAIL JABATAN
+/*TAMPILAN DETAIL JABATAN*/
 function openDetail(point) {
   detailTitle.textContent = point.title;
 
