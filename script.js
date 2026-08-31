@@ -270,13 +270,10 @@ function setupToggle(btn, body, onOpen) {
 }
 setupToggle(toggleRO, roBody);
 setupToggle(toggleUker, ukerBody);
+setupToggle(toggleKPI, kpiBody);
+kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
 
-// Section KPI
-setupToggle(toggleKPI, kpiBody, () => {
-  if (!kpiFrame.src) {
-    kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
-  }
-});
+
 /*TAMPILAN DETAIL JABATAN*/
 function openDetail(point) {
   detailTitle.textContent = point.title;
