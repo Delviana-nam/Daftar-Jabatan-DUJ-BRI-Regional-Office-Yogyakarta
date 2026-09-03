@@ -63,6 +63,12 @@ function resolvePreviewUrl(id) {
   return `https://drive.google.com/file/d/${id}/preview`;
 }
 
+/* Download KHUSUS tab KPI yang sedang dibuka (berdasarkan gid), bukan seluruh spreadsheet */
+function resolveKpiDownloadUrl(gid, format) {
+  format = format || "pdf";
+  return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
+}
+
 function isImageFile(value) {
   if (!value) return false;
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
@@ -356,7 +362,7 @@ function initKpiInstance(containerEl, opts) {
 
   const tableScroll = containerEl.querySelector(".kpi-table-scroll");
   const errBox = containerEl.querySelector(".kpi-err");
-  const openSheetLink = containerEl.querySelector(".kpi-open-sheet");
+  const openSheetLink = containerEl.querySelector(".kpi-open-sheets");
   const refreshBtn = containerEl.querySelector(".kpi-refresh-btn");
 
   openSheetLink.href = `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/edit#gid=${gid}`;
@@ -433,8 +439,19 @@ function openKpiDetail(div) {
   detailImage.style.display = "none";
 
   detailKpiWrap.style.display = "block";
-  downloadBtn.style.display = "none";
-  downloadBtn.href = "#";
+
+  if (div.kpiGid && String(div.kpiGid).trim() !== "") {
+    downloadBtn.href = resolveKpiDownloadUrl(div.kpiGid, "pdf");
+    downloadBtn.setAttribute("download", sanitizeFilename(div.title) + " - KPI.pdf");
+    downloadBtn.target = "_blank";
+    downloadBtn.rel = "noopener";
+    downloadBtn.style.display = "flex";
+  } else {
+    downloadBtn.removeAttribute("download");
+    downloadBtn.removeAttribute("target");
+    downloadBtn.href = "#";
+    downloadBtn.style.display = "none";
+  }
 
   if (currentKpiDetailInstance) currentKpiDetailInstance.destroy();
   const { title, subtitle } = splitKpiLabel(div.kpiLabel, div.title);
@@ -491,6 +508,7 @@ function showMain() {
   downloadBtn.style.display = "none";
   downloadBtn.href = "#";
   downloadBtn.removeAttribute("download");
+  downloadBtn.removeAttribute("target");
   if (currentKpiDetailInstance) {
     currentKpiDetailInstance.destroy();
     currentKpiDetailInstance = null;
