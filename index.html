@@ -18,8 +18,8 @@
     <h1 class="topbar-title">DESKRIPSI JABATAN BRI</h1>
 
     <div class="topbar-right-logos">
-      <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara">
-      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri">
+      <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
+      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
     </div>
   </header>
 
@@ -71,16 +71,16 @@
     </div>
 
     <!-- ===== SECTION 3: KPI ===== -->
-   <div class="section-title-box">
+   <div class="section-title-box" id="kpiSection">
   <button class="section-title-box-inner" id="toggleKPI" aria-expanded="true">
-    <span class="section-title-link">KPI_Regional_Office_Area KC, KCP dan BRI Unit</span>
+    <span class="section-title-link">KPI Regional Office Area KC, KCP dan BRI Unit</span>
     <span class="toggle-arrow"></span>
   </button>
 </div>
 
 <div id="kpiBody" class="collapsible-body">
   <section class="pdf-preview-wrap">
-    <img id="kpiImage" class="pdf-preview-image" alt="KPI Regional Office Area KC, KCP dan BRI Unit">
+    <div id="kpiFrameMain" class="kpi-frame"></div>
   </section>
 </div>
 
@@ -93,6 +93,9 @@
     </div>
     <div class="detail-pdf-wrap">
       <iframe id="detailFrame" src="" title="Detail Jabatan" allow="autoplay" allowfullscreen></iframe>
+      <div id="detailKpiWrap" class="detail-kpi-wrap" style="display:none;">
+        <div id="kpiFrameDetail" class="kpi-frame"></div>
+      </div>
       <button id="backBtn" class="back-btn">
         <span class="back-arrow">&#8592;</span> Back
       </button>
