@@ -15,5 +15,6 @@
    lengkap divisi itu.
 3. Tiap poin jabatan (misal "REGIONAL SME BANKING HEAD") kalau diklik akan
    membuka halaman detail yang menampilkan preview detail rincian pekerjaan jabatan tersebut.
-   Ada tombol **Kembali** untuk balik ke tampilan awal.
+   Ada tombol **Kembali** untuk balik ke tampilan awal dan **download** untuk mendownload hanya isi bagian itu saja.
+4. Anda dapat melihat Key Performance Index pada bagian KPI dan mendownloadnya.
  
