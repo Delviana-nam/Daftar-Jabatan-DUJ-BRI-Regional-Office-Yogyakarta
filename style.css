@@ -1,4 +1,3 @@
-/* warna back ground */
 :root {
   --color-header-bg: #307FE2;
   --color-orange: #71c5e8;
@@ -17,7 +16,7 @@ body {
   background: var(--color-white);
 }
 
-/* ================= HEADER (dikecilkan) ================= */
+/* ================= HEADER ================= */
 .topbar {
   display: flex;
   align-items: center;
@@ -223,7 +222,7 @@ body {
   text-align: left;
 }
 
-/* Panah */
+/* trough up/ down */
 .toggle-arrow {
   flex-shrink: 0;
   width: 10px;
@@ -239,7 +238,7 @@ body {
   margin-top: 4px;
 }
 
-/* Panel card yang bisa diciutkan/dibuka */
+/* Panel card yang bisa ditutup/dibuka */
 .collapsible-body {
   overflow: hidden;
   max-height: 20000px;
@@ -310,6 +309,33 @@ body {
 }
 .download-btn:hover { filter: brightness(0.95); }
 
+/* Tombol "Lihat KPI" */
+.kpi-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 40px);
+  margin: 0 20px 12px;
+  background: #ffffff;
+  color: var(--color-blue);
+  border: 2px solid #71c5e8;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.kpi-link-btn:hover,
+.kpi-link-btn:active {
+  background: #f2fbff;
+}
+.kpi-link-arrow {
+  font-size: 16px;
+  color: #71c5e8;
+}
+
 .card-note {
   font-style: italic;
   font-size: 14px;
@@ -360,6 +386,7 @@ body {
   background: var(--color-bg-section);
   padding: 0 40px 60px;
   -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
 .pdf-preview-image {
   width: 100%;
@@ -379,6 +406,130 @@ body {
   .pdf-preview-image { padding: 10px; }
 }
 
+/* ================= KPI (LIVE DARI GOOGLE SHEET) ================= */
+.kpi-frame {
+  max-width: 950px;
+  margin: 24px auto 0;
+  border: 3px solid var(--color-header-bg);
+  border-radius: 22px;
+  padding: 6px;
+  background: linear-gradient(180deg, var(--color-accent), #ffffff 40px);
+  overflow: hidden;
+}
+
+.detail-kpi-wrap {
+  height: 100%;
+  max-width: 1050px;
+  overflow-y: auto;
+  padding: 20px 20px 90px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.detail-kpi-wrap .kpi-frame { max-width: 100%; margin-top: 0; }
+
+.kpi-card {
+  background: #ffffff;
+  border-radius: 13px;
+  padding: 5px 18px 10px; /*atas-kanan-kiri*/
+}
+
+.kpi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 2px;
+}
+.kpi-brand { display: flex; align-items: center; gap: 10px; min-width: 110px; }
+.kpi-brand-right { justify-content: flex-end; }
+.kpi-logo-danantara { height: 24px; width: auto; }
+.kpi-logo-bri { height: 42px; width: auto; }
+
+.kpi-title {
+  text-align: center;
+  color: var(--color-blue);
+  font-size: 19px;
+  line-height: 1.25;
+  margin: 2px 0 8px;
+}
+.kpi-title span { display: block; font-size: 16px; white-space: pre-line; }
+
+/* Kotak Penetapan Key Performance Indicator (KPI) di tiap card divisi */
+.kpi-link-btn span:first-child {
+  white-space: pre-line;
+  line-height: 1.35;
+}
+
+.kpi-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+  color: #5c6b7a;
+}
+.kpi-toolbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.kpi-action-btn {
+  border: 1px solid #c7d3de;
+  background: #fff;
+  color: var(--color-text);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+}
+.kpi-action-btn:hover { background: #f3f6fa; }
+
+.kpi-err-box {
+  padding: 12px;
+  text-align: center;
+  color: #c0392b;
+  font-size: 13.5px;
+  background: #fdeceb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.kpi-table-scroll {
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #cfe0ef;
+  position: relative;
+  background: #fff;
+}
+
+/* Tabel KPI live from google sheet */
+.kpi-sheet-iframe {
+  display: block;
+  width: 100%;
+  height: 700px;
+  border: none;
+  background: #fff;
+}
+
+.kpi-empty {
+  padding: 22px;
+  text-align: center;
+  color: #5c6b7a;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .kpi-card { padding: 10px 10px 12px; }
+  .kpi-title { font-size: 16px; margin: 2px 0 6px; }
+  .kpi-title span { font-size: 13px; }
+  .kpi-logo-danantara { height: 18px; }
+  .kpi-logo-bri { height: 32px; }
+  .kpi-toolbar { font-size: 11px; justify-content: center; margin-bottom: 6px; }
+  .kpi-action-btn { padding: 5px 10px; font-size: 11px; }
+}
+
+
 /* view KPI */
 .detail-view {
   display: none;
@@ -393,6 +544,7 @@ body {
 .detail-topbar {
   display: flex;
   align-items: center;
+  gap: 14px;
   padding: 14px 20px;
   background: var(--color-header-bg);
   color: var(--color-white);
@@ -412,10 +564,10 @@ body {
 
 /*Tombol Back*/
 .back-btn {
-  position: absolute;
+  position: fixed;
   left: 24px;
   bottom: 24px;
-  z-index: 10;
+  z-index: 65;
   display: flex;
   align-items: center;
   gap: 8px;
