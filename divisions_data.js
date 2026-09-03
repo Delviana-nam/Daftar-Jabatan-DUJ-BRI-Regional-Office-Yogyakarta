@@ -24,7 +24,7 @@ const divisions = [
     "downloadId": "files/Regional Micro Banking Head.pdf",
     "kpiEnabled": true,
     "kpiGid": "519583074",
-    "kpiHeight": 450,
+    "kpiHeight": 480,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Micro Banking Head Tahun 2026",
     "points": [
       { "title": "REGIONAL MICRO BANKING HEAD", "fileId": "images/8.jpg", "pdfId": "8" },
@@ -51,7 +51,7 @@ const divisions = [
     "downloadId": "files/Regional Consumer Banking Head.pdf",
     "kpiEnabled": true,
     "kpiGid": "1194928475",
-    "kpiHeight": 450,
+    "kpiHeight": 480,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Consumer Banking Head (RCBH) Tahun 2026",
     "points": [
       { "title": "REGIONAL CONSUMER BANKING HEAD", "fileId": "images/19.jpg", "pdfId": "19" },
@@ -77,7 +77,7 @@ const divisions = [
     "downloadId": "files/Regional Business Support Head.pdf",
     "kpiEnabled": true,
     "kpiGid": "1696468939",
-    "kpiHeight": 450,
+    "kpiHeight": 480,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Business Support Head Tahun 2026",
     "points": [
       { "title": "REGIONAL OPERATION HEAD", "fileId": "images/29.jpg", "pdfId": "29" },
@@ -118,7 +118,7 @@ const divisionsUker = [
     "downloadId": "files/Manajer UKER.pdf",
     "kpiEnabled": true,
     "kpiGid": "1349675824",
-    "kpiHeight": 450,
+    "kpiHeight": 480,
     "kpiLabel": "Penetapan Key Performance Indicator\nMicro Business Manager, Consumer Business Manager, Priority Business Manager Tahun 2026",
     "points": [
       { "title": "MANAJER BISNIS KECIL", "fileId": "images/52.jpg", "pdfId": "52" },
@@ -148,7 +148,7 @@ const divisionsUker = [
     "downloadId": "files/Marketing.pdf",
     "kpiEnabled": true,
     "kpiGid": "679117388",
-    "kpiHeight": 450,
+    "kpiHeight": 480,
     "kpiLabel": "Penetapan Key Performance Indicator\nMantri, RM Mikro, RM BRIGuna, RM KPR, RM Priority Tahun 2026",
     "points": [
       { "title": "RM BISNIS KECIL (SME)", "fileId": "images/66.jpg", "pdfId": "66" },
