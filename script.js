@@ -63,7 +63,7 @@ function resolvePreviewUrl(id) {
   return `https://drive.google.com/file/d/${id}/preview`;
 }
 
-/* Download KHUSUS tab KPI yang sedang dibuka (berdasarkan gid), bukan seluruh spreadsheet */
+/* Download KHUSUS tab KPI yang sedang dibuka (berdasarkan gid)*/
 function resolveKpiDownloadUrl(gid, format) {
   format = format || "pdf";
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
