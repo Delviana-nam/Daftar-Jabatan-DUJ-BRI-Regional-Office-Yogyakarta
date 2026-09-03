@@ -22,6 +22,10 @@ const divisions = [
     "id": "regional-micro-banking",
     "title": "REGIONAL MICRO BANKING",
     "downloadId": "files/Regional Micro Banking Head.pdf",
+    "kpiEnabled": true,
+    "kpiGid": "519583074",
+    "kpiHeight":480,
+    "kpiLabel": "Penetapan Key Performance Indicator\nRegional Micro Banking Head Tahun 2026",
     "points": [
       { "title": "REGIONAL MICRO BANKING HEAD", "fileId": "images/8.jpg" },
       { "title": "MICRO BUSINESS DEPARTMENT HEAD", "fileId": "images/9.jpg" },
@@ -45,6 +49,10 @@ const divisions = [
     "id": "regional-consumer-banking",
     "title": "REGIONAL CONSUMER BANKING",
     "downloadId": "files/Regional Consumer Banking Head.pdf",
+    "kpiEnabled": true,
+    "kpiGid": "1194928475",
+    "kpiHeight": 480,
+    "kpiLabel": "Penetapan Key Performance Indicator\nRegional Consumer Banking Head (RCBH) Tahun 2026",
     "points": [
       { "title": "REGIONAL CONSUMER BANKING HEAD", "fileId": "images/19.jpg" },
       { "title": "MORTGAGE DEPARTMENT HEAD", "fileId": "images/20.jpg" },
@@ -67,6 +75,10 @@ const divisions = [
     "id": "regional-operation-banking",
     "title": "REGIONAL BUSINESS SUPPORT HEAD",
     "downloadId": "files/Regional Business Support Head.pdf",
+    "kpiEnabled": true,
+    "kpiGid": "1696468939",
+    "kpiHeight": 480,
+    "kpiLabel": "Penetapan Key Performance Indicator\nRegional Business Support Head Tahun 2026",
     "points": [
       { "title": "REGIONAL OPERATION HEAD", "fileId": "images/29.jpg" },
       { "title": "OPERATION, NETWORK & SERVICE DEPARTMENT HEAD", "fileId": "images/30.jpg" },
@@ -104,11 +116,15 @@ const divisionsUker = [
     "id": "manajer-uker",
     "title": "MANAJER UKER",
     "downloadId": "files/Manajer UKER.pdf",
+    "kpiEnabled": true,
+    "kpiGid": "1349675824",
+    "kpiHeight": 480,
+    "kpiLabel": "Penetapan Key Performance Indicator\nMicro Business Manager, Consumer Business Manager, Priority Business Manager Tahun 2026",
     "points": [
       { "title": "MANAJER BISNIS KECIL", "fileId": "images/52.jpg" },
       { "title": "MANAJER BISNIS MIKRO", "fileId": "images/54.jpg" },
-      { "title": "MANAJER BISNIS MIKRO (MBA)", "fileId": "images/56.jpg" },
-      { "title": "MANAJER BISNIS KONSUMER", "fileId": "images/53.jpg" },
+      { "title": "MANAJER BISNIS MIKRO ER (MBA)", "fileId": "images/56.jpg" },
+      { "title": "MANAJER BISNIS KONSUM", "fileId": "images/53.jpg" },
       { "title": "MANAJER BANKING PRIORITY", "fileId": "images/50.jpg" },
       { "title": "MANAJER DANA & TRANSAKSI", "fileId": "images/51.jpg" },
       { "title": "MANAJER OPERASIONAL", "fileId": "images/55.jpg" },
@@ -122,7 +138,7 @@ const divisionsUker = [
     "points": [
       { "title": "SPV OPERASIONAL & LAYANAN", "fileId": "images/58.jpg" },
       { "title": "SPV OPERASIONAL/LAYANAN ", "fileId": "images/59.jpg" },
-      { "title": "SPV OPERASIONAL KREDIT", "fileId": "images/60" },
+      { "title": "SPV OPERASIONAL KREDIT", "fileId": "images/60.jpg" },
       { "title": "SPV PENUNJANG OPERASIONAL", "fileId": "images/61.jpg" }
     ]
   },
@@ -130,6 +146,10 @@ const divisionsUker = [
     "id": "marketing",
     "title": "MARKETING",
     "downloadId": "files/Marketing.pdf",
+    "kpiEnabled": true,
+    "kpiGid": "679117388",
+    "kpiHeight": 480,
+    "kpiLabel": "Penetapan Key Performance Indicator\nMantri, RM Mikro, RM BRIGuna, RM KPR, RM Priority Tahun 2026",
     "points": [
       { "title": "RM BISNIS KECIL (SME)", "fileId": "images/66.jpg" },
       { "title": "RM DANA & TRANSAKSI", "fileId": "images/68.jpg" },
