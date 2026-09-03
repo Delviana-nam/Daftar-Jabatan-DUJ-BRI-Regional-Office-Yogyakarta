@@ -77,7 +77,10 @@ function extractNumberFromFileId(fileId) {
 
 function resolveDetailPdfForPoint(point) {
   if (point && point.pdfId) {
-    return isLocalOrUrl(point.pdfId) ? point.pdfId : resolveDownloadUrl(point.pdfId);
+    // Jika pdfId sudah berupa URL/path lengkap (mis. link Google Drive), pakai langsung.
+    // Jika hanya angka biasa (mis. "55"), anggap itu nomor file lokal: files/55.pdf
+    // (sama seperti nomor pada images/55.jpg) — BUKAN ID Google Drive.
+    return isLocalOrUrl(point.pdfId) ? point.pdfId : `files/${point.pdfId}.pdf`;
   }
   const num = extractNumberFromFileId(point && point.fileId);
   if (!num) return null;
