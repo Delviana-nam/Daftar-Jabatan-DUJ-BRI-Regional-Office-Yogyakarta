@@ -16,7 +16,7 @@ body {
   background: var(--color-white);
 }
 
-/* ================= HEADER ================= */
+/* ================= HEADER (dikecilkan) ================= */
 .topbar {
   display: flex;
   align-items: center;
@@ -222,7 +222,7 @@ body {
   text-align: left;
 }
 
-/* trough up/ down */
+/* Panah */
 .toggle-arrow {
   flex-shrink: 0;
   width: 10px;
@@ -309,7 +309,6 @@ body {
 }
 .download-btn:hover { filter: brightness(0.95); }
 
-/* Tombol "Lihat KPI" */
 .kpi-link-btn {
   display: flex;
   align-items: center;
@@ -386,7 +385,6 @@ body {
   background: var(--color-bg-section);
   padding: 0 40px 60px;
   -webkit-overflow-scrolling: touch;
-  overflow: hidden;
 }
 .pdf-preview-image {
   width: 100%;
@@ -406,7 +404,7 @@ body {
   .pdf-preview-image { padding: 10px; }
 }
 
-/* ================= KPI (LIVE DARI GOOGLE SHEET) ================= */
+/* ================= FRAME KPI (LIVE DARI GOOGLE SHEET) ================= */
 .kpi-frame {
   max-width: 950px;
   margin: 24px auto 0;
@@ -414,9 +412,9 @@ body {
   border-radius: 22px;
   padding: 6px;
   background: linear-gradient(180deg, var(--color-accent), #ffffff 40px);
-  overflow: hidden;
 }
 
+/* Penempatan tombol "Back" */
 .detail-kpi-wrap {
   height: 100%;
   max-width: 1050px;
@@ -429,7 +427,7 @@ body {
 
 .kpi-card {
   background: #ffffff;
-  border-radius: 13px;
+  border-radius: 18px;
   padding: 5px 18px 10px; /*atas-kanan-kiri*/
 }
 
@@ -454,7 +452,7 @@ body {
 }
 .kpi-title span { display: block; font-size: 16px; white-space: pre-line; }
 
-/* Kotak Penetapan Key Performance Indicator (KPI) di tiap card divisi */
+/* Kotak "Penetapan Key Performance Indicator" di tiap card divisi */
 .kpi-link-btn span:first-child {
   white-space: pre-line;
   line-height: 1.35;
@@ -503,7 +501,7 @@ body {
   background: #fff;
 }
 
-/* Tabel KPI live from google sheet */
+/* Tabel KPI live from gsheet */
 .kpi-sheet-iframe {
   display: block;
   width: 100%;
@@ -563,11 +561,17 @@ body {
 }
 
 /*Tombol Back*/
-.back-btn {
+.detail-actions {
   position: fixed;
   left: 24px;
   bottom: 24px;
   z-index: 65;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -579,6 +583,7 @@ body {
   font-size: 14px;
   border-radius: 30px;
   cursor: pointer;
+  text-decoration: none;
   box-shadow: 0 3px 10px rgba(0,0,0,0.25);
   transition: filter 0.15s ease, transform 0.15s ease;
 }
@@ -591,10 +596,18 @@ body {
   line-height: 1;
 }
 
+/* Tombol Download di sebelah tombol Back */
+.download-btn-detail {
+  background: var(--color-orange);
+}
+
 @media (max-width: 600px) {
-  .back-btn {
+  .detail-actions {
     left: 16px;
     bottom: 16px;
+    gap: 8px;
+  }
+  .back-btn {
     padding: 9px 16px;
     font-size: 13px;
   }
