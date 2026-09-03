@@ -20,12 +20,13 @@ const kpiBody = document.getElementById("kpiBody");
 const toggleKPI = document.getElementById("toggleKPI");
 
 const detailKpiWrap = document.getElementById("detailKpiWrap");
+const downloadBtn = document.getElementById("downloadBtn");
 
 /* ====== KONFIGURASI GOOGLE SHEET KPI ======*/
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
 
-/* Google sheet di publish agar yang dilihat hanya bagian tab yang ingin di lihat, kecuali saat membuka google sheet */
+/*  Publish to web untuk menampilkan HANYA satu tab per kotak KPI, tanpa baris tab lain */
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
 /*img preview gambar */
@@ -65,6 +66,12 @@ function resolvePreviewUrl(id) {
 function isImageFile(value) {
   if (!value) return false;
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
+}
+
+/* download tugas tugas DUJ */
+function resolveDetailPdfForPoint(point) {
+  if (!point || !point.pdfId) return null;
+  return isLocalOrUrl(point.pdfId) ? point.pdfId : resolveDownloadUrl(point.pdfId);
 }
 
 function escapeHtml(str) {
@@ -127,8 +134,8 @@ function buildSidebarGroup(labelText, groupId, list) {
   sidebarList.appendChild(groupLi);
 }
 
-buildSidebarGroup("DUJ RO Jogja", "group-ro", divisions);
-buildSidebarGroup("DUJ Unit Kerja", "group-uker", divisionsUker);
+buildSidebarGroup("1. DUJ RO Jogja", "group-ro", divisions);
+buildSidebarGroup("2. DUJ Unit Kerja", "group-uker", divisionsUker);
 
 /* 3. KPI */
 function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
@@ -165,7 +172,7 @@ function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
   sidebarList.appendChild(groupLi);
 }
 
-buildSidebarGroupKPI("Key Performance Indicator (KPI)", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
+buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
   closeSidebar();
   showMain();
 
@@ -190,7 +197,7 @@ function buildDivisionCard(div) {
     ? `<p class="card-note">Silakan unduh berkas jabatan disini.</p><ul class="point-list"></ul>`
     : "";
 
-  // untuk tabel biar otomatis live
+  // tabel otomatis live
   const hasKpi = !!(div.kpiEnabled || (div.kpiGid && String(div.kpiGid).trim()));
   const kpiLabel = (div.kpiLabel && String(div.kpiLabel).trim()) || ("Penetapan Key Performance Indicator\n" + div.title);
   const kpiLabelHtml = kpiLabel.split("\n").map(line => escapeHtml(line)).join("<br>");
@@ -198,7 +205,7 @@ function buildDivisionCard(div) {
     ? `<button type="button" class="kpi-link-btn"><span>${kpiLabelHtml}</span><span class="kpi-link-arrow">&#8250;</span></button>`
     : "";
 
-  // urutan tata letak setiap card
+  // Urutan tampilan card
   card.innerHTML = `
     <img src="${div.image || ''}" alt="${div.title}" loading="lazy" onerror="this.style.display='none'">
     <h4>${div.title}</h4>
@@ -235,7 +242,7 @@ function buildDivisionCard(div) {
   return card;
 }
 
-/* RCEO paling atas*/
+/* RCEO sendiri ditengah atas grid Regional Office */
 const rceoDivision = divisions[0];
 const otherDivisions = divisions.slice(1);
 
@@ -296,7 +303,7 @@ setupToggle(toggleUker, ukerBody);
 setupToggle(toggleKPI, kpiBody);
 
 
-/* ====== KPI LIVE DARI GOOGLE SHEET  ======*/
+/* FRAME KPI LIVE DARI GOOGLE SHEET */
 function kpiFrameShellHTML(title, subtitle) {
   return `
     <div class="kpi-card">
@@ -321,7 +328,7 @@ function kpiFrameShellHTML(title, subtitle) {
   `;
 }
 
-const KPI_DEFAULT_HEIGHT = 700;
+const KPI_DEFAULT_HEIGHT = 700; 
 
 /*KPI Live */
 function initKpiInstance(containerEl, opts) {
@@ -353,9 +360,8 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // Pakai pubhtml/gsheetnya di publish agar yang dilihat hanya perbagian tab yang ingin di tampilkan
+    // google sheetnya di publish agar dapat terlihat di iframe sesuai tab/bagian yang di ingin kan
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
-
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
     iframe.style.height = height + "px";
@@ -381,13 +387,14 @@ function initKpiInstance(containerEl, opts) {
 }
 
 
-/* urutan tata letak setiap card */
+/* urutan tataletak stiap card */
 function splitKpiLabel(label, fallbackSubtitle) {
   const text = (label && String(label).trim()) || fallbackSubtitle || "";
   const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
   if (lines.length >= 2) {
     return { title: lines[0], subtitle: lines.slice(1).join("\n") };
   }
+
   return { title: "Penetapan Key Performance Indicator", subtitle: lines[0] || "" };
 }
 
@@ -399,7 +406,7 @@ initKpiInstance(document.getElementById("kpiFrameMain"), {
   height: 620
 });
 
-/* untuk bagian KPI per-card */
+/* buat KPI per-card */
 let currentKpiDetailInstance = null;
 
 function openKpiDetail(div) {
@@ -411,6 +418,8 @@ function openKpiDetail(div) {
   detailImage.style.display = "none";
 
   detailKpiWrap.style.display = "block";
+  downloadBtn.style.display = "none";
+  downloadBtn.href = "#";
 
   if (currentKpiDetailInstance) currentKpiDetailInstance.destroy();
   const { title, subtitle } = splitKpiLabel(div.kpiLabel, div.title);
@@ -444,6 +453,15 @@ function openDetail(point) {
     detailFrame.src = resolvePreviewUrl(point.fileId);
   }
 
+  const pdfPath = resolveDetailPdfForPoint(point);
+  if (pdfPath) {
+    downloadBtn.href = pdfPath;
+    downloadBtn.style.display = "flex";
+  } else {
+    downloadBtn.href = "#";
+    downloadBtn.style.display = "none";
+  }
+
   detailView.classList.add("show");
   window.scrollTo(0, 0);
 }
@@ -453,6 +471,8 @@ function showMain() {
   detailFrame.src = "";
   detailImage.src = "";
   detailKpiWrap.style.display = "none";
+  downloadBtn.style.display = "none";
+  downloadBtn.href = "#";
   if (currentKpiDetailInstance) {
     currentKpiDetailInstance.destroy();
     currentKpiDetailInstance = null;
