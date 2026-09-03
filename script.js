@@ -26,7 +26,7 @@ const downloadBtn = document.getElementById("downloadBtn");
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
 
-/*  Publish to web untuk menampilkan HANYA satu tab per kotak KPI, tanpa baris tab lain */
+/* Publish to web untuk menampilkan HANYA satu tab per kotak KPI, tanpa baris tab lain */
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
 /*img preview gambar */
@@ -69,9 +69,24 @@ function isImageFile(value) {
 }
 
 /* download tugas tugas DUJ */
+function extractNumberFromFileId(fileId) {
+  if (!fileId) return null;
+  const match = String(fileId).match(/(\d+)(?=\.[a-zA-Z0-9]+$)/);
+  return match ? match[1] : null;
+}
+
 function resolveDetailPdfForPoint(point) {
-  if (!point || !point.pdfId) return null;
-  return isLocalOrUrl(point.pdfId) ? point.pdfId : resolveDownloadUrl(point.pdfId);
+  if (point && point.pdfId) {
+    return isLocalOrUrl(point.pdfId) ? point.pdfId : resolveDownloadUrl(point.pdfId);
+  }
+  const num = extractNumberFromFileId(point && point.fileId);
+  if (!num) return null;
+  return `files/${num}.pdf`;
+}
+
+/* ini agar judul sesuai dengan penulisan file */
+function sanitizeFilename(name) {
+  return String(name || "Dokumen").replace(/[\\/:*?"<>|]/g, "-").trim();
 }
 
 function escapeHtml(str) {
@@ -134,8 +149,8 @@ function buildSidebarGroup(labelText, groupId, list) {
   sidebarList.appendChild(groupLi);
 }
 
-buildSidebarGroup("1. DUJ RO Jogja", "group-ro", divisions);
-buildSidebarGroup("2. DUJ Unit Kerja", "group-uker", divisionsUker);
+buildSidebarGroup("DUJ RO Jogja", "group-ro", divisions);
+buildSidebarGroup("DUJ Unit Kerja", "group-uker", divisionsUker);
 
 /* 3. KPI */
 function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
@@ -172,7 +187,7 @@ function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
   sidebarList.appendChild(groupLi);
 }
 
-buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
+buildSidebarGroupKPI("KPI", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
   closeSidebar();
   showMain();
 
@@ -456,8 +471,10 @@ function openDetail(point) {
   const pdfPath = resolveDetailPdfForPoint(point);
   if (pdfPath) {
     downloadBtn.href = pdfPath;
+    downloadBtn.setAttribute("download", sanitizeFilename(point.title) + ".pdf");
     downloadBtn.style.display = "flex";
   } else {
+    downloadBtn.removeAttribute("download");
     downloadBtn.href = "#";
     downloadBtn.style.display = "none";
   }
@@ -473,6 +490,7 @@ function showMain() {
   detailKpiWrap.style.display = "none";
   downloadBtn.style.display = "none";
   downloadBtn.href = "#";
+  downloadBtn.removeAttribute("download");
   if (currentKpiDetailInstance) {
     currentKpiDetailInstance.destroy();
     currentKpiDetailInstance = null;
