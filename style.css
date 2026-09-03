@@ -385,6 +385,7 @@ body {
   background: var(--color-bg-section);
   padding: 0 40px 60px;
   -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
 .pdf-preview-image {
   width: 100%;
