@@ -77,9 +77,6 @@ function extractNumberFromFileId(fileId) {
 
 function resolveDetailPdfForPoint(point) {
   if (point && point.pdfId) {
-    // Jika pdfId sudah berupa URL/path lengkap (mis. link Google Drive), pakai langsung.
-    // Jika hanya angka biasa (mis. "55"), anggap itu nomor file lokal: files/55.pdf
-    // (sama seperti nomor pada images/55.jpg) — BUKAN ID Google Drive.
     return isLocalOrUrl(point.pdfId) ? point.pdfId : `files/${point.pdfId}.pdf`;
   }
   const num = extractNumberFromFileId(point && point.fileId);
@@ -87,7 +84,7 @@ function resolveDetailPdfForPoint(point) {
   return `files/${num}.pdf`;
 }
 
-/* ini agar judul sesuai dengan penulisan file */
+/* judul sesuai dengan penulisan file */
 function sanitizeFilename(name) {
   return String(name || "Dokumen").replace(/[\\/:*?"<>|]/g, "-").trim();
 }
@@ -336,7 +333,7 @@ function kpiFrameShellHTML(title, subtitle) {
       <h2 class="kpi-title">${title}<span>${subtitle}</span></h2>
       <div class="kpi-toolbar">
         <div class="kpi-toolbar-actions">
-          <a class="kpi-action-btn kpi-open-sheet" href="#" target="_blank" rel="noopener">Buka Google Sheet</a>
+          <a class="kpi-action-btn kpi-open-sheets" href="#" target="_blank" rel="noopener">Buka Google Sheets</a>
           <button class="kpi-action-btn kpi-refresh-btn" type="button">Muat ulang</button>
         </div>
       </div>
