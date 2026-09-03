@@ -18,8 +18,15 @@ const toggleUker = document.getElementById("toggleUker");
 
 const kpiBody = document.getElementById("kpiBody");
 const toggleKPI = document.getElementById("toggleKPI");
-const kpiImage = document.getElementById("kpiImage");
-const kpiImagePath = "images/KPI.jpg";
+
+const detailKpiWrap = document.getElementById("detailKpiWrap");
+
+/* ====== KONFIGURASI GOOGLE SHEET KPI ======*/
+const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
+const KPI_SHEET_GID = "0";
+
+/* Google sheet di publish agar yang dilihat hanya bagian tab yang ingin di lihat, kecuali saat membuka google sheet */
+const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
 /*img preview gambar */
 const detailImage = document.createElement("img");
@@ -58,6 +65,12 @@ function resolvePreviewUrl(id) {
 function isImageFile(value) {
   if (!value) return false;
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 /* SIDEBAR / DAFTAR ISI */
@@ -114,8 +127,8 @@ function buildSidebarGroup(labelText, groupId, list) {
   sidebarList.appendChild(groupLi);
 }
 
-buildSidebarGroup("1. DUJ RO Jogja", "group-ro", divisions);
-buildSidebarGroup("2. DUJ Unit Kerja", "group-uker", divisionsUker);
+buildSidebarGroup("DUJ RO Jogja", "group-ro", divisions);
+buildSidebarGroup("DUJ Unit Kerja", "group-uker", divisionsUker);
 
 /* 3. KPI */
 function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
@@ -152,7 +165,7 @@ function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
   sidebarList.appendChild(groupLi);
 }
 
-buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
+buildSidebarGroupKPI("Key Performance Indicator (KPI)", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
   closeSidebar();
   showMain();
 
@@ -160,9 +173,6 @@ buildSidebarGroupKPI("3. KPI", "group-kpi", "KPI Regional Office Area KC, KCP da
   if (kpiBody.classList.contains("collapsed")) {
     kpiBody.classList.remove("collapsed");
     toggleKPI.setAttribute("aria-expanded", "true");
-  }
-  if (!kpiFrame.src) {
-    kpiFrame.src = resolvePreviewUrl(kpiPdfPath);
   }
 
   requestAnimationFrame(() => {
@@ -180,12 +190,26 @@ function buildDivisionCard(div) {
     ? `<p class="card-note">Silakan unduh berkas jabatan disini.</p><ul class="point-list"></ul>`
     : "";
 
+  // untuk tabel biar otomatis live
+  const hasKpi = !!(div.kpiEnabled || (div.kpiGid && String(div.kpiGid).trim()));
+  const kpiLabel = (div.kpiLabel && String(div.kpiLabel).trim()) || ("Penetapan Key Performance Indicator\n" + div.title);
+  const kpiLabelHtml = kpiLabel.split("\n").map(line => escapeHtml(line)).join("<br>");
+  const kpiBadgeHtml = hasKpi
+    ? `<button type="button" class="kpi-link-btn"><span>${kpiLabelHtml}</span><span class="kpi-link-arrow">&#8250;</span></button>`
+    : "";
+
+  // urutan tata letak setiap card
   card.innerHTML = `
     <img src="${div.image || ''}" alt="${div.title}" loading="lazy" onerror="this.style.display='none'">
     <h4>${div.title}</h4>
     <a class="download-btn" href="${resolveDownloadUrl(div.downloadId)}" target="_blank" rel="noopener">DOWNLOAD</a>
+    ${kpiBadgeHtml}
     ${pointsHtml}
   `;
+
+  if (hasKpi) {
+    card.querySelector(".kpi-link-btn").addEventListener("click", () => openKpiDetail(div));
+  }
 
   if (div.points.length) {
     const list = card.querySelector(".point-list");
@@ -211,7 +235,7 @@ function buildDivisionCard(div) {
   return card;
 }
 
-/* RCEO sendiri ditengah atas grid Regional Office */
+/* RCEO paling atas*/
 const rceoDivision = divisions[0];
 const otherDivisions = divisions.slice(1);
 
@@ -221,7 +245,7 @@ const rceoCard = buildDivisionCard(rceoDivision);
 rceoWrap.appendChild(rceoCard);
 cardsGrid.parentNode.insertBefore(rceoWrap, cardsGrid);
 
-/*grid card Regional Office8*/
+/*grid card Regional Office*/
 otherDivisions.forEach(div => {
   cardsGrid.appendChild(buildDivisionCard(div));
 });
@@ -270,12 +294,143 @@ function setupToggle(btn, body, onOpen) {
 setupToggle(toggleRO, roBody);
 setupToggle(toggleUker, ukerBody);
 setupToggle(toggleKPI, kpiBody);
-kpiImage.src = resolvePreviewUrl(kpiImagePath);
+
+
+/* ====== KPI LIVE DARI GOOGLE SHEET  ======*/
+function kpiFrameShellHTML(title, subtitle) {
+  return `
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <div class="kpi-brand">
+          <img src="images/Danantara_black.png" alt="Logo Danantara" class="kpi-logo-danantara" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
+        </div>
+        <div class="kpi-brand kpi-brand-right">
+          <img src="images/bri_blue.png" alt="Logo BRI" class="kpi-logo-bri" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
+        </div>
+      </div>
+      <h2 class="kpi-title">${title}<span>${subtitle}</span></h2>
+      <div class="kpi-toolbar">
+        <div class="kpi-toolbar-actions">
+          <a class="kpi-action-btn kpi-open-sheet" href="#" target="_blank" rel="noopener">Buka Google Sheet</a>
+          <button class="kpi-action-btn kpi-refresh-btn" type="button">Muat ulang</button>
+        </div>
+      </div>
+      <div class="kpi-err"></div>
+      <div class="kpi-table-scroll"><div class="kpi-empty">Memuat data…</div></div>
+    </div>
+  `;
+}
+
+const KPI_DEFAULT_HEIGHT = 700;
+
+/*KPI Live */
+function initKpiInstance(containerEl, opts) {
+  const gid = opts.gid;
+  const title = opts.title || "KPI Regional Office";
+  const subtitle = opts.subtitle || "";
+  const height = Number(opts.height) > 0 ? Number(opts.height) : KPI_DEFAULT_HEIGHT;
+
+  containerEl.innerHTML = kpiFrameShellHTML(title, subtitle);
+
+  const tableScroll = containerEl.querySelector(".kpi-table-scroll");
+  const errBox = containerEl.querySelector(".kpi-err");
+  const openSheetLink = containerEl.querySelector(".kpi-open-sheet");
+  const refreshBtn = containerEl.querySelector(".kpi-refresh-btn");
+
+  openSheetLink.href = `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/edit#gid=${gid}`;
+
+  let destroyed = false;
+
+  function showErr(msg) {
+    errBox.innerHTML = msg ? `<div class="kpi-err-box">${msg}</div>` : "";
+  }
+
+  function load() {
+    if (destroyed) return;
+    if (gid === undefined || gid === null || String(gid).trim() === "") {
+      tableScroll.innerHTML = `<div class="kpi-empty">GID tab Google Sheet belum diisi di divisions_data.js (kpiGid). Isi dengan angka GID dari URL tab sheet-nya (…#gid=XXXXXXX).</div>`;
+      return;
+    }
+    showErr("");
+
+    // Pakai pubhtml/gsheetnya di publish agar yang dilihat hanya perbagian tab yang ingin di tampilkan
+    const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
+
+    const iframe = document.createElement("iframe");
+    iframe.className = "kpi-sheet-iframe";
+    iframe.style.height = height + "px";
+    iframe.loading = "lazy";
+    iframe.title = title;
+    iframe.referrerPolicy = "no-referrer-when-downgrade";
+    iframe.onerror = function () {
+      showErr('Tidak bisa memuat tabel dari Google Sheet. Pastikan sheet sudah di-"Publish to web" (File > Share > Publish to web) dan GID tab benar.');
+    };
+    iframe.src = src;
+
+    tableScroll.innerHTML = "";
+    tableScroll.appendChild(iframe);
+  }
+
+  refreshBtn.addEventListener("click", load);
+  load();
+
+  return {
+    reload: load,
+    destroy: function () { destroyed = true; }
+  };
+}
+
+
+/* urutan tata letak setiap card */
+function splitKpiLabel(label, fallbackSubtitle) {
+  const text = (label && String(label).trim()) || fallbackSubtitle || "";
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+  if (lines.length >= 2) {
+    return { title: lines[0], subtitle: lines.slice(1).join("\n") };
+  }
+  return { title: "Penetapan Key Performance Indicator", subtitle: lines[0] || "" };
+}
+
+/*  (section "3. KPI") */
+initKpiInstance(document.getElementById("kpiFrameMain"), {
+  gid: KPI_SHEET_GID,
+  title: "Penetapan Key Performance Indicator",
+  subtitle: "Regional Office, Area, Kantor Cabang, Kantor Cabang Pembantu, dan BRI Unit Tahun 2026",
+  height: 620
+});
+
+/* untuk bagian KPI per-card */
+let currentKpiDetailInstance = null;
+
+function openKpiDetail(div) {
+  detailTitle.textContent = "KPI - " + div.title;
+
+  detailFrame.src = "";
+  detailFrame.style.display = "none";
+  detailImage.src = "";
+  detailImage.style.display = "none";
+
+  detailKpiWrap.style.display = "block";
+
+  if (currentKpiDetailInstance) currentKpiDetailInstance.destroy();
+  const { title, subtitle } = splitKpiLabel(div.kpiLabel, div.title);
+  currentKpiDetailInstance = initKpiInstance(document.getElementById("kpiFrameDetail"), {
+    gid: div.kpiGid,
+    title: title,
+    subtitle: subtitle,
+    height: div.kpiHeight
+  });
+
+  detailView.classList.add("show");
+  window.scrollTo(0, 0);
+}
 
 
 /*TAMPILAN DETAIL JABATAN*/
 function openDetail(point) {
   detailTitle.textContent = point.title;
+
+  detailKpiWrap.style.display = "none";
 
   if (isImageFile(point.fileId)) {
     detailFrame.src = "";
@@ -297,6 +452,11 @@ function showMain() {
   detailView.classList.remove("show");
   detailFrame.src = "";
   detailImage.src = "";
+  detailKpiWrap.style.display = "none";
+  if (currentKpiDetailInstance) {
+    currentKpiDetailInstance.destroy();
+    currentKpiDetailInstance = null;
+  }
 }
 
 backBtn.addEventListener("click", showMain);
