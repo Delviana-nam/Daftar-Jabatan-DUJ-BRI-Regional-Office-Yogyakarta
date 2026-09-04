@@ -6,6 +6,7 @@
   --color-white: #ffffff;
   --color-text: #333333;
   --color-accent: #71c5e8; 
+  --topbar-height: 56px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,7 +17,7 @@ body {
   background: var(--color-white);
 }
 
-/* ================= HEADER (dikecilkan) ================= */
+/*  HEADER  */
 .topbar {
   display: flex;
   align-items: center;
@@ -67,7 +68,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR */
 .sidebar {
   position: fixed;
   top: 0;
@@ -169,7 +170,7 @@ body {
 }
 .sidebar-overlay.show { display: block; }
 
-/* ================= HERO ================= */
+/* HERO */
 .hero {
   position: relative;
   padding: 50px 30px 40px;
@@ -188,13 +189,28 @@ body {
   color: #555;
 }
 
-/* ================= SECTION TITLE  ================= */
+/* SECTION TITLE */
 .section-title-box {
   width: 100%;
   background: var(--color-bg-section);
   padding: 20px 20px;
   display: flex;
   justify-content: center;
+  position: sticky;
+  top: var(--topbar-height);
+  z-index: 45;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.section-title-box.is-stuck {
+  background: var(--color-white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.sticky-sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .section-title-box-inner {
@@ -229,13 +245,13 @@ body {
   height: 10px;
   border-right: 2px solid #307FE2;
   border-bottom: 2px solid #307FE2;
-  transform: rotate(45deg);
+  transform: rotate(-135deg);
   transition: transform 0.3s ease;
-  margin-top: -4px;
+  margin-top: 4px;
 }
 .section-title-box-inner[aria-expanded="false"] .toggle-arrow {
-  transform: rotate(-135deg);
-  margin-top: 4px;
+  transform: rotate(45deg);
+  margin-top: -4px;
 }
 
 /* Panel card yang bisa ditutup/dibuka */
@@ -250,7 +266,7 @@ body {
   opacity: 0;
 }
 
-/* ================= CARDS GRID ================= */
+/* CARDS GRID */
 .cards-grid {
   background: var(--color-bg-section);
   display: grid;
@@ -267,6 +283,16 @@ body {
   display: flex;
   flex-direction: column;
   scroll-margin-top: 90px;
+}
+
+@keyframes card-highlight-flash {
+  0%   { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 0 rgba(8,87,195,0); }
+  20%  { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 5px rgba(8,87,195,0.85); }
+  60%  { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 5px rgba(8,87,195,0.85); }
+  100% { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 0 rgba(8,87,195,0); }
+}
+.division-card.highlight-flash {
+  animation: card-highlight-flash 0.5s ease-in-out 1;
 }
 
 /* RCEO atas sendiri*/
@@ -331,8 +357,15 @@ body {
   background: #f2fbff;
 }
 .kpi-link-arrow {
-  font-size: 16px;
-  color: #71c5e8;
+  font-size: 34px;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--color-orange);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .kpi-link-arrow { font-size: 28px; }
 }
 
 .card-note {
@@ -357,7 +390,7 @@ body {
   color: var(--color-text);
   font-size: 14px;
   cursor: pointer;
-  padding: 4px 0 4px 18px;
+  padding: 4px 0 4px 26px;
   position: relative;
   width: 100%;
   display: block;
@@ -366,18 +399,26 @@ body {
 }
 .point-list button::before,
 .point-list a::before {
-  content: "\25C6";
+  content: "\1F441";
   color: var(--color-orange);
   position: absolute;
   left: 0;
-  font-size: 11px;
-  top: 7px;
+  font-size: 14px;
+  top: 4px;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
 }
 .point-list button:hover,
 .point-list a:hover,
 .point-list button:active,
 .point-list a:active {
   color: var(--color-accent);
+}
+.point-list button:hover::before,
+.point-list a:hover::before,
+.point-list button:active::before,
+.point-list a:active::before {
+  opacity: 1;
 }
 
 /* ================= SECTION KPI ================= */
@@ -443,7 +484,7 @@ body {
 .kpi-brand { display: flex; align-items: center; gap: 10px; min-width: 110px; }
 .kpi-brand-right { justify-content: flex-end; }
 .kpi-logo-danantara { height: 24px; width: auto; }
-.kpi-logo-bri { height: 70px; width: auto; }
+.kpi-logo-bri { height: 90px; width: auto; }
 
 .kpi-title {
   text-align: center;
