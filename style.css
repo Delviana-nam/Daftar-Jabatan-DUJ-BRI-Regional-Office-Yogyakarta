@@ -443,7 +443,7 @@ body {
 .kpi-brand { display: flex; align-items: center; gap: 10px; min-width: 110px; }
 .kpi-brand-right { justify-content: flex-end; }
 .kpi-logo-danantara { height: 24px; width: auto; }
-.kpi-logo-bri { height: 90px; width: auto; }
+.kpi-logo-bri { height: 120px; width: auto; }
 
 .kpi-title {
   text-align: center;
