@@ -80,7 +80,7 @@ const divisions = [
     "kpiHeight": 460,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Business Support Head Tahun 2026",
     "points": [
-      { "title": "REGIONAL OPERATION HEAD", "fileId": "images/29.jpg", "pdfId": "29" },
+      { "title": "REGIONAL BUSINESS SUPPORT HEAD", "fileId": "images/29.jpg", "pdfId": "29" },
       { "title": "OPERATION, NETWORK & SERVICE DEPARTMENT HEAD", "fileId": "images/30.jpg", "pdfId": "30" },
       { "title": "ACCOUNTING SECTION HEAD", "fileId": "images/31.jpg", "pdfId": "31" },
       { "title": "OPERATION, NETWORK & SERVICE SECTION HEAD", "fileId": "images/32.jpg", "pdfId": "32" },
