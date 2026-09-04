@@ -22,7 +22,7 @@ const toggleKPI = document.getElementById("toggleKPI");
 const detailKpiWrap = document.getElementById("detailKpiWrap");
 const downloadBtn = document.getElementById("downloadBtn");
 
-/* ====== KONFIGURASI GOOGLE SHEET KPI ======*/
+/* KONFIGURASI GOOGLE SHEET KPI */
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
 
@@ -463,6 +463,7 @@ initKpiInstance(document.getElementById("kpiFrameMain"), {
 
 /* buat KPI per-card */
 let currentKpiDetailInstance = null;
+let previousScrollY = 0;
 
 function openKpiDetail(div) {
   detailTitle.textContent = "KPI - " + div.title;
@@ -496,8 +497,8 @@ function openKpiDetail(div) {
     height: div.kpiHeight
   });
 
-  detailView.classList.add("show");
-  window.scrollTo(0, 0);
+  previousScrollY = window.scrollY;
+detailView.classList.add("show");
 }
 
 
@@ -530,8 +531,8 @@ function openDetail(point) {
     downloadBtn.style.display = "none";
   }
 
-  detailView.classList.add("show");
-  window.scrollTo(0, 0);
+  previousScrollY = window.scrollY;
+detailView.classList.add("show");
 }
 
 function showMain() {
@@ -543,10 +544,19 @@ function showMain() {
   downloadBtn.href = "#";
   downloadBtn.removeAttribute("download");
   downloadBtn.removeAttribute("target");
+
   if (currentKpiDetailInstance) {
     currentKpiDetailInstance.destroy();
     currentKpiDetailInstance = null;
   }
+
+  // Kembali ke posisi scroll sebelumnya
+  requestAnimationFrame(() => {
+    window.scrollTo({
+      top: previousScrollY,
+      behavior: "instant"
+    });
+  });
 }
 
 backBtn.addEventListener("click", showMain);
