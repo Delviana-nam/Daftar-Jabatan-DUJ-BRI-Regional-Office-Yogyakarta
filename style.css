@@ -399,15 +399,56 @@ body {
 }
 .point-list button::before,
 .point-list a::before {
-  content: "\1F441";
-  color: var(--color-orange);
+  content: "";
   position: absolute;
   left: 0;
-  font-size: 14px;
-  top: 4px;
-  opacity: 0.7;
-  transition: opacity 0.15s ease;
+  top: 50%;
+  width: 20px;
+  height: 12px;
+  transform: translateY(-50%);
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath fill-rule='evenodd' fill='%23fff' d='M12,1 C6,1 1,7 1,7 C1,7 6,13 12,13 C18,13 23,7 23,7 C23,7 18,1 12,1 Z M8.2,7 A3.8,3.8 0 1,0 15.8,7 A3.8,3.8 0 1,0 8.2,7 Z'/%3E%3Ccircle cx='12' cy='7' r='1.6' fill='%23fff'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath fill-rule='evenodd' fill='%23fff' d='M12,1 C6,1 1,7 1,7 C1,7 6,13 12,13 C18,13 23,7 23,7 C23,7 18,1 12,1 Z M8.2,7 A3.8,3.8 0 1,0 15.8,7 A3.8,3.8 0 1,0 8.2,7 Z'/%3E%3Ccircle cx='12' cy='7' r='1.6' fill='%23fff'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: background-color 0.2s ease;
 }
+
+.point-list button::after,
+.point-list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 22px;
+  height: 5px;
+  transform: translateY(-6px);
+  opacity: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 980 226'%3E%3Cg stroke='%23fff' stroke-width='48' stroke-linecap='round' fill='none'%3E%3Cline x1='490' y1='160' x2='490' y2='30'/%3E%3Cline x1='357' y1='170' x2='290' y2='40'/%3E%3Cline x1='623' y1='170' x2='690' y2='40'/%3E%3Cline x1='224' y1='198' x2='110' y2='75'/%3E%3Cline x1='756' y1='198' x2='870' y2='75'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 980 226'%3E%3Cg stroke='%23fff' stroke-width='48' stroke-linecap='round' fill='none'%3E%3Cline x1='490' y1='160' x2='490' y2='30'/%3E%3Cline x1='357' y1='170' x2='290' y2='40'/%3E%3Cline x1='623' y1='170' x2='690' y2='40'/%3E%3Cline x1='224' y1='198' x2='110' y2='75'/%3E%3Cline x1='756' y1='198' x2='870' y2='75'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.point-list button:hover::after,
+.point-list a:hover::after,
+.point-list button:active::after,
+.point-list a:active::after {
+  opacity: 1;
+  transform: translateY(-11.5px);
+}
+
 .point-list button:hover,
 .point-list a:hover,
 .point-list button:active,
@@ -640,7 +681,7 @@ body {
   line-height: 1;
 }
 
-/* Tombol Download di sebelah tombol Back */
+/* Tombol Download di atas tombol Back */
 .download-btn-detail {
   background: var(--color-orange);
 }
