@@ -26,10 +26,8 @@ const downloadBtn = document.getElementById("downloadBtn");
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
 
-/* Publish to web untuk menampilkan HANYA satu tab per kotak KPI, tanpa baris tab lain */
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
-/*img preview gambar */
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
 detailImage.style.display = "none";
@@ -63,7 +61,7 @@ function resolvePreviewUrl(id) {
   return `https://drive.google.com/file/d/${id}/preview`;
 }
 
-/* Download KHUSUS tab KPI yang sedang dibuka (berdasarkan gid)*/
+/* Download KHUSUS tab KPI yang dibuka (berdasarkan gid)*/
 function resolveKpiDownloadUrl(gid, format) {
   format = format || "pdf";
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
@@ -114,6 +112,39 @@ function expandSection(id) {
   }
 }
 
+function flashHighlight(el) {
+  if (!el) return;
+  el.classList.remove("highlight-flash");
+  void el.offsetWidth; // reflow, biar animasi bisa diulang
+  el.classList.add("highlight-flash");
+  el.addEventListener("animationend", function handler() {
+    el.classList.remove("highlight-flash");
+    el.removeEventListener("animationend", handler);
+  });
+}
+
+/* sticky tittle box */
+function getStickyBoxFor(el) {
+  const body = el.closest(".collapsible-body");
+  if (!body) return null;
+  let sib = body.previousElementSibling;
+  while (sib && !sib.classList.contains("section-title-box")) {
+    sib = sib.previousElementSibling;
+  }
+  return sib;
+}
+
+/* agar judul card nggak ketutup pas berhenti scroll */
+function scrollToCardClearingSticky(el) {
+  const topbar = document.querySelector(".topbar");
+  const box = getStickyBoxFor(el);
+  const extraPadding = 16;
+  const stickyOffset = (topbar ? topbar.offsetHeight : 0) + (box ? box.offsetHeight : 0) + extraPadding;
+  const rect = el.getBoundingClientRect();
+  const targetY = window.scrollY + rect.top - stickyOffset;
+  window.scrollTo({ top: Math.max(targetY, 0), behavior: "smooth" });
+}
+
 function buildSidebarGroup(labelText, groupId, list) {
   const groupLi = document.createElement("li");
   groupLi.className = "sidebar-group";
@@ -137,7 +168,10 @@ function buildSidebarGroup(labelText, groupId, list) {
       showMain();
       expandSection(div.id);
       requestAnimationFrame(() => {
-        document.getElementById(div.id).scrollIntoView({ behavior: "smooth" });
+        const target = document.getElementById(div.id);
+        if (!target) return;
+        scrollToCardClearingSticky(target);
+        setTimeout(() => flashHighlight(target), 500);
       });
     });
     li.appendChild(a);
@@ -223,7 +257,7 @@ function buildDivisionCard(div) {
   const kpiLabel = (div.kpiLabel && String(div.kpiLabel).trim()) || ("Penetapan Key Performance Indicator\n" + div.title);
   const kpiLabelHtml = kpiLabel.split("\n").map(line => escapeHtml(line)).join("<br>");
   const kpiBadgeHtml = hasKpi
-    ? `<button type="button" class="kpi-link-btn"><span>${kpiLabelHtml}</span><span class="kpi-link-arrow">&#8250;</span></button>`
+    ? `<button type="button" class="kpi-link-btn"><span>${kpiLabelHtml}</span><span class="kpi-link-arrow" aria-hidden="true">&#8250;</span></button>`
     : "";
 
   // Urutan tampilan card
@@ -381,7 +415,7 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // google sheetnya di publish agar dapat terlihat di iframe sesuai tab/bagian yang di ingin kan
+    // Google Sheetsnya di publish agar dapat terlihat di iframe sesuai tab/bagian yang di ingin kan
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
@@ -516,3 +550,61 @@ function showMain() {
 }
 
 backBtn.addEventListener("click", showMain);
+
+/* ====== tittle box stay di atas saat di scroll (sticky) ====== */
+(function setupStickyTitleBoxes() {
+  const topbar = document.querySelector(".topbar");
+  if (!topbar) return;
+
+  function applyTopbarHeightVar() {
+    document.documentElement.style.setProperty("--topbar-height", topbar.offsetHeight + "px");
+  }
+  applyTopbarHeightVar();
+
+  let sentinels = [];
+  let observer = null;
+
+  function teardown() {
+    if (observer) observer.disconnect();
+    sentinels.forEach(s => s.remove());
+    sentinels = [];
+  }
+
+  function init() {
+    teardown();
+    applyTopbarHeightVar();
+    const offset = topbar.offsetHeight + 1;
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          const box = entry.target._stickyBox;
+          if (box) box.classList.toggle("is-stuck", !entry.isIntersecting);
+        });
+      },
+      { rootMargin: `-${offset}px 0px 0px 0px`, threshold: 0 }
+    );
+
+    document.querySelectorAll(".section-title-box").forEach(box => {
+      const sentinel = document.createElement("div");
+      sentinel.className = "sticky-sentinel";
+      sentinel.setAttribute("aria-hidden", "true");
+      sentinel._stickyBox = box;
+      box.parentNode.insertBefore(sentinel, box);
+      sentinels.push(sentinel);
+      observer.observe(sentinel);
+    });
+  }
+
+  init();
+
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(init, 150);
+  });
+  window.addEventListener("load", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(init, 150);
+  });
+})();
