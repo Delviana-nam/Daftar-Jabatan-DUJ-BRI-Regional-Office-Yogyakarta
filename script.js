@@ -333,7 +333,7 @@ function kpiFrameShellHTML(title, subtitle) {
           <img src="images/Danantara_black.png" alt="Logo Danantara" class="kpi-logo-danantara" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
         </div>
         <div class="kpi-brand kpi-brand-right">
-          <img src="images/bri_blue.png" alt="Logo BRI" class="kpi-logo-bri" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
+          <img src="images/bri_Blue.png" alt="Logo BRI" class="kpi-logo-bri" onerror="console.warn('Logo tidak ditemukan:', this.src); this.style.display='none'">
         </div>
       </div>
       <h2 class="kpi-title">${title}<span>${subtitle}</span></h2>
