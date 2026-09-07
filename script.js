@@ -98,7 +98,7 @@ function downloadPdfBytes(bytes, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-async function generateKpiPdf({ gid, title, subtitle, filename }) {
+async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
   downloadBtn.innerHTML = '<span class="back-arrow">&#8595;</span> Menyiapkan PDF...';
