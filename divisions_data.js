@@ -121,14 +121,14 @@ const divisionsUker = [
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nMicro Business Manager, Consumer Business Manager, Priority Business Manager Tahun 2026",
     "points": [
-      { "title": "MANAJER BISNIS KECIL", "fileId": "images/52.jpg", "pdfId": "52" },
-      { "title": "MANAJER BISNIS MIKRO", "fileId": "images/54.jpg", "pdfId": "54" },
-      { "title": "MANAJER BISNIS MIKRO ER (MBA)", "fileId": "images/56.jpg", "pdfId": "56" },
-      { "title": "MANAJER BISNIS KONSUM", "fileId": "images/53.jpg", "pdfId": "53" },
-      { "title": "MANAJER BANKING PRIORITY", "fileId": "images/50.jpg", "pdfId": "50" },
-      { "title": "MANAJER DANA & TRANSAKSI", "fileId": "images/51.jpg", "pdfId": "51" },
+      { "title": "MANAJER BISNIS KECIL", "fileId": "images/49.jpg", "pdfId": "49" },
+      { "title": "MANAJER BISNIS MIKRO", "fileId": "images/50.jpg", "pdfId": "50" },
+      { "title": "MANAJER BISNIS MIKRO ER (MBA)", "fileId": "images/51.jpg", "pdfId": "51" },
+      { "title": "MANAJER BISNIS KONSUM", "fileId": "images/52.jpg", "pdfId": "52" },
+      { "title": "MANAJER BANKING PRIORITY", "fileId": "images/53.jpg", "pdfId": "53" },
+      { "title": "MANAJER DANA & TRANSAKSI", "fileId": "images/54.jpg", "pdfId": "54" },
       { "title": "MANAJER OPERASIONAL", "fileId": "images/55.jpg", "pdfId": "55" },
-      { "title": "AST MANAJER OPERASIONAL & LAYANAN", "fileId": "images/49.jpg", "pdfId": "49" }
+      { "title": "AST MANAJER OPERASIONAL & LAYANAN", "fileId": "images/56.jpg", "pdfId": "56" }
     ]
   },
   {
@@ -151,13 +151,13 @@ const divisionsUker = [
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nMantri, RM Mikro, RM BRIGuna, RM KPR, RM Priority Tahun 2026",
     "points": [
-      { "title": "RM BISNIS KECIL (SME)", "fileId": "images/66.jpg", "pdfId": "66" },
-      { "title": "RM FUNDING & TRANSACTION", "fileId": "images/68.jpg", "pdfId": "68" },
-      { "title": "RM BISNIS KPR", "fileId": "images/67.jpg", "pdfId": "67" },
-      { "title": "RM BISNIS BRIGUNA", "fileId": "images/65.jpg", "pdfId": "65" },
-      { "title": "RM PRIORITY", "fileId": "images/69.jpg", "pdfId": "69" },
-      { "title": "MANTRI", "fileId": "images/64.jpg", "pdfId": "64" },
-      { "title": "RM CREDIT RESTRUCTURING & RECOVERY", "fileId": "images/63.jpg", "pdfId": "63" }
+      { "title": "RM BISNIS KECIL (SME)", "fileId": "images/63.jpg", "pdfId": "63" },
+      { "title": "RM FUNDING & TRANSACTION", "fileId": "images/64.jpg", "pdfId": "64" },
+      { "title": "RM BISNIS KPR", "fileId": "images/65.jpg", "pdfId": "65" },
+      { "title": "RM BISNIS BRIGUNA", "fileId": "images/66.jpg", "pdfId": "66" },
+      { "title": "RM PRIORITY", "fileId": "images/67.jpg", "pdfId": "67" },
+      { "title": "MANTRI", "fileId": "images/68.jpg", "pdfId": "68" },
+      { "title": "RM CREDIT RESTRUCTURING & RECOVERY", "fileId": "images/69.jpg", "pdfId": "69" }
     ]
   },
   {
@@ -178,13 +178,13 @@ const divisionsUker = [
     "title": "SUPPORT",
     "downloadId": "files/Support.pdf",
     "points": [
-      { "title": "PET OPERASIONAL KREDIT", "fileId": "images/79.jpg", "pdfId": "79" },
-      { "title": "PETUGAS TRANSAKSI", "fileId": "images/82.jpg", "pdfId": "82" },
+      { "title": "PET OPERASIONAL KREDIT", "fileId": "images/78.jpg", "pdfId": "78" },
+      { "title": "PETUGAS TRANSAKSI", "fileId": "images/79.jpg", "pdfId": "79" },
       { "title": "PETUGAS IT & E-CHANNEL", "fileId": "images/80.jpg", "pdfId": "80" },
-      { "title": "PET PENUNJANG OPERASIONAL", "fileId": "images/84.jpg", "pdfId": "84" },
-      { "title": "SEKRETARIS", "fileId": "images/83.jpg", "pdfId": "83" },
-      { "title": "PET PENUNJANG BISNIS", "fileId": "images/81.jpg", "pdfId": "81" },
-      { "title": "PET PENUNJANG BISNIS KEAGENAN", "fileId": "images/78.jpg", "pdfId": "78" }
+      { "title": "PET PENUNJANG OPERASIONAL", "fileId": "images/81.jpg", "pdfId": "81" },
+      { "title": "SEKRETARIS", "fileId": "images/82.jpg", "pdfId": "82" },
+      { "title": "PET PENUNJANG BISNIS", "fileId": "images/83.jpg", "pdfId": "83" },
+      { "title": "PET PENUNJANG BISNIS KEAGENAN", "fileId": "images/84.jpg", "pdfId": "84" }
     ]
   }
 ];
