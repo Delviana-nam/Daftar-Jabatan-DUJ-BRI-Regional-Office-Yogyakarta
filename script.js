@@ -68,11 +68,11 @@ function resolveKpiDownloadUrl(gid, format) {
 }
 
 /* PDF dari Google Sheets per tab */
-async function fetchSheetPdfBytes(gid, range) { // <-- FIX: tambah parameter range
-  let url = // <-- FIX: const -> let, karena di-append di bawah
+async function fetchSheetPdfBytes(gid, range) {
+  let url =
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
     `?format=pdf&gid=${encodeURIComponent(gid)}` +
-    `&portrait=false&size=A4&fitw=true&scale=4` +
+    `&portrait=false&size=A4&fitw=true&scale=2` + // <-- turun dari 4 ke 2, lebih cepat
     `&sheetnames=false&printtitle=false&pagenumbers=false&gridlines=false` +
     `&top_margin=0.00&bottom_margin=0.00&left_margin=0.00&right_margin=0.00`;
 
@@ -83,23 +83,22 @@ async function fetchSheetPdfBytes(gid, range) { // <-- FIX: tambah parameter ran
     if (range.c2 != null) url += `&c2=${range.c2}`;
   }
 
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
-  return await res.arrayBuffer();
-}
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 20000); // <-- batas 20 detik
 
-function downloadPdfBytes(bytes, filename) {
-  const blob = new Blob([bytes], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename || "KPI.pdf";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
+    return await res.arrayBuffer();
+  } catch (err) {
+    if (err.name === "AbortError") {
+      throw new Error("Waktu tunggu habis saat mengambil data dari Google Sheets (gid " + gid + "). Coba lagi atau cek koneksi internet.");
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
-
 async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
