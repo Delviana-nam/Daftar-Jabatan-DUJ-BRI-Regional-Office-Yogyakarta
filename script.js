@@ -74,6 +74,13 @@ async function fetchSheetPdfBytes(gid) {
     `&portrait=false&size=A4&fitw=true&scale=4` +
     `&sheetnames=false&printtitle=false&pagenumbers=false&gridlines=false` +
     `&top_margin=0.00&bottom_margin=0.00&left_margin=0.00&right_margin=0.00`;
+
+  if (range) {
+    if (range.r1 != null) url += `&r1=${range.r1}`;
+    if (range.r2 != null) url += `&r2=${range.r2}`;
+    if (range.c1 != null) url += `&c1=${range.c1}`;
+    if (range.c2 != null) url += `&c2=${range.c2}`;
+  }
   const res = await fetch(url);
   if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
   return await res.arrayBuffer();
@@ -98,7 +105,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
 
   try {
     const [sheetPdfBytes, logoDanantaraBytes, logoBriBytes] = await Promise.all([
-      fetchSheetPdfBytes(gid),
+      fetchSheetPdfBytes(gid, range),
       fetch("images/Danantara_black.png").then(r => r.arrayBuffer()),
       fetch("images/bri_Blue.png").then(r => r.arrayBuffer())
     ]);
