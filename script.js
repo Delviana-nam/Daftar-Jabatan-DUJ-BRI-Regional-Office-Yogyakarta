@@ -149,6 +149,42 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
       return !isSubItemRow(row);
     });
 
+    /* Gabungkan (rowSpan) kolom "No." untuk baris yang nomornya kosong,
+       supaya nyambung visual seperti merged cell di Google Sheets */
+    function buildMergedBody(rows) {
+      const merged = [];
+      let i = 0;
+      while (i < rows.length) {
+        const row = rows[i];
+        const noValue = String(row[0] || "").trim();
+
+        if (noValue !== "") {
+          let span = 1;
+          let j = i + 1;
+          while (j < rows.length && String(rows[j][0] || "").trim() === "") {
+            span++;
+            j++;
+          }
+          const newRow = row.slice();
+          newRow[0] = {
+            content: noValue,
+            rowSpan: span,
+            styles: { valign: "middle", halign: "center" }
+          };
+          merged.push(newRow);
+          for (let k = i + 1; k < i + span; k++) {
+            merged.push(rows[k].slice(1)); // kolom "No." dihapus dari baris ini
+          }
+          i += span;
+        } else {
+          merged.push(row.slice());
+          i++;
+        }
+      }
+      return merged;
+    }
+    const mergedBody = buildMergedBody(body);
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -204,7 +240,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
 
     doc.autoTable({
       head,
-      body,
+      body: mergedBody,
       startY: 76,
       margin: { top: 76, left: 30, right: 30, bottom: 36 },
       theme: "grid",
