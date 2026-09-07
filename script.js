@@ -69,10 +69,11 @@ function resolveKpiDownloadUrl(gid, format) {
 
 /* ============ GENERATOR PDF KPI DENGAN TEMPLATE LOGO (jsPDF) ============ */
 
-/* Ambil gambar dari URL dan ubah jadi base64, supaya bisa dipakai jsPDF (addImage) */
-const _imageDataUrlCache = {};
-function urlToDataUrl(url) {
-  if (_imageDataUrlCache[url]) return _imageDataUrlCache[url];
+/* Ambil gambar dari URL, ubah jadi base64 SEKALIGUS ambil dimensi aslinya
+   supaya logo bisa di-scale proporsional (gak gepeng) di dalam PDF */
+const _imageInfoCache = {};
+function loadImageInfo(url) {
+  if (_imageInfoCache[url]) return _imageInfoCache[url];
   const p = fetch(url)
     .then(res => {
       if (!res.ok) throw new Error("Gagal memuat gambar: " + url);
@@ -80,12 +81,24 @@ function urlToDataUrl(url) {
     })
     .then(blob => new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
+      reader.onloadend = () => {
+        const dataUrl = reader.result;
+        const img = new Image();
+        img.onload = () => resolve({ dataUrl, width: img.naturalWidth, height: img.naturalHeight });
+        img.onerror = reject;
+        img.src = dataUrl;
+      };
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     }));
-  _imageDataUrlCache[url] = p;
+  _imageInfoCache[url] = p;
   return p;
+}
+
+/* Hitung ukuran gambar supaya pas di dalam kotak (maxW x maxH) tanpa gepeng */
+function fitImageBox(naturalW, naturalH, maxW, maxH) {
+  const ratio = Math.min(maxW / naturalW, maxH / naturalH);
+  return { w: naturalW * ratio, h: naturalH * ratio };
 }
 
 /* Ambil isi tab Google Sheet (berdasar gid) sebagai array baris, lewat endpoint CSV publik */
@@ -107,8 +120,8 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
   try {
     const [rows, logoDanantara, logoBri] = await Promise.all([
       fetchSheetRows(gid),
-      urlToDataUrl("images/Danantara_black.png"),
-      urlToDataUrl("images/bri_Blue.png")
+      loadImageInfo("images/Danantara_black.png"),
+      loadImageInfo("images/bri_Blue.png")
     ]);
 
     if (!rows.length) throw new Error("Data KPI kosong.");
@@ -121,10 +134,27 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
+    // Kotak maksimum tempat logo diletakkan (logo di-scale proporsional di dalam kotak ini, jadi gak gepeng)
+    const LOGO_BOX_W = 90;
+    const LOGO_BOX_H = 32;
+    const LOGO_Y = 16;
+    const danantaraSize = fitImageBox(logoDanantara.width, logoDanantara.height, LOGO_BOX_W, LOGO_BOX_H);
+    const briSize = fitImageBox(logoBri.width, logoBri.height, LOGO_BOX_W, LOGO_BOX_H);
+
     function drawHeaderFooter() {
-      // Logo kiri & kanan
-      doc.addImage(logoDanantara, "PNG", 40, 18, 85, 28);
-      doc.addImage(logoBri, "PNG", pageWidth - 40 - 85, 18, 85, 28);
+      // Logo kiri (Danantara), rata kiri & vertikal-tengah di dalam kotaknya
+      doc.addImage(
+        logoDanantara.dataUrl, "PNG",
+        40, LOGO_Y + (LOGO_BOX_H - danantaraSize.h) / 2,
+        danantaraSize.w, danantaraSize.h
+      );
+
+      // Logo kanan (BRI), rata kanan & vertikal-tengah di dalam kotaknya
+      doc.addImage(
+        logoBri.dataUrl, "PNG",
+        pageWidth - 40 - briSize.w, LOGO_Y + (LOGO_BOX_H - briSize.h) / 2,
+        briSize.w, briSize.h
+      );
 
       // Judul & subjudul di tengah
       doc.setFont(undefined, "bold");
