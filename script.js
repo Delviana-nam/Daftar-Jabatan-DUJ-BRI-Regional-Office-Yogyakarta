@@ -115,95 +115,6 @@ function stripLeadingBlankRows(rows) {
   return rows.slice(start);
 }
 
-/* ==== Styling & merge otomatis untuk tabel KPI di PDF ====
-   - Baris kategori (mis. "Fokus Pertumbuhan Kredit") -> biru muda #CFE2F3, teks hitam bold,
-     kolom No.+KPI digabung jadi satu.
-   - Baris "Total Bobot" (grand total paling bawah)   -> biru #71C5E8, teks putih bold.
-   - Kolom No. digabung vertikal untuk tiap kelompok sub-item (a, b, c, ...).
-*/
-const KPI_CATEGORY_BG = [207, 226, 243]; // #CFE2F3
-const KPI_TOTAL_BG    = [113, 197, 232]; // #71C5E8
-
-function isKpiSubItemLabel(text) {
-  // baris sub-item selalu diawali "a.", "b.", "c." dst.
-  return /^[a-z]\.\s*/i.test(String(text || "").trim());
-}
-
-function isKpiTotalRow(row) {
-  const joined = (String(row[0] || "") + " " + String(row[1] || "")).toLowerCase();
-  return joined.includes("total bobot");
-}
-
-function buildKpiStyledBody(rawRows) {
-  const styledRows = [];
-  let i = 0;
-
-  while (i < rawRows.length) {
-    const row = rawRows[i];
-    const noCell = String(row[0] || "").trim();
-    const kpiCell = String(row[1] || "").trim();
-
-    // Baris grand total "Total Bobot"
-    if (isKpiTotalRow(row)) {
-      const rest = row.slice(2).map(v => ({
-        content: v || "",
-        styles: { fillColor: KPI_TOTAL_BG, textColor: 255, fontStyle: "bold" }
-      }));
-      styledRows.push([
-        { content: "Total Bobot", colSpan: 2, styles: { fillColor: KPI_TOTAL_BG, textColor: 255, fontStyle: "bold" } },
-        ...rest
-      ]);
-      i++;
-      continue;
-    }
-
-    // Baris kategori: kolom KPI berisi label kategori (bukan sub-item "a./b./c.") dan No. kosong
-    if (noCell === "" && kpiCell !== "" && !isKpiSubItemLabel(kpiCell)) {
-      const rest = row.slice(2).map(v => ({
-        content: v || "",
-        styles: { fillColor: KPI_CATEGORY_BG, textColor: [0, 0, 0], fontStyle: "bold" }
-      }));
-      styledRows.push([
-        { content: kpiCell, colSpan: 2, styles: { fillColor: KPI_CATEGORY_BG, textColor: [0, 0, 0], fontStyle: "bold" } },
-        ...rest
-      ]);
-      i++;
-      continue;
-    }
-
-    // Awal kelompok bernomor -> gabung kolom No. vertikal sepanjang sub-itemnya
-    if (noCell !== "") {
-      let span = 1;
-      let j = i + 1;
-      while (j < rawRows.length) {
-        const nextNo = String(rawRows[j][0] || "").trim();
-        const nextKpi = String(rawRows[j][1] || "").trim();
-        if (nextNo === "" && isKpiSubItemLabel(nextKpi)) {
-          span++;
-          j++;
-        } else {
-          break;
-        }
-      }
-      styledRows.push([
-        { content: noCell, rowSpan: span, styles: { halign: "center", valign: "middle" } },
-        ...row.slice(1)
-      ]);
-      for (let k = i + 1; k < i + span; k++) {
-        styledRows.push(rawRows[k].slice(1));
-      }
-      i += span;
-      continue;
-    }
-
-    // Fallback: baris apa adanya (data tidak sesuai pola di atas)
-    styledRows.push(row);
-    i++;
-  }
-
-  return styledRows;
-}
-
 /* letterhead logo Danantara + BRI */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
@@ -221,7 +132,22 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
 
     const cleanRows = stripLeadingBlankRows(rows);
     const head = [cleanRows[0]];
-    const body = buildKpiStyledBody(cleanRows.slice(1));
+    const body = cleanRows.slice(1);
+
+    /* Deteksi baris "kategori" (mis. "Meningkatkan Profitability",
+       "Fokus Pertumbuhan Kredit") supaya bisa dikasih style bold +
+       background biru muda seperti di Google Sheet aslinya.
+       Baris sub-item (mis. "a. Laba", "b. Fee Based Income Total")
+       tetap pakai style biasa. */
+    function isSubItemRow(rowArray) {
+      const kpiText = String((rowArray && rowArray[1]) || "").trim();
+      return /^[a-z]\.\s/i.test(kpiText);
+    }
+    const categoryRowFlags = body.map(row => {
+      const kpiText = String((row && row[1]) || "").trim();
+      if (!kpiText) return false;
+      return !isSubItemRow(row);
+    });
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
@@ -291,20 +217,24 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
         lineColor: [150, 150, 150]
       },
       headStyles: {
-        fillColor: [8, 87, 195],
+        fillColor: [11, 61, 145],
         textColor: 255,
         fontStyle: "bold",
         lineWidth: 0.5,
         lineColor: [150, 150, 150]
-      },
-      columnStyles: {
-        0: { halign: "center" }
       },
       bodyStyles: {
         lineWidth: 0.5,
         lineColor: [150, 150, 150]
       },
       alternateRowStyles: { fillColor: [255, 255, 255] },
+      didParseCell: function (data) {
+        if (data.section === "body" && categoryRowFlags[data.row.index]) {
+          data.cell.styles.fillColor = [214, 232, 250];
+          data.cell.styles.textColor = [11, 61, 145];
+          data.cell.styles.fontStyle = "bold";
+        }
+      },
       didDrawPage: drawHeaderFooter
     });
 
