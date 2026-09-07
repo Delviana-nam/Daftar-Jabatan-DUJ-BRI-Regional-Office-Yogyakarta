@@ -66,9 +66,9 @@ function resolveKpiDownloadUrl(gid, format) {
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* PDF dari Google Sheets per tab */
-async function fetchSheetPdfBytes(gid) {
-  const url =
+/* PDF dari Google Sheets per tab, dengan opsi range (r1,r2,c1,c2) untuk memotong hanya area tabel */
+async function fetchSheetPdfBytes(gid, range) { // <-- FIX: tambah parameter range
+  let url = // <-- FIX: const -> let, karena di-append di bawah
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
     `?format=pdf&gid=${encodeURIComponent(gid)}` +
     `&portrait=false&size=A4&fitw=true&scale=4` +
@@ -81,6 +81,7 @@ async function fetchSheetPdfBytes(gid) {
     if (range.c1 != null) url += `&c1=${range.c1}`;
     if (range.c2 != null) url += `&c2=${range.c2}`;
   }
+
   const res = await fetch(url);
   if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
   return await res.arrayBuffer();
@@ -132,7 +133,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       const pageHeight = sheetH + HEADER_H + FOOTER_H;
       const page = outDoc.addPage([pageWidth, pageHeight]);
 
-      // enter table
+      // tabel ditempel di tengah (margin kiri-kanan sama)
       page.drawPage(embedded, {
         x: TABLE_MARGIN_X,
         y: FOOTER_H,
@@ -611,7 +612,8 @@ function openKpiDetail(div) {
         gid: div.kpiGid,
         title: kpiTitleForPdf,
         subtitle: kpiSubtitleForPdf,
-        filename: sanitizeFilename(div.title) + " - KPI.pdf"
+        filename: sanitizeFilename(div.title) + " - KPI.pdf",
+        range: div.kpiRange || null // <-- FIX: teruskan range per-divisi dari divisions_data.js
       });
     };
     downloadBtn._kpiClickHandler = handler;
