@@ -61,10 +61,113 @@ function resolvePreviewUrl(id) {
   return `https://drive.google.com/file/d/${id}/preview`;
 }
 
-/* Download KHUSUS tab KPI yang dibuka (berdasarkan gid)*/
+/* Download KHUSUS tab KPI yang dibuka (berdasarkan gid) - versi lama, disimpan sebagai fallback */
 function resolveKpiDownloadUrl(gid, format) {
   format = format || "pdf";
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
+}
+
+/* ============ GENERATOR PDF KPI DENGAN TEMPLATE LOGO (jsPDF) ============ */
+
+/* Ambil gambar dari URL dan ubah jadi base64, supaya bisa dipakai jsPDF (addImage) */
+const _imageDataUrlCache = {};
+function urlToDataUrl(url) {
+  if (_imageDataUrlCache[url]) return _imageDataUrlCache[url];
+  const p = fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error("Gagal memuat gambar: " + url);
+      return res.blob();
+    })
+    .then(blob => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    }));
+  _imageDataUrlCache[url] = p;
+  return p;
+}
+
+/* Ambil isi tab Google Sheet (berdasar gid) sebagai array baris, lewat endpoint CSV publik */
+async function fetchSheetRows(gid) {
+  const csvUrl = `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(gid)}`;
+  const res = await fetch(csvUrl);
+  if (!res.ok) throw new Error("Gagal mengambil data sheet (gid " + gid + ")");
+  const csvText = await res.text();
+  const parsed = Papa.parse(csvText.trim(), { skipEmptyLines: true });
+  return parsed.data;
+}
+
+/* Bikin & download PDF KPI dengan letterhead logo Danantara + BRI */
+async function generateKpiPdf({ gid, title, subtitle, filename }) {
+  if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
+  const originalLabel = downloadBtn.innerHTML;
+  downloadBtn.innerHTML = '<span class="back-arrow">&#8595;</span> Menyiapkan PDF...';
+
+  try {
+    const [rows, logoDanantara, logoBri] = await Promise.all([
+      fetchSheetRows(gid),
+      urlToDataUrl("images/Danantara_black.png"),
+      urlToDataUrl("images/bri_Blue.png")
+    ]);
+
+    if (!rows.length) throw new Error("Data KPI kosong.");
+
+    const head = [rows[0]];
+    const body = rows.slice(1);
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    function drawHeaderFooter() {
+      // Logo kiri & kanan
+      doc.addImage(logoDanantara, "PNG", 40, 18, 85, 28);
+      doc.addImage(logoBri, "PNG", pageWidth - 40 - 85, 18, 85, 28);
+
+      // Judul & subjudul di tengah
+      doc.setFont(undefined, "bold");
+      doc.setFontSize(13);
+      doc.text(title, pageWidth / 2, 32, { align: "center" });
+      if (subtitle) {
+        doc.setFont(undefined, "normal");
+        doc.setFontSize(9);
+        doc.text(subtitle, pageWidth / 2, 46, { align: "center" });
+      }
+
+      // Garis pemisah header
+      doc.setDrawColor(180);
+      doc.line(40, 58, pageWidth - 40, 58);
+
+      // Footer: nomor halaman + tanggal
+      const pageNum = doc.internal.getCurrentPageInfo().pageNumber;
+      doc.setFontSize(8);
+      doc.setTextColor(120);
+      doc.text(`Halaman ${pageNum}`, pageWidth - 40, pageHeight - 20, { align: "right" });
+      doc.text(`Dicetak ${new Date().toLocaleDateString("id-ID")}`, 40, pageHeight - 20);
+      doc.setTextColor(0);
+    }
+
+    doc.autoTable({
+      head,
+      body,
+      startY: 72,
+      margin: { top: 72, left: 30, right: 30, bottom: 36 },
+      styles: { fontSize: 8, cellPadding: 4, overflow: "linebreak" },
+      headStyles: { fillColor: [0, 60, 130], textColor: 255, fontStyle: "bold" },
+      didDrawPage: drawHeaderFooter
+    });
+
+    doc.save(filename || "KPI.pdf");
+  } catch (err) {
+    console.error(err);
+    alert("Gagal membuat PDF: " + err.message + "\nMenggunakan link download bawaan sebagai cadangan.");
+    window.open(resolveKpiDownloadUrl(gid, "pdf"), "_blank");
+  } finally {
+    downloadBtn.innerHTML = originalLabel;
+    if (downloadBtn.classList) downloadBtn.classList.remove("is-loading");
+  }
 }
 
 function isImageFile(value) {
@@ -475,15 +578,31 @@ function openKpiDetail(div) {
 
   detailKpiWrap.style.display = "block";
 
+  // Bersihkan handler klik dari pemakaian sebelumnya (hindari numpuk event listener)
+  if (downloadBtn._kpiClickHandler) {
+    downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
+    downloadBtn._kpiClickHandler = null;
+  }
+
   if (div.kpiGid && String(div.kpiGid).trim() !== "") {
-    downloadBtn.href = resolveKpiDownloadUrl(div.kpiGid, "pdf");
-    downloadBtn.setAttribute("download", sanitizeFilename(div.title) + " - KPI.pdf");
-    downloadBtn.target = "_blank";
-    downloadBtn.rel = "noopener";
-    downloadBtn.style.display = "flex";
-  } else {
+    downloadBtn.href = "#";
     downloadBtn.removeAttribute("download");
     downloadBtn.removeAttribute("target");
+    downloadBtn.style.display = "flex";
+
+    const { title: kpiTitleForPdf, subtitle: kpiSubtitleForPdf } = splitKpiLabel(div.kpiLabel, div.title);
+    const handler = (e) => {
+      e.preventDefault();
+      generateKpiPdf({
+        gid: div.kpiGid,
+        title: kpiTitleForPdf,
+        subtitle: kpiSubtitleForPdf,
+        filename: sanitizeFilename(div.title) + " - KPI.pdf"
+      });
+    };
+    downloadBtn._kpiClickHandler = handler;
+    downloadBtn.addEventListener("click", handler);
+  } else {
     downloadBtn.href = "#";
     downloadBtn.style.display = "none";
   }
@@ -520,6 +639,12 @@ function openDetail(point) {
     detailFrame.src = resolvePreviewUrl(point.fileId);
   }
 
+  // Bersihkan handler klik KPI kalau ada sisa dari halaman sebelumnya
+  if (downloadBtn._kpiClickHandler) {
+    downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
+    downloadBtn._kpiClickHandler = null;
+  }
+
   const pdfPath = resolveDetailPdfForPoint(point);
   if (pdfPath) {
     downloadBtn.href = pdfPath;
@@ -536,6 +661,10 @@ detailView.classList.add("show");
 }
 
 function showMain() {
+  if (downloadBtn._kpiClickHandler) {
+    downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
+    downloadBtn._kpiClickHandler = null;
+  }
   detailView.classList.remove("show");
   detailFrame.src = "";
   detailImage.src = "";
