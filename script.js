@@ -41,7 +41,6 @@ detailImage.style.maxWidth = "1100px";
 detailImage.style.margin = "0 auto";
 detailFrame.insertAdjacentElement("afterend", detailImage);
 
-/*upload files agar dapat di download*/
 function isLocalOrUrl(value) {
   if (!value) return false;
   return value.startsWith("http") || value.includes("/") || value.includes(".");
@@ -61,16 +60,13 @@ function resolvePreviewUrl(id) {
   return `https://drive.google.com/file/d/${id}/preview`;
 }
 
-/* Download KHUSUS tab KPI yang dibuka (berdasarkan gid) - versi lama, disimpan sebagai fallback */
+/* Download KHUSUS tab KPI berdasarkan gid */
 function resolveKpiDownloadUrl(gid, format) {
   format = format || "pdf";
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* ============ GENERATOR PDF KPI DENGAN TEMPLATE LOGO (jsPDF) ============ */
-
-/* Ambil gambar dari URL, ubah jadi base64 SEKALIGUS ambil dimensi aslinya
-   supaya logo bisa di-scale proporsional (gak gepeng) di dalam PDF */
+/* (jsPDF) */
 const _imageInfoCache = {};
 function loadImageInfo(url) {
   if (_imageInfoCache[url]) return _imageInfoCache[url];
@@ -95,13 +91,12 @@ function loadImageInfo(url) {
   return p;
 }
 
-/* Hitung ukuran gambar supaya pas di dalam kotak (maxW x maxH) tanpa gepeng */
 function fitImageBox(naturalW, naturalH, maxW, maxH) {
   const ratio = Math.min(maxW / naturalW, maxH / naturalH);
   return { w: naturalW * ratio, h: naturalH * ratio };
 }
 
-/* Ambil isi tab Google Sheet (berdasar gid) sebagai array baris, lewat endpoint CSV publik */
+/* array baris untuk download */
 async function fetchSheetRows(gid) {
   const csvUrl = `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(gid)}`;
   const res = await fetch(csvUrl);
@@ -111,7 +106,7 @@ async function fetchSheetRows(gid) {
   return parsed.data;
 }
 
-/* Buang baris-baris kosong di paling atas data (kalau ada baris kosong sebelum header asli) */
+/* utk hilangin baris-baris kosong di paling atas data */
 function stripLeadingBlankRows(rows) {
   let start = 0;
   while (start < rows.length && rows[start].every(cell => String(cell || "").trim() === "")) {
@@ -120,7 +115,7 @@ function stripLeadingBlankRows(rows) {
   return rows.slice(start);
 }
 
-/* Bikin & download PDF KPI dengan letterhead logo Danantara + BRI */
+/* letterhead logo Danantara + BRI */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
@@ -144,26 +139,25 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
-    // Kotak maksimum tempat logo diletakkan (logo di-scale proporsional di dalam kotak ini, jadi gak gepeng)
-    // BRI dikasih kotak lebih besar sesuai permintaan
+    
     const DANANTARA_BOX_W = 95;
     const DANANTARA_BOX_H = 38;
     const BRI_BOX_W = 130;
-    const BRI_BOX_H = 46;
+    const BRI_BOX_H = 70;
     const LOGO_Y = 12;
     const HEADER_ROW_H = 50;
     const danantaraSize = fitImageBox(logoDanantara.width, logoDanantara.height, DANANTARA_BOX_W, DANANTARA_BOX_H);
     const briSize = fitImageBox(logoBri.width, logoBri.height, BRI_BOX_W, BRI_BOX_H);
 
     function drawHeaderFooter() {
-      // Logo kiri (Danantara), rata kiri & vertikal-tengah di baris header
+      // Logo kiri (Danantara)
       doc.addImage(
         logoDanantara.dataUrl, "PNG",
         40, LOGO_Y + (HEADER_ROW_H - danantaraSize.h) / 2,
         danantaraSize.w, danantaraSize.h
       );
 
-      // Logo kanan (BRI), rata kanan & vertikal-tengah, ukuran lebih besar
+      // Logo kanan (BRI)
       doc.addImage(
         logoBri.dataUrl, "PNG",
         pageWidth - 40 - briSize.w, LOGO_Y + (HEADER_ROW_H - briSize.h) / 2,
@@ -254,7 +248,6 @@ function resolveDetailPdfForPoint(point) {
   return `files/${num}.pdf`;
 }
 
-/* judul sesuai dengan penulisan file */
 function sanitizeFilename(name) {
   return String(name || "Dokumen").replace(/[\\/:*?"<>|]/g, "-").trim();
 }
