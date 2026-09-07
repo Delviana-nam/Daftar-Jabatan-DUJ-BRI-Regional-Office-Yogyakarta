@@ -72,7 +72,7 @@ async function fetchSheetPdfBytes(gid, range) {
   let url =
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
     `?format=pdf&gid=${encodeURIComponent(gid)}` +
-    `&portrait=false&size=A4&fitw=true&scale=2` + // <-- turun dari 4 ke 2, lebih cepat
+    `&portrait=false&size=A4&fitw=true&scale=2` +
     `&sheetnames=false&printtitle=false&pagenumbers=false&gridlines=false` +
     `&top_margin=0.00&bottom_margin=0.00&left_margin=0.00&right_margin=0.00`;
 
@@ -84,7 +84,7 @@ async function fetchSheetPdfBytes(gid, range) {
   }
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 20000); // <-- batas 20 detik
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
 
   try {
     const res = await fetch(url, { signal: controller.signal });
@@ -99,6 +99,19 @@ async function fetchSheetPdfBytes(gid, range) {
     clearTimeout(timeoutId);
   }
 }
+
+function downloadPdfBytes(bytes, filename) {
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename || "KPI.pdf";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
 async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
@@ -133,7 +146,6 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       const pageHeight = sheetH + HEADER_H + FOOTER_H;
       const page = outDoc.addPage([pageWidth, pageHeight]);
 
-      // tabel ditempel di tengah (margin kiri-kanan sama)
       page.drawPage(embedded, {
         x: TABLE_MARGIN_X,
         y: FOOTER_H,
@@ -141,7 +153,6 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: sheetH
       });
 
-      // Logo kiri (Danantara)
       const danW = 70;
       const danH = danantaraImg.height * (danW / danantaraImg.width);
       page.drawImage(danantaraImg, {
@@ -151,8 +162,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: danH
       });
 
-      // Logo kanan (BRI)
-      const briW = 80;
+      const briW = 90;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
         x: pageWidth - MARGIN_X - briW,
@@ -161,7 +171,6 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: briH
       });
 
-      // Footer: nomor halaman + tanggal
       const fontNormal = await outDoc.embedFont(PDFLib.StandardFonts.Helvetica);
       const pageNumText = `Halaman ${i + 1}`;
       const dateText = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
