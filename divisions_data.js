@@ -26,6 +26,7 @@ const divisions = [
     "kpiGid": "519583074",
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Micro Banking Head Tahun 2026",
+    "kpiRange": { "r1": 4, "r2": 32, "c1": 0, "c2": 3 },
     "points": [
       { "title": "REGIONAL MICRO BANKING HEAD", "fileId": "images/8.jpg", "pdfId": "8" },
       { "title": "MICRO BUSINESS DEPARTMENT HEAD", "fileId": "images/9.jpg", "pdfId": "9" },
@@ -53,6 +54,7 @@ const divisions = [
     "kpiGid": "1194928475",
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Consumer Banking Head (RCBH) Tahun 2026",
+    "kpiRange": { "r1": 3, "r2": 37, "c1": 0, "c2": 3 },
     "points": [
       { "title": "REGIONAL CONSUMER BANKING HEAD", "fileId": "images/19.jpg", "pdfId": "19" },
       { "title": "MORTGAGE DEPARTMENT HEAD", "fileId": "images/20.jpg", "pdfId": "20" },
@@ -79,6 +81,7 @@ const divisions = [
     "kpiGid": "1696468939",
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Business Support Head Tahun 2026",
+    "kpiRange": { "r1": 4, "r2": 28, "c1": 0, "c2": 3 },
     "points": [
       { "title": "REGIONAL BUSINESS SUPPORT HEAD", "fileId": "images/29.jpg", "pdfId": "29" },
       { "title": "OPERATION, SERVICE & E-CHANNEL DEPARTMENT HEAD", "fileId": "images/30.jpg", "pdfId": "30" },
@@ -120,6 +123,7 @@ const divisionsUker = [
     "kpiGid": "1349675824",
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nMicro Business Manager, Consumer Business Manager, Priority Business Manager Tahun 2026",
+    "kpiRange": { "r1": 4, "r2": 40, "c1": 0, "c2": 5 },
     "points": [
       { "title": "MANAJER BISNIS KECIL", "fileId": "images/49.jpg", "pdfId": "49" },
       { "title": "MANAJER BISNIS MIKRO", "fileId": "images/50.jpg", "pdfId": "50" },
@@ -150,6 +154,7 @@ const divisionsUker = [
     "kpiGid": "679117388",
     "kpiHeight": 400,
     "kpiLabel": "Penetapan Key Performance Indicator\nMantri, RM Mikro, RM BRIGuna, RM KPR, RM Priority Tahun 2026",
+    "kpiRange": { "r1": 4, "r2": 42, "c1": 0, "c2": 13 },
     "points": [
       { "title": "RM BISNIS KECIL (SME)", "fileId": "images/63.jpg", "pdfId": "63" },
       { "title": "RM FUNDING & TRANSACTION", "fileId": "images/64.jpg", "pdfId": "64" },
