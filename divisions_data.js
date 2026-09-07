@@ -31,7 +31,7 @@ const divisions = [
       { "title": "MICRO BUSINESS DEPARTMENT HEAD", "fileId": "images/9.jpg", "pdfId": "9" },
       { "title": "MICRO ECOSYSTEM 1 & 2 DEPARTMENT HEAD", "fileId": "images/10.jpg", "pdfId": "10" },
       { "title": "MICRO BUSINESS AREA MANAGER", "fileId": "images/11.jpg", "pdfId": "11" },
-      { "title": "MICRO BUSINESS AREA ASISTEN", "fileId": "images/12.jpg", "pdfId": "12" }
+      { "title": "MICRO BUSINESS AREA ASSISTANT", "fileId": "images/12.jpg", "pdfId": "12" }
     ]
   },
   {
@@ -89,7 +89,7 @@ const divisions = [
       { "title": "SINERGY BACK OFFICE LOGISTIC SECTION HEAD", "fileId": "images/35.jpg", "pdfId": "35" },
       { "title": "PUBLIC RELATION & PROTOCOL SECTION HEAD", "fileId": "images/36.jpg", "pdfId": "36" },
       { "title": "SECRETARY RO", "fileId": "images/37.jpg", "pdfId": "37" },
-      { "title": "INFORMATION TECHNOLOGY & E CHANNEL DEPARTMENT HEAD", "fileId": "images/38.jpg", "pdfId": "38" },
+      { "title": "INFORMATION TECHNOLOGY & E-CHANNEL DEPARTMENT HEAD", "fileId": "images/38.jpg", "pdfId": "38" },
       { "title": "INFORMATION TECHNOLOGY SECTION HEAD", "fileId": "images/39.jpg", "pdfId": "39" },
       { "title": "EDC SECTION HEAD", "fileId": "images/40.jpg", "pdfId": "40" },
       { "title": "ATM/CRM SECTION HEAD", "fileId": "images/41.jpg", "pdfId": "41" },
@@ -152,7 +152,7 @@ const divisionsUker = [
     "kpiLabel": "Penetapan Key Performance Indicator\nMantri, RM Mikro, RM BRIGuna, RM KPR, RM Priority Tahun 2026",
     "points": [
       { "title": "RM BISNIS KECIL (SME)", "fileId": "images/66.jpg", "pdfId": "66" },
-      { "title": "RM DANA & TRANSAKSI", "fileId": "images/68.jpg", "pdfId": "68" },
+      { "title": "RM FUNDING & TRANSACTION", "fileId": "images/68.jpg", "pdfId": "68" },
       { "title": "RM BISNIS KPR", "fileId": "images/67.jpg", "pdfId": "67" },
       { "title": "RM BISNIS BRIGUNA", "fileId": "images/65.jpg", "pdfId": "65" },
       { "title": "RM PRIORITY", "fileId": "images/69.jpg", "pdfId": "69" },
@@ -165,7 +165,7 @@ const divisionsUker = [
     "title": "FRONTLINER",
     "downloadId": "files/Frontliner.pdf",
     "points": [
-      { "title": "PRIORITY BANKING ASISSTANT", "fileId": "images/71.jpg", "pdfId": "71" },
+      { "title": "PRIORITY BANKING ASSISTANT", "fileId": "images/71.jpg", "pdfId": "71" },
       { "title": "CUSTOMER SERVICE (RITEL)", "fileId": "images/72.jpg", "pdfId": "72" },
       { "title": "CUSTOMER SERVICE (UNIT)", "fileId": "images/73.jpg", "pdfId": "73" },
       { "title": "TELLER (RITEL)", "fileId": "images/74.jpg", "pdfId": "74" },
@@ -180,7 +180,7 @@ const divisionsUker = [
     "points": [
       { "title": "PET OPERASIONAL KREDIT", "fileId": "images/79.jpg", "pdfId": "79" },
       { "title": "PETUGAS TRANSAKSI", "fileId": "images/82.jpg", "pdfId": "82" },
-      { "title": "PETUGAS IT & ECHANNEL", "fileId": "images/80.jpg", "pdfId": "80" },
+      { "title": "PETUGAS IT & E-CHANNEL", "fileId": "images/80.jpg", "pdfId": "80" },
       { "title": "PET PENUNJANG OPERASIONAL", "fileId": "images/84.jpg", "pdfId": "84" },
       { "title": "SEKRETARIS", "fileId": "images/83.jpg", "pdfId": "83" },
       { "title": "PET PENUNJANG BISNIS", "fileId": "images/81.jpg", "pdfId": "81" },
