@@ -22,7 +22,7 @@ const toggleKPI = document.getElementById("toggleKPI");
 const detailKpiWrap = document.getElementById("detailKpiWrap");
 const downloadBtn = document.getElementById("downloadBtn");
 
-/* KONFIGURASI GOOGLE SHEET KPI */
+/* KONFIGURASI GOOGLE SHEETS KPI */
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
 
@@ -66,9 +66,7 @@ function resolveKpiDownloadUrl(gid, format) {
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* Ambil PDF export ASLI dari Google Sheets khusus untuk 1 tab (gid).
-   Ini PDF yang di-render langsung oleh Google, jadi semua warna,
-   bold, dan merge cell dijamin sama persis seperti tampilan aslinya. */
+/* PDF dari Google Sheets per tab */
 async function fetchSheetPdfBytes(gid) {
   const url =
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
@@ -93,9 +91,6 @@ function downloadPdfBytes(bytes, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-/* Tempelkan PDF hasil export gsheet ke halaman baru dengan tambahan
-   strip header (logo Danantara + logo BRI + judul) di atas, dan
-   strip footer (halaman + tanggal) di bawah. */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
@@ -108,33 +103,31 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
       fetch("images/bri_Blue.png").then(r => r.arrayBuffer())
     ]);
 
-    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+    const { PDFDocument } = PDFLib;
 
     const srcDoc = await PDFDocument.load(sheetPdfBytes);
     const outDoc = await PDFDocument.create();
 
     const danantaraImg = await outDoc.embedPng(logoDanantaraBytes);
     const briImg = await outDoc.embedPng(logoBriBytes);
-    const fontBold = await outDoc.embedFont(StandardFonts.HelveticaBold);
-    const fontNormal = await outDoc.embedFont(StandardFonts.Helvetica);
 
-    const HEADER_H = 70;
+    const HEADER_H = 50;
     const FOOTER_H = 26;
     const MARGIN_X = 30;
-
+    const TABLE_MARGIN_X = 20;
     const srcPages = srcDoc.getPages();
     for (let i = 0; i < srcPages.length; i++) {
       const embedded = await outDoc.embedPage(srcPages[i]);
       const sheetW = embedded.width;
       const sheetH = embedded.height;
 
-      const pageWidth = sheetW;
+      const pageWidth = sheetW + TABLE_MARGIN_X * 2;
       const pageHeight = sheetH + HEADER_H + FOOTER_H;
       const page = outDoc.addPage([pageWidth, pageHeight]);
 
-      // Konten sheet ditempel di bawah strip header, di atas strip footer
+      // enter table
       page.drawPage(embedded, {
-        x: 0,
+        x: TABLE_MARGIN_X,
         y: FOOTER_H,
         width: sheetW,
         height: sheetH
@@ -160,46 +153,16 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
         height: briH
       });
 
-      // Judul di tengah
-      const titleSize = 13;
-      const titleWidth = fontBold.widthOfTextAtSize(title, titleSize);
-      page.drawText(title, {
-        x: (pageWidth - titleWidth) / 2,
-        y: pageHeight - 26,
-        size: titleSize,
-        font: fontBold,
-        color: rgb(0, 0, 0)
-      });
-
-      if (subtitle) {
-        const subSize = 9;
-        const subWidth = fontNormal.widthOfTextAtSize(subtitle, subSize);
-        page.drawText(subtitle, {
-          x: (pageWidth - subWidth) / 2,
-          y: pageHeight - 42,
-          size: subSize,
-          font: fontNormal,
-          color: rgb(0.2, 0.2, 0.2)
-        });
-      }
-
-      // Garis pemisah header
-      page.drawLine({
-        start: { x: MARGIN_X, y: pageHeight - HEADER_H },
-        end: { x: pageWidth - MARGIN_X, y: pageHeight - HEADER_H },
-        thickness: 0.5,
-        color: rgb(0.7, 0.7, 0.7)
-      });
-
       // Footer: nomor halaman + tanggal
+      const fontNormal = await outDoc.embedFont(PDFLib.StandardFonts.Helvetica);
       const pageNumText = `Halaman ${i + 1}`;
       const dateText = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
       const pnWidth = fontNormal.widthOfTextAtSize(pageNumText, 8);
       page.drawText(dateText, {
-        x: MARGIN_X, y: 10, size: 8, font: fontNormal, color: rgb(0.45, 0.45, 0.45)
+        x: MARGIN_X, y: 10, size: 8, font: fontNormal, color: PDFLib.rgb(0.45, 0.45, 0.45)
       });
       page.drawText(pageNumText, {
-        x: pageWidth - MARGIN_X - pnWidth, y: 10, size: 8, font: fontNormal, color: rgb(0.45, 0.45, 0.45)
+        x: pageWidth - MARGIN_X - pnWidth, y: 10, size: 8, font: fontNormal, color: PDFLib.rgb(0.45, 0.45, 0.45)
       });
     }
 
@@ -562,7 +525,7 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // Google Sheetsnya di publish agar dapat terlihat di iframe sesuai tab/bagian yang di ingin kan
+    // publish Google Sheetsnya
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
@@ -734,7 +697,7 @@ function showMain() {
 
 backBtn.addEventListener("click", showMain);
 
-/* ====== tittle box stay di atas saat di scroll (sticky) ====== */
+/* sticky title box */
 (function setupStickyTitleBoxes() {
   const topbar = document.querySelector(".topbar");
   if (!topbar) return;
