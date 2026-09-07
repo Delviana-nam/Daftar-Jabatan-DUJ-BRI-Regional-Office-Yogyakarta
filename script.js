@@ -111,6 +111,15 @@ async function fetchSheetRows(gid) {
   return parsed.data;
 }
 
+/* Buang baris-baris kosong di paling atas data (kalau ada baris kosong sebelum header asli) */
+function stripLeadingBlankRows(rows) {
+  let start = 0;
+  while (start < rows.length && rows[start].every(cell => String(cell || "").trim() === "")) {
+    start++;
+  }
+  return rows.slice(start);
+}
+
 /* Bikin & download PDF KPI dengan letterhead logo Danantara + BRI */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
@@ -126,8 +135,9 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
 
     if (!rows.length) throw new Error("Data KPI kosong.");
 
-    const head = [rows[0]];
-    const body = rows.slice(1);
+    const cleanRows = stripLeadingBlankRows(rows);
+    const head = [cleanRows[0]];
+    const body = cleanRows.slice(1);
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
@@ -135,24 +145,28 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
     const pageHeight = doc.internal.pageSize.getHeight();
 
     // Kotak maksimum tempat logo diletakkan (logo di-scale proporsional di dalam kotak ini, jadi gak gepeng)
-    const LOGO_BOX_W = 90;
-    const LOGO_BOX_H = 32;
-    const LOGO_Y = 16;
-    const danantaraSize = fitImageBox(logoDanantara.width, logoDanantara.height, LOGO_BOX_W, LOGO_BOX_H);
-    const briSize = fitImageBox(logoBri.width, logoBri.height, LOGO_BOX_W, LOGO_BOX_H);
+    // BRI dikasih kotak lebih besar sesuai permintaan
+    const DANANTARA_BOX_W = 95;
+    const DANANTARA_BOX_H = 38;
+    const BRI_BOX_W = 130;
+    const BRI_BOX_H = 46;
+    const LOGO_Y = 12;
+    const HEADER_ROW_H = 50;
+    const danantaraSize = fitImageBox(logoDanantara.width, logoDanantara.height, DANANTARA_BOX_W, DANANTARA_BOX_H);
+    const briSize = fitImageBox(logoBri.width, logoBri.height, BRI_BOX_W, BRI_BOX_H);
 
     function drawHeaderFooter() {
-      // Logo kiri (Danantara), rata kiri & vertikal-tengah di dalam kotaknya
+      // Logo kiri (Danantara), rata kiri & vertikal-tengah di baris header
       doc.addImage(
         logoDanantara.dataUrl, "PNG",
-        40, LOGO_Y + (LOGO_BOX_H - danantaraSize.h) / 2,
+        40, LOGO_Y + (HEADER_ROW_H - danantaraSize.h) / 2,
         danantaraSize.w, danantaraSize.h
       );
 
-      // Logo kanan (BRI), rata kanan & vertikal-tengah di dalam kotaknya
+      // Logo kanan (BRI), rata kanan & vertikal-tengah, ukuran lebih besar
       doc.addImage(
         logoBri.dataUrl, "PNG",
-        pageWidth - 40 - briSize.w, LOGO_Y + (LOGO_BOX_H - briSize.h) / 2,
+        pageWidth - 40 - briSize.w, LOGO_Y + (HEADER_ROW_H - briSize.h) / 2,
         briSize.w, briSize.h
       );
 
@@ -168,7 +182,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
 
       // Garis pemisah header
       doc.setDrawColor(180);
-      doc.line(40, 58, pageWidth - 40, 58);
+      doc.line(40, 62, pageWidth - 40, 62);
 
       // Footer: nomor halaman + tanggal
       const pageNum = doc.internal.getCurrentPageInfo().pageNumber;
@@ -182,10 +196,29 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
     doc.autoTable({
       head,
       body,
-      startY: 72,
-      margin: { top: 72, left: 30, right: 30, bottom: 36 },
-      styles: { fontSize: 8, cellPadding: 4, overflow: "linebreak" },
-      headStyles: { fillColor: [0, 60, 130], textColor: 255, fontStyle: "bold" },
+      startY: 76,
+      margin: { top: 76, left: 30, right: 30, bottom: 36 },
+      theme: "grid",
+      styles: {
+        fontSize: 8,
+        cellPadding: 4,
+        overflow: "linebreak",
+        valign: "middle",
+        lineWidth: 0.5,
+        lineColor: [150, 150, 150]
+      },
+      headStyles: {
+        fillColor: [11, 61, 145],
+        textColor: 255,
+        fontStyle: "bold",
+        lineWidth: 0.5,
+        lineColor: [150, 150, 150]
+      },
+      bodyStyles: {
+        lineWidth: 0.5,
+        lineColor: [150, 150, 150]
+      },
+      alternateRowStyles: { fillColor: [255, 255, 255] },
       didDrawPage: drawHeaderFooter
     });
 
