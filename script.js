@@ -66,215 +66,145 @@ function resolveKpiDownloadUrl(gid, format) {
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* (jsPDF) */
-const _imageInfoCache = {};
-function loadImageInfo(url) {
-  if (_imageInfoCache[url]) return _imageInfoCache[url];
-  const p = fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error("Gagal memuat gambar: " + url);
-      return res.blob();
-    })
-    .then(blob => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const dataUrl = reader.result;
-        const img = new Image();
-        img.onload = () => resolve({ dataUrl, width: img.naturalWidth, height: img.naturalHeight });
-        img.onerror = reject;
-        img.src = dataUrl;
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    }));
-  _imageInfoCache[url] = p;
-  return p;
+/* Ambil PDF export ASLI dari Google Sheets khusus untuk 1 tab (gid).
+   Ini PDF yang di-render langsung oleh Google, jadi semua warna,
+   bold, dan merge cell dijamin sama persis seperti tampilan aslinya. */
+async function fetchSheetPdfBytes(gid) {
+  const url =
+    `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
+    `?format=pdf&gid=${encodeURIComponent(gid)}` +
+    `&portrait=false&size=A4&fitw=true&scale=4` +
+    `&sheetnames=false&printtitle=false&pagenumbers=false&gridlines=false` +
+    `&top_margin=0.00&bottom_margin=0.00&left_margin=0.00&right_margin=0.00`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
+  return await res.arrayBuffer();
 }
 
-function fitImageBox(naturalW, naturalH, maxW, maxH) {
-  const ratio = Math.min(maxW / naturalW, maxH / naturalH);
-  return { w: naturalW * ratio, h: naturalH * ratio };
+function downloadPdfBytes(bytes, filename) {
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename || "KPI.pdf";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-/* array baris untuk download */
-async function fetchSheetRows(gid) {
-  const csvUrl = `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/gviz/tq?tqx=out:csv&gid=${encodeURIComponent(gid)}`;
-  const res = await fetch(csvUrl);
-  if (!res.ok) throw new Error("Gagal mengambil data sheet (gid " + gid + ")");
-  const csvText = await res.text();
-  const parsed = Papa.parse(csvText.trim(), { skipEmptyLines: true });
-  return parsed.data;
-}
-
-/* utk hilangin baris-baris kosong di paling atas data */
-function stripLeadingBlankRows(rows) {
-  let start = 0;
-  while (start < rows.length && rows[start].every(cell => String(cell || "").trim() === "")) {
-    start++;
-  }
-  return rows.slice(start);
-}
-
-/* letterhead logo Danantara + BRI */
+/* Tempelkan PDF hasil export gsheet ke halaman baru dengan tambahan
+   strip header (logo Danantara + logo BRI + judul) di atas, dan
+   strip footer (halaman + tanggal) di bawah. */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
   downloadBtn.innerHTML = '<span class="back-arrow">&#8595;</span> Menyiapkan PDF...';
 
   try {
-    const [rows, logoDanantara, logoBri] = await Promise.all([
-      fetchSheetRows(gid),
-      loadImageInfo("images/Danantara_black.png"),
-      loadImageInfo("images/bri_Blue.png")
+    const [sheetPdfBytes, logoDanantaraBytes, logoBriBytes] = await Promise.all([
+      fetchSheetPdfBytes(gid),
+      fetch("images/Danantara_black.png").then(r => r.arrayBuffer()),
+      fetch("images/bri_Blue.png").then(r => r.arrayBuffer())
     ]);
 
-    if (!rows.length) throw new Error("Data KPI kosong.");
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
-    const cleanRows = stripLeadingBlankRows(rows);
-    const head = [cleanRows[0]];
-    const body = cleanRows.slice(1);
+    const srcDoc = await PDFDocument.load(sheetPdfBytes);
+    const outDoc = await PDFDocument.create();
 
-    /* Deteksi baris "kategori" (mis. "Meningkatkan Profitability",
-       "Fokus Pertumbuhan Kredit") supaya bisa dikasih style bold +
-       background biru muda seperti di Google Sheet aslinya.
-       Baris sub-item (mis. "a. Laba", "b. Fee Based Income Total")
-       tetap pakai style biasa. */
-    function isSubItemRow(rowArray) {
-      const kpiText = String((rowArray && rowArray[1]) || "").trim();
-      return /^[a-z]\.\s/i.test(kpiText);
-    }
-    const categoryRowFlags = body.map(row => {
-      const kpiText = String((row && row[1]) || "").trim();
-      if (!kpiText) return false;
-      return !isSubItemRow(row);
-    });
+    const danantaraImg = await outDoc.embedPng(logoDanantaraBytes);
+    const briImg = await outDoc.embedPng(logoBriBytes);
+    const fontBold = await outDoc.embedFont(StandardFonts.HelveticaBold);
+    const fontNormal = await outDoc.embedFont(StandardFonts.Helvetica);
 
-    /* Gabungkan (rowSpan) kolom "No." untuk baris yang nomornya kosong,
-       supaya nyambung visual seperti merged cell di Google Sheets */
-    function buildMergedBody(rows) {
-      const merged = [];
-      let i = 0;
-      while (i < rows.length) {
-        const row = rows[i];
-        const noValue = String(row[0] || "").trim();
+    const HEADER_H = 70;
+    const FOOTER_H = 26;
+    const MARGIN_X = 30;
 
-        if (noValue !== "") {
-          let span = 1;
-          let j = i + 1;
-          while (j < rows.length && String(rows[j][0] || "").trim() === "") {
-            span++;
-            j++;
-          }
-          const newRow = row.slice();
-          newRow[0] = {
-            content: noValue,
-            rowSpan: span,
-            styles: { valign: "middle", halign: "center" }
-          };
-          merged.push(newRow);
-          for (let k = i + 1; k < i + span; k++) {
-            merged.push(rows[k].slice(1)); // kolom "No." dihapus dari baris ini
-          }
-          i += span;
-        } else {
-          merged.push(row.slice());
-          i++;
-        }
-      }
-      return merged;
-    }
-    const mergedBody = buildMergedBody(body);
+    const srcPages = srcDoc.getPages();
+    for (let i = 0; i < srcPages.length; i++) {
+      const embedded = await outDoc.embedPage(srcPages[i]);
+      const sheetW = embedded.width;
+      const sheetH = embedded.height;
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
+      const pageWidth = sheetW;
+      const pageHeight = sheetH + HEADER_H + FOOTER_H;
+      const page = outDoc.addPage([pageWidth, pageHeight]);
 
-    
-    const DANANTARA_BOX_W = 95;
-    const DANANTARA_BOX_H = 38;
-    const BRI_BOX_W = 130;
-    const BRI_BOX_H = 70;
-    const LOGO_Y = 12;
-    const HEADER_ROW_H = 50;
-    const danantaraSize = fitImageBox(logoDanantara.width, logoDanantara.height, DANANTARA_BOX_W, DANANTARA_BOX_H);
-    const briSize = fitImageBox(logoBri.width, logoBri.height, BRI_BOX_W, BRI_BOX_H);
+      // Konten sheet ditempel di bawah strip header, di atas strip footer
+      page.drawPage(embedded, {
+        x: 0,
+        y: FOOTER_H,
+        width: sheetW,
+        height: sheetH
+      });
 
-    function drawHeaderFooter() {
       // Logo kiri (Danantara)
-      doc.addImage(
-        logoDanantara.dataUrl, "PNG",
-        40, LOGO_Y + (HEADER_ROW_H - danantaraSize.h) / 2,
-        danantaraSize.w, danantaraSize.h
-      );
+      const danW = 70;
+      const danH = danantaraImg.height * (danW / danantaraImg.width);
+      page.drawImage(danantaraImg, {
+        x: MARGIN_X,
+        y: pageHeight - HEADER_H + (HEADER_H - danH) / 2,
+        width: danW,
+        height: danH
+      });
 
       // Logo kanan (BRI)
-      doc.addImage(
-        logoBri.dataUrl, "PNG",
-        pageWidth - 40 - briSize.w, LOGO_Y + (HEADER_ROW_H - briSize.h) / 2,
-        briSize.w, briSize.h
-      );
+      const briW = 90;
+      const briH = briImg.height * (briW / briImg.width);
+      page.drawImage(briImg, {
+        x: pageWidth - MARGIN_X - briW,
+        y: pageHeight - HEADER_H + (HEADER_H - briH) / 2,
+        width: briW,
+        height: briH
+      });
 
-      // Judul & subjudul di tengah
-      doc.setFont(undefined, "bold");
-      doc.setFontSize(13);
-      doc.text(title, pageWidth / 2, 32, { align: "center" });
+      // Judul di tengah
+      const titleSize = 13;
+      const titleWidth = fontBold.widthOfTextAtSize(title, titleSize);
+      page.drawText(title, {
+        x: (pageWidth - titleWidth) / 2,
+        y: pageHeight - 26,
+        size: titleSize,
+        font: fontBold,
+        color: rgb(0, 0, 0)
+      });
+
       if (subtitle) {
-        doc.setFont(undefined, "normal");
-        doc.setFontSize(9);
-        doc.text(subtitle, pageWidth / 2, 46, { align: "center" });
+        const subSize = 9;
+        const subWidth = fontNormal.widthOfTextAtSize(subtitle, subSize);
+        page.drawText(subtitle, {
+          x: (pageWidth - subWidth) / 2,
+          y: pageHeight - 42,
+          size: subSize,
+          font: fontNormal,
+          color: rgb(0.2, 0.2, 0.2)
+        });
       }
 
       // Garis pemisah header
-      doc.setDrawColor(180);
-      doc.line(40, 62, pageWidth - 40, 62);
+      page.drawLine({
+        start: { x: MARGIN_X, y: pageHeight - HEADER_H },
+        end: { x: pageWidth - MARGIN_X, y: pageHeight - HEADER_H },
+        thickness: 0.5,
+        color: rgb(0.7, 0.7, 0.7)
+      });
 
       // Footer: nomor halaman + tanggal
-      const pageNum = doc.internal.getCurrentPageInfo().pageNumber;
-      doc.setFontSize(8);
-      doc.setTextColor(120);
-      doc.text(`Halaman ${pageNum}`, pageWidth - 40, pageHeight - 20, { align: "right" });
-      doc.text(`Dicetak ${new Date().toLocaleDateString("id-ID")}`, 40, pageHeight - 20);
-      doc.setTextColor(0);
+      const pageNumText = `Halaman ${i + 1}`;
+      const dateText = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
+      const pnWidth = fontNormal.widthOfTextAtSize(pageNumText, 8);
+      page.drawText(dateText, {
+        x: MARGIN_X, y: 10, size: 8, font: fontNormal, color: rgb(0.45, 0.45, 0.45)
+      });
+      page.drawText(pageNumText, {
+        x: pageWidth - MARGIN_X - pnWidth, y: 10, size: 8, font: fontNormal, color: rgb(0.45, 0.45, 0.45)
+      });
     }
 
-    doc.autoTable({
-      head,
-      body: mergedBody,
-      startY: 76,
-      margin: { top: 76, left: 30, right: 30, bottom: 36 },
-      theme: "grid",
-      styles: {
-        fontSize: 8,
-        cellPadding: 4,
-        overflow: "linebreak",
-        valign: "middle",
-        lineWidth: 0.5,
-        lineColor: [150, 150, 150]
-      },
-      headStyles: {
-        fillColor: [11, 61, 145],
-        textColor: 255,
-        fontStyle: "bold",
-        lineWidth: 0.5,
-        lineColor: [150, 150, 150]
-      },
-      bodyStyles: {
-        lineWidth: 0.5,
-        lineColor: [150, 150, 150]
-      },
-      alternateRowStyles: { fillColor: [255, 255, 255] },
-      didParseCell: function (data) {
-        if (data.section === "body" && categoryRowFlags[data.row.index]) {
-          data.cell.styles.fillColor = [214, 232, 250];
-          data.cell.styles.textColor = [11, 61, 145];
-          data.cell.styles.fontStyle = "bold";
-        }
-      },
-      didDrawPage: drawHeaderFooter
-    });
-
-    doc.save(filename || "KPI.pdf");
+    const outBytes = await outDoc.save();
+    downloadPdfBytes(outBytes, filename || "KPI.pdf");
   } catch (err) {
     console.error(err);
     alert("Gagal membuat PDF: " + err.message + "\nMenggunakan link download bawaan sebagai cadangan.");
