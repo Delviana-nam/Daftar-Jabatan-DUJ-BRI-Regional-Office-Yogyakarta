@@ -25,6 +25,7 @@ const downloadBtn = document.getElementById("downloadBtn");
 /* KONFIGURASI GOOGLE SHEETS KPI */
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
+const DEFAULT_KPI_RANGE = { r1: 3, c1: 0, c2: 3 };
 
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
@@ -66,7 +67,7 @@ function resolveKpiDownloadUrl(gid, format) {
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* PDF dari Google Sheets per tab, dengan opsi range (r1,r2,c1,c2) untuk memotong hanya area tabel */
+/* PDF dari Google Sheets per tab */
 async function fetchSheetPdfBytes(gid, range) { // <-- FIX: tambah parameter range
   let url = // <-- FIX: const -> let, karena di-append di bawah
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
@@ -152,7 +153,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       });
 
       // Logo kanan (BRI)
-      const briW = 90;
+      const briW = 80;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
         x: pageWidth - MARGIN_X - briW,
@@ -571,7 +572,7 @@ function splitKpiLabel(label, fallbackSubtitle) {
   return { title: "Penetapan Key Performance Indicator", subtitle: lines[0] || "" };
 }
 
-/*  (section "3. KPI") */
+/* (section "3. KPI") */
 initKpiInstance(document.getElementById("kpiFrameMain"), {
   gid: KPI_SHEET_GID,
   title: "Penetapan Key Performance Indicator",
