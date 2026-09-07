@@ -81,7 +81,7 @@ const divisions = [
     "kpiLabel": "Penetapan Key Performance Indicator\nRegional Business Support Head Tahun 2026",
     "points": [
       { "title": "REGIONAL BUSINESS SUPPORT HEAD", "fileId": "images/29.jpg", "pdfId": "29" },
-      { "title": "OPERATION, NETWORK & SERVICE DEPARTMENT HEAD", "fileId": "images/30.jpg", "pdfId": "30" },
+      { "title": "OPERATION, NETWORK, E-CHANNEL & SERVICE DEPARTMENT HEAD", "fileId": "images/30.jpg", "pdfId": "30" },
       { "title": "ACCOUNTING SECTION HEAD", "fileId": "images/31.jpg", "pdfId": "31" },
       { "title": "OPERATION, NETWORK & SERVICE SECTION HEAD", "fileId": "images/32.jpg", "pdfId": "32" },
       { "title": "LOGISTIC & GENERAL AFFAIR DEPARTMENT HEAD", "fileId": "images/33.jpg", "pdfId": "33" },
@@ -180,7 +180,7 @@ const divisionsUker = [
     "points": [
       { "title": "PET OPERASIONAL KREDIT", "fileId": "images/79.jpg", "pdfId": "79" },
       { "title": "PETUGAS TRANSAKSI", "fileId": "images/82.jpg", "pdfId": "82" },
-      { "title": "PETUGAS IT & E-CHANNEL", "fileId": "images/80.jpg", "pdfId": "80" },
+      { "title": "PETUGAS IT", "fileId": "images/80.jpg", "pdfId": "80" },
       { "title": "PET PENUNJANG OPERASIONAL", "fileId": "images/84.jpg", "pdfId": "84" },
       { "title": "SEKRETARIS", "fileId": "images/83.jpg", "pdfId": "83" },
       { "title": "PET PENUNJANG BISNIS", "fileId": "images/81.jpg", "pdfId": "81" },
