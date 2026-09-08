@@ -134,10 +134,10 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
     const fontBold = await outDoc.embedFont(StandardFonts.HelveticaBold);
     const fontNormal = await outDoc.embedFont(StandardFonts.Helvetica);
 
-    const HEADER_H = 70; // dinaikkan lagi supaya muat logo + judul + subjudul
+    const HEADER_H = 70;
     const FOOTER_H = 26;
     const MARGIN_X = 30;
-    const TABLE_MARGIN_X = 20;
+    const TABLE_MARGIN_X = 40;
 
     const srcPages = srcDoc.getPages();
     for (let i = 0; i < srcPages.length; i++) {
@@ -149,7 +149,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       const pageHeight = sheetH + HEADER_H + FOOTER_H;
       const page = outDoc.addPage([pageWidth, pageHeight]);
 
-      // Tabel ditempel di tengah (margin kiri-kanan sama)
+      // Tabel ditempel di tengah
       page.drawPage(embedded, {
         x: TABLE_MARGIN_X,
         y: FOOTER_H,
@@ -158,7 +158,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       });
 
       // Logo kiri (Danantara)
-      const danW = 70;
+      const danW = 80;
       const danH = danantaraImg.height * (danW / danantaraImg.width);
       page.drawImage(danantaraImg, {
         x: MARGIN_X,
