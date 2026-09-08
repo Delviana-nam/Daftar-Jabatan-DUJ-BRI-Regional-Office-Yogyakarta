@@ -162,7 +162,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: danH
       });
 
-      const briW = 90;
+      const briW = 80;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
         x: pageWidth - MARGIN_X - briW,
