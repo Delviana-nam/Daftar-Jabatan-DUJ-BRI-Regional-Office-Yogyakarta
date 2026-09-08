@@ -38,7 +38,7 @@ body {
   margin-left: auto;
 }
 .topbar-logo-danantara {
-  height: 36px;
+  height: 30px;
   width: auto;
 }
 .topbar-logo-bri {
@@ -462,7 +462,7 @@ body {
   opacity: 1;
 }
 
-/* ================= SECTION KPI ================= */
+/* SECTION KPI */
 .pdf-preview-wrap {
   background: var(--color-bg-section);
   padding: 0 40px 60px;
@@ -487,7 +487,7 @@ body {
   .pdf-preview-image { padding: 10px; }
 }
 
-/* ================= FRAME KPI (LIVE DARI GOOGLE SHEET) ================= */
+/* FRAME KPI (LIVE DARI GOOGLE SHEET) */
 .kpi-frame {
   max-width: 950px;
   margin: 24px auto 0;
@@ -585,7 +585,7 @@ body {
   background: #fff;
 }
 
-/* Tabel KPI live from gsheet */
+/* Tabel KPI live from gsheets */
 .kpi-sheet-iframe {
   display: block;
   width: 100%;
@@ -698,7 +698,7 @@ body {
   }
 }
 
-/* ================= RESPONSIVE ================= */
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .cards-grid { grid-template-columns: repeat(2, 1fr); }
 }
