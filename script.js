@@ -72,7 +72,7 @@ async function fetchSheetPdfBytes(gid, range) {
   let url =
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
     `?format=pdf&gid=${encodeURIComponent(gid)}` +
-    `&portrait=false&size=A4&fitw=true&scale=2` +
+    `&fitw=true&scale=2` +   
     `&sheetnames=false&printtitle=false&pagenumbers=false&gridlines=false` +
     `&top_margin=0.00&bottom_margin=0.00&left_margin=0.00&right_margin=0.00`;
 
@@ -202,8 +202,6 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
           color: rgb(0.2, 0.2, 0.2)
         });
       }
-
-      // (garis pemisah header sengaja tidak digambar lagi, sesuai permintaan sebelumnya)
 
       // Footer: nomor halaman + tanggal
       const pageNumText = `Halaman ${i + 1}`;
