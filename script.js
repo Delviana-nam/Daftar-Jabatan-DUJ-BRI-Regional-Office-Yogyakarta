@@ -124,18 +124,21 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       fetch("images/bri_Blue.png").then(r => r.arrayBuffer())
     ]);
 
-    const { PDFDocument } = PDFLib;
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
     const srcDoc = await PDFDocument.load(sheetPdfBytes);
     const outDoc = await PDFDocument.create();
 
     const danantaraImg = await outDoc.embedPng(logoDanantaraBytes);
     const briImg = await outDoc.embedPng(logoBriBytes);
+    const fontBold = await outDoc.embedFont(StandardFonts.HelveticaBold);
+    const fontNormal = await outDoc.embedFont(StandardFonts.Helvetica);
 
-    const HEADER_H = 50;
+    const HEADER_H = 70; // dinaikkan lagi supaya muat logo + judul + subjudul
     const FOOTER_H = 26;
     const MARGIN_X = 30;
     const TABLE_MARGIN_X = 20;
+
     const srcPages = srcDoc.getPages();
     for (let i = 0; i < srcPages.length; i++) {
       const embedded = await outDoc.embedPage(srcPages[i]);
@@ -146,6 +149,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       const pageHeight = sheetH + HEADER_H + FOOTER_H;
       const page = outDoc.addPage([pageWidth, pageHeight]);
 
+      // Tabel ditempel di tengah (margin kiri-kanan sama)
       page.drawPage(embedded, {
         x: TABLE_MARGIN_X,
         y: FOOTER_H,
@@ -153,6 +157,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: sheetH
       });
 
+      // Logo kiri (Danantara)
       const danW = 70;
       const danH = danantaraImg.height * (danW / danantaraImg.width);
       page.drawImage(danantaraImg, {
@@ -162,6 +167,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: danH
       });
 
+      // Logo kanan (BRI)
       const briW = 80;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
@@ -171,15 +177,43 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: briH
       });
 
-      const fontNormal = await outDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+      // Judul di tengah
+      if (title) {
+        const titleSize = 13;
+        const titleWidth = fontBold.widthOfTextAtSize(title, titleSize);
+        page.drawText(title, {
+          x: (pageWidth - titleWidth) / 2,
+          y: pageHeight - 26,
+          size: titleSize,
+          font: fontBold,
+          color: rgb(0, 0, 0)
+        });
+      }
+
+      // Subjudul di tengah
+      if (subtitle) {
+        const subSize = 9;
+        const subWidth = fontNormal.widthOfTextAtSize(subtitle, subSize);
+        page.drawText(subtitle, {
+          x: (pageWidth - subWidth) / 2,
+          y: pageHeight - 42,
+          size: subSize,
+          font: fontNormal,
+          color: rgb(0.2, 0.2, 0.2)
+        });
+      }
+
+      // (garis pemisah header sengaja tidak digambar lagi, sesuai permintaan sebelumnya)
+
+      // Footer: nomor halaman + tanggal
       const pageNumText = `Halaman ${i + 1}`;
       const dateText = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
       const pnWidth = fontNormal.widthOfTextAtSize(pageNumText, 8);
       page.drawText(dateText, {
-        x: MARGIN_X, y: 10, size: 8, font: fontNormal, color: PDFLib.rgb(0.45, 0.45, 0.45)
+        x: MARGIN_X, y: 10, size: 8, font: fontNormal, color: rgb(0.45, 0.45, 0.45)
       });
       page.drawText(pageNumText, {
-        x: pageWidth - MARGIN_X - pnWidth, y: 10, size: 8, font: fontNormal, color: PDFLib.rgb(0.45, 0.45, 0.45)
+        x: pageWidth - MARGIN_X - pnWidth, y: 10, size: 8, font: fontNormal, color: rgb(0.45, 0.45, 0.45)
       });
     }
 
@@ -187,7 +221,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
     downloadPdfBytes(outBytes, filename || "KPI.pdf");
   } catch (err) {
     console.error(err);
-    alert("Gagal membuat PDF: " + err.message + "\nMenggunakan link download bawaan sebagai cadangan.");
+    alert("Gagal membuat PDF: " + err.message + "\nSilakan membuka google sheets dan download sebagai cadangan.");
     window.open(resolveKpiDownloadUrl(gid, "pdf"), "_blank");
   } finally {
     downloadBtn.innerHTML = originalLabel;
