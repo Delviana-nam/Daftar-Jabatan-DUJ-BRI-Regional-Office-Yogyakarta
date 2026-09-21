@@ -945,7 +945,7 @@ body {
 .footer-heading { font-size: 14px; font-weight: 800; margin-bottom: 14px; }
 .footer-phone {
   display: inline-block;
-  color: #feffff;
+  color: #ffffff;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -956,7 +956,7 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 2px solid #feffff;
+  border: 2px solid #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -975,7 +975,7 @@ body {
 .footer-link-list { list-style: none; }
 .footer-link-list li { margin-bottom: 10px; }
 .footer-link-list a {
-  color: #feffff;
+  color: #ffffff;
   text-decoration: none;
   font-size: 13px;
 }
@@ -984,7 +984,7 @@ body {
 .footer-col-disclaimer p {
   font-size: 12px;
   line-height: 1.6;
-  color: #cddaf5;
+  color: #ffffff;
   margin-bottom: 14px;
 }
 
