@@ -283,7 +283,7 @@ function openDivisionPage(id) {
 
   const kpiItemHtml = hasKpi ? `
     <button type="button" class="division-kpi-box" id="divisionKpiBtn">
-      <span class="division-kpi-arrow" aria-hidden="true"></span>
+      <span class="division-kpi-arrow" aria-hidden="true">${arrowUpRightSvg()}</span>
       <span class="division-kpi-caption">Key Performance Indicator</span>
       <span class="division-kpi-desc">${escapeHtml(div.title)}</span>
     </button>` : "";
@@ -293,7 +293,7 @@ function openDivisionPage(id) {
       <button type="button" class="division-point-item" data-idx="${idx}">
         <span class="division-point-icon">${eyeIconSvg()}</span>
         <span class="division-point-label">${escapeHtml(point.title)}</span>
-        <span class="division-point-arrow">&#8599;</span>
+        <span class="division-point-arrow">${arrowUpRightSvg()}</span>
       </button>
     `).join("");
 
@@ -922,3 +922,7 @@ backBtn.addEventListener("click", showMain);
     slides[current].classList.add("active");
   }, 5000);
 })();
+
+function arrowUpRightSvg() {
+  return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>`;
+}
