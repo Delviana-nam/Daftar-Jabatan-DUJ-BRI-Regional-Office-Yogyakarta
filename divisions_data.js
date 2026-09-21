@@ -178,13 +178,13 @@ const divisionsUker = [
     "title": "SUPPORT",
     "downloadId": "files/Support.pdf",
     "points": [
-      { "title": "PET OPERASIONAL KREDIT", "fileId": "images/78.jpg", "pdfId": "78" },
+      { "title": "PETUGAS OPERASIONAL KREDIT", "fileId": "images/78.jpg", "pdfId": "78" },
       { "title": "PETUGAS TRANSAKSI", "fileId": "images/79.jpg", "pdfId": "79" },
-      { "title": "PETUGAS IT & E-CHANNEL", "fileId": "images/80.jpg", "pdfId": "80" },
-      { "title": "PET PENUNJANG OPERASIONAL", "fileId": "images/81.jpg", "pdfId": "81" },
+      { "title": "PETUGAS IT", "fileId": "images/80.jpg", "pdfId": "80" },
+      { "title": "PETUGAS PENUNJANG OPERASIONAL", "fileId": "images/81.jpg", "pdfId": "81" },
       { "title": "SEKRETARIS", "fileId": "images/82.jpg", "pdfId": "82" },
-      { "title": "PET PENUNJANG BISNIS", "fileId": "images/83.jpg", "pdfId": "83" },
-      { "title": "PET PENUNJANG BISNIS KEAGENAN", "fileId": "images/84.jpg", "pdfId": "84" }
+      { "title": "PETUGAS PENUNJANG BISNIS", "fileId": "images/83.jpg", "pdfId": "83" },
+      { "title": "PETUGAS PENUNJANG BISNIS KEAGENAN", "fileId": "images/84.jpg", "pdfId": "84" }
     ]
   }
 ];
