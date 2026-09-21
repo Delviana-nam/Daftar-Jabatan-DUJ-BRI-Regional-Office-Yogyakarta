@@ -30,7 +30,7 @@ const KPI_SHEET_GID = "0";
 
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
-/* Elemen gambar untuk pratinjau detail (dipasang setelah iframe) */
+/* Elemen gambar */
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
 detailImage.style.display = "none";
@@ -95,7 +95,7 @@ function downloadPdfBytes(bytes, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-/* Bangun PDF KPI: tabel dari sheet + header (logo, judul) + footer */
+/* PDF KPI */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
@@ -141,7 +141,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
         height: sheetH
       });
 
-      // Header: logo Danantara (kiri), logo BRI (kanan)
+      // Header: logo Danantara
       const danW = 70;
       const danH = danantaraImg.height * (danW / danantaraImg.width);
       page.drawImage(danantaraImg, {
@@ -150,7 +150,8 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
         width: danW,
         height: danH
       });
-
+      
+      //logo BRI
       const briW = 80;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
@@ -416,7 +417,6 @@ divisionsUker.forEach(div => {
   cardsGridUker.appendChild(buildDivisionCard(div));
 });
 
-// Samakan lebar card RCEO dengan card lain
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -495,7 +495,7 @@ setupToggle(toggleUker, ukerBody);
 setupToggle(toggleKPI, kpiBody);
 
 
-/* ===== TABEL KPI LIVE (Google Sheet via iframe) ===== */
+/* ===== TABEL KPI LIVE ===== */
 function kpiFrameShellHTML(title, subtitle) {
   return `
     <div class="kpi-card">
@@ -551,7 +551,7 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // Sheet harus sudah di-publish agar tab terkait tampil di iframe
+    // Sheet harus di-publish agar tab terkait tampil di iframe
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
@@ -738,7 +738,7 @@ function showMain() {
 
 backBtn.addEventListener("click", showMain);
 
-/* ===== JUDUL SECTION STICKY SAAT SCROLL ===== */
+/* ===== JUDUL SECTION ===== */
 (function setupStickyTitleBoxes() {
   const topbar = document.querySelector(".topbar");
   if (!topbar) return;
