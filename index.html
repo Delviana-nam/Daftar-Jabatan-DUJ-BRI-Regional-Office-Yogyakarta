@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=17">
+<link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
 
@@ -17,12 +17,19 @@
     <div class="topbar-logos">
       <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara logo-dark-mode" onerror="this.style.display='none'">
       <img src="images/Danantara_black.png" alt="Logo Danantara" class="topbar-logo-danantara logo-light-mode" onerror="this.style.display='none'">
-      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri logo-dark-mode" onerror="this.style.display='none'">
-      <img src="images/bri_Blue.png" alt="Logo BRI" class="topbar-logo-bri logo-light-mode" onerror="this.style.display='none'">
+      <a href="#homeSection" class="topbar-brand" data-scroll-target="homeSection" aria-label="Kembali ke Home">
+        <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri logo-dark-mode" onerror="this.style.display='none'">
+        <img src="images/bri_Blue.png" alt="Logo BRI" class="topbar-logo-bri logo-light-mode" onerror="this.style.display='none'">
+      </a>
     </div>
 
+    <button type="button" class="topbar-hamburger" id="topbarToggle" aria-label="Buka menu" aria-expanded="false" aria-controls="topbarNav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
     <nav class="topbar-nav" id="topbarNav">
-      <a href="#homeSection" class="topbar-nav-link" data-scroll-target="homeSection">Home</a>
       <a href="#visiSection" class="topbar-nav-link" data-scroll-target="visiSection">Visi</a>
 
       <div class="topbar-nav-dropdown">
@@ -287,6 +294,6 @@
   <script src="libs/fontkit.umd.min.js"></script>
 
   <script src="divisions_data.js"></script>
-  <script src="script.js?v=11"></script>
+  <script src="script.js?v=12"></script>
 </body>
 </html>
