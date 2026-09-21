@@ -1,190 +1,292 @@
-// Data divisi untuk halaman Regional Office 11
-const divisions = [
- {
-  "id": "rceo",
-  "title": "RCEO",
-  "downloadId": "files/RCEO.pdf",
-  "points": [
-    { "title": "REGIONAL CHIEF EXECUTIVE OFFICER (RCEO)", "fileId": "images/2.jpg", "pdfId": "2" }
-  ]
-},
-  {
-    "id": "regional-sme-banking",
-    "title": "REGIONAL SME BANKING",
-    "downloadId": "files/Regional SME Banking.pdf",
-    "points": [
-      { "title": "REGIONAL SME BANKING HEAD", "fileId": "images/4.jpg", "pdfId": "4" },
-      { "title": "SMALL BUSINESS DEPARTMENT HEAD", "fileId": "images/5.jpg", "pdfId": "5" },
-      { "title": "MEDIUM BUSINESS DEPARTMENT HEAD", "fileId": "images/6.jpg", "pdfId": "6" }
-    ]
-  },
-  {
-    "id": "regional-micro-banking",
-    "title": "REGIONAL MICRO BANKING",
-    "downloadId": "files/Regional Micro Banking Head.pdf",
-    "kpiEnabled": true,
-    "kpiGid": "519583074",
-    "kpiHeight": 400,
-    "kpiLabel": "Penetapan Key Performance Indicator\nRegional Micro Banking Head Tahun 2026",
-    "points": [
-      { "title": "REGIONAL MICRO BANKING HEAD", "fileId": "images/8.jpg", "pdfId": "8" },
-      { "title": "MICRO BUSINESS DEPARTMENT HEAD", "fileId": "images/9.jpg", "pdfId": "9" },
-      { "title": "MICRO ECOSYSTEM 1 & 2 DEPARTMENT HEAD", "fileId": "images/10.jpg", "pdfId": "10" },
-      { "title": "MICRO BUSINESS AREA MANAGER", "fileId": "images/11.jpg", "pdfId": "11" },
-      { "title": "MICRO BUSINESS AREA ASSISTANT", "fileId": "images/12.jpg", "pdfId": "12" }
-    ]
-  },
-  {
-    "id": "regional-funding-retail-transaction-banking",
-    "title": "REGIONAL FUNDING & RETAIL TRANSACTION BANKING",
-    "downloadId": "files/Regional Funding and Retail Banking.pdf",
-    "points": [
-      { "title": "REGIONAL FUNDING TRANSACTION BANKING HEAD", "fileId": "images/14.jpg", "pdfId": "14" },
-      { "title": "MASS FUNDING DEPARTMENT HEAD", "fileId": "images/15.jpg", "pdfId": "15" },
-      { "title": "RETAIL PAYMENT & MERCHANT RELATIONSHIP DEPARTMENT HEAD", "fileId": "images/16.jpg", "pdfId": "16" },
-      { "title": "TEAM LEADER - FUNDING & RETAIL TRANSACTION SALES", "fileId": "images/17.jpg", "pdfId": "17" }
-    ]
-  },
-  {
-    "id": "regional-consumer-banking",
-    "title": "REGIONAL CONSUMER BANKING",
-    "downloadId": "files/Regional Consumer Banking Head.pdf",
-    "kpiEnabled": true,
-    "kpiGid": "1194928475",
-    "kpiHeight": 400,
-    "kpiLabel": "Penetapan Key Performance Indicator\nRegional Consumer Banking Head (RCBH) Tahun 2026",
-    "points": [
-      { "title": "REGIONAL CONSUMER BANKING HEAD", "fileId": "images/19.jpg", "pdfId": "19" },
-      { "title": "MORTGAGE DEPARTMENT HEAD", "fileId": "images/20.jpg", "pdfId": "20" },
-      { "title": "SALARY BASED LOAN & CREDIT CARD DEPARTMENT HEAD", "fileId": "images/21.jpg", "pdfId": "21" },
-      { "title": "SBL CC - SECTION HEAD", "fileId": "images/22.jpg", "pdfId": "22" }
-    ]
-  },
-  {
-    "id": "regional-risk-management",
-    "title": "REGIONAL RISK MANAGEMENT",
-    "downloadId": "files/Regional Risk Management.pdf",
-    "points": [
-      { "title": "REGIONAL RISK MANAGEMENT HEAD", "fileId": "images/24.jpg", "pdfId": "24" },
-      { "title": "TEAM LEADER - CREDIT RISK ANALYSIS", "fileId": "images/25.jpg", "pdfId": "25" },
-      { "title": "TEAM LEADER - RISK MANAGEMENT & COMPLIANCE", "fileId": "images/26.jpg", "pdfId": "26" },
-      { "title": "MICRO & RETAIL RISK & COMPLIANCE", "fileId": "images/27.jpg", "pdfId": "27" }
-    ]
-  },
-  {
-    "id": "regional-operation-banking",
-    "title": "REGIONAL BUSINESS SUPPORT HEAD",
-    "downloadId": "files/Regional Business Support Head.pdf",
-    "kpiEnabled": true,
-    "kpiGid": "1696468939",
-    "kpiHeight": 400,
-    "kpiLabel": "Penetapan Key Performance Indicator\nRegional Business Support Head Tahun 2026",
-    "points": [
-      { "title": "REGIONAL BUSINESS SUPPORT HEAD", "fileId": "images/29.jpg", "pdfId": "29" },
-      { "title": "OPERATION, SERVICE & E-CHANNEL DEPARTMENT HEAD", "fileId": "images/30.jpg", "pdfId": "30" },
-      { "title": "ACCOUNTING SECTION HEAD", "fileId": "images/31.jpg", "pdfId": "31" },
-      { "title": "OPERATION, NETWORK & SERVICE SECTION HEAD", "fileId": "images/32.jpg", "pdfId": "32" },
-      { "title": "LOGISTIC & GENERAL AFFAIR DEPARTMENT HEAD", "fileId": "images/33.jpg", "pdfId": "33" },
-      { "title": "FIXED ASSETS MANAGEMENT & PROCUREMENT SECTION HEAD", "fileId": "images/34.jpg", "pdfId": "34" },
-      { "title": "SINERGY BACK OFFICE LOGISTIC SECTION HEAD", "fileId": "images/35.jpg", "pdfId": "35" },
-      { "title": "PUBLIC RELATION & PROTOCOL SECTION HEAD", "fileId": "images/36.jpg", "pdfId": "36" },
-      { "title": "SECRETARY RO", "fileId": "images/37.jpg", "pdfId": "37" },
-      { "title": "INFORMATION TECHNOLOGY DEPARTMENT HEAD", "fileId": "images/38.jpg", "pdfId": "38" },
-      { "title": "INFORMATION TECHNOLOGY SECTION HEAD", "fileId": "images/39.jpg", "pdfId": "39" },
-      { "title": "EDC SECTION HEAD", "fileId": "images/40.jpg", "pdfId": "40" },
-      { "title": "ATM/CRM SECTION HEAD", "fileId": "images/41.jpg", "pdfId": "41" },
-      { "title": "CREDIT OPERATIONAL DEPARTMENT HEAD", "fileId": "images/42.jpg", "pdfId": "42" },
-      { "title": "CREDIT OPERATIONAL SECTION HEAD", "fileId": "images/43.jpg", "pdfId": "43" }
-    ]
-  }
-];
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deskripsi Jabatan BRI - Regional Office Yogyakarta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css?v=17">
+</head>
+<body>
 
+  <!-- ===== HEADER ===== -->
+  <header class="topbar">
+    <div class="topbar-logos">
+      <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara logo-dark-mode" onerror="this.style.display='none'">
+      <img src="images/Danantara_black.png" alt="Logo Danantara" class="topbar-logo-danantara logo-light-mode" onerror="this.style.display='none'">
+      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri logo-dark-mode" onerror="this.style.display='none'">
+      <img src="images/bri_Blue.png" alt="Logo BRI" class="topbar-logo-bri logo-light-mode" onerror="this.style.display='none'">
+    </div>
 
-// Data untuk section "Unit Kerja Operasional"
-const divisionsUker = [
-  {
-    "id": "pemimpin-uker",
-    "title": "PEMIMPIN UKER",
-    "downloadId": "files/Pemimpin Unit Kerja.pdf",
-    "points": [
-      { "title": "PEMIMPIN CABANG", "fileId": "images/45.jpg", "pdfId": "45" },
-      { "title": "PEMIMPIN CABANG PEMBANTU", "fileId": "images/46.jpg", "pdfId": "46" },
-      { "title": "KEPALA UNIT", "fileId": "images/47.jpg", "pdfId": "47" }
-    ]
-  },
-  {
-    "id": "manajer-uker",
-    "title": "MANAJER UKER",
-    "downloadId": "files/Manajer UKER.pdf",
-    "kpiEnabled": true,
-    "kpiGid": "1349675824",
-    "kpiHeight": 400,
-    "kpiLabel": "Penetapan Key Performance Indicator\nMicro Business Manager, Consumer Business Manager, Priority Business Manager Tahun 2026",
-    "points": [
-      { "title": "MANAJER BISNIS KECIL", "fileId": "images/49.jpg", "pdfId": "49" },
-      { "title": "MANAJER BISNIS MIKRO", "fileId": "images/50.jpg", "pdfId": "50" },
-      { "title": "MANAJER BISNIS MIKRO ER (MBA)", "fileId": "images/51.jpg", "pdfId": "51" },
-      { "title": "MANAJER BISNIS KONSUM", "fileId": "images/52.jpg", "pdfId": "52" },
-      { "title": "MANAJER BANKING PRIORITY", "fileId": "images/53.jpg", "pdfId": "53" },
-      { "title": "MANAJER DANA & TRANSAKSI", "fileId": "images/54.jpg", "pdfId": "54" },
-      { "title": "MANAJER OPERASIONAL", "fileId": "images/55.jpg", "pdfId": "55" },
-      { "title": "AST MANAJER OPERASIONAL & LAYANAN", "fileId": "images/56.jpg", "pdfId": "56" }
-    ]
-  },
-  {
-    "id": "supervisor-uker",
-    "title": "SUPERVISOR UKER",
-    "downloadId": "files/Supervisor UNIT KERJA.pdf",
-    "points": [
-      { "title": "SPV OPERASIONAL & LAYANAN", "fileId": "images/58.jpg", "pdfId": "58" },
-      { "title": "SPV OPERASIONAL/LAYANAN ", "fileId": "images/59.jpg", "pdfId": "59" },
-      { "title": "SPV OPERASIONAL KREDIT", "fileId": "images/60.jpg", "pdfId": "60" },
-      { "title": "SPV PENUNJANG OPERASIONAL", "fileId": "images/61.jpg", "pdfId": "61" }
-    ]
-  },
-  {
-    "id": "marketing",
-    "title": "MARKETING",
-    "downloadId": "files/Marketing.pdf",
-    "kpiEnabled": true,
-    "kpiGid": "679117388",
-    "kpiHeight": 400,
-    "kpiLabel": "Penetapan Key Performance Indicator\nMantri, RM Mikro, RM BRIGuna, RM KPR, RM Priority Tahun 2026",
-    "points": [
-      { "title": "RM BISNIS KECIL (SME)", "fileId": "images/63.jpg", "pdfId": "63" },
-      { "title": "RM FUNDING & TRANSACTION", "fileId": "images/64.jpg", "pdfId": "64" },
-      { "title": "RM BISNIS KPR", "fileId": "images/65.jpg", "pdfId": "65" },
-      { "title": "RM BISNIS BRIGUNA", "fileId": "images/66.jpg", "pdfId": "66" },
-      { "title": "RM PRIORITY", "fileId": "images/67.jpg", "pdfId": "67" },
-      { "title": "MANTRI", "fileId": "images/68.jpg", "pdfId": "68" },
-      { "title": "RM CREDIT RESTRUCTURING & RECOVERY", "fileId": "images/69.jpg", "pdfId": "69" }
-    ]
-  },
-  {
-    "id": "frontliner",
-    "title": "FRONTLINER",
-    "downloadId": "files/Frontliner.pdf",
-    "points": [
-      { "title": "PRIORITY BANKING ASSISTANT", "fileId": "images/71.jpg", "pdfId": "71" },
-      { "title": "CUSTOMER SERVICE (RITEL)", "fileId": "images/72.jpg", "pdfId": "72" },
-      { "title": "CUSTOMER SERVICE (UNIT)", "fileId": "images/73.jpg", "pdfId": "73" },
-      { "title": "TELLER (RITEL)", "fileId": "images/74.jpg", "pdfId": "74" },
-      { "title": "TELLER (UNIT)", "fileId": "images/75.jpg", "pdfId": "75" },
-      { "title": "UNIVERSAL BANKER", "fileId": "images/76.jpg", "pdfId": "76" }
-    ]
-  },
-  {
-    "id": "support",
-    "title": "SUPPORT",
-    "downloadId": "files/Support.pdf",
-    "points": [
-      { "title": "PETUGAS OPERASIONAL KREDIT", "fileId": "images/78.jpg", "pdfId": "78" },
-      { "title": "PETUGAS TRANSAKSI", "fileId": "images/79.jpg", "pdfId": "79" },
-      { "title": "PETUGAS IT", "fileId": "images/80.jpg", "pdfId": "80" },
-      { "title": "PETUGAS PENUNJANG OPERASIONAL", "fileId": "images/81.jpg", "pdfId": "81" },
-      { "title": "SEKRETARIS", "fileId": "images/82.jpg", "pdfId": "82" },
-      { "title": "PETUGAS PENUNJANG BISNIS", "fileId": "images/83.jpg", "pdfId": "83" },
-      { "title": "PETUGAS PENUNJANG BISNIS KEAGENAN", "fileId": "images/84.jpg", "pdfId": "84" }
-    ]
-  }
-];
+    <nav class="topbar-nav" id="topbarNav">
+      <a href="#homeSection" class="topbar-nav-link" data-scroll-target="homeSection">Home</a>
+      <a href="#visiSection" class="topbar-nav-link" data-scroll-target="visiSection">Visi</a>
+
+      <div class="topbar-nav-dropdown">
+        <button type="button" class="topbar-nav-link topbar-nav-dropdown-btn">
+          DUJ RO Yogyakarta <span class="topbar-nav-caret">&#9662;</span>
+        </button>
+        <ul class="topbar-dropdown-menu" id="navDropdownRO"></ul>
+      </div>
+
+      <div class="topbar-nav-dropdown">
+        <button type="button" class="topbar-nav-link topbar-nav-dropdown-btn">
+          DUJ Unit Kerja <span class="topbar-nav-caret">&#9662;</span>
+        </button>
+        <ul class="topbar-dropdown-menu" id="navDropdownUker"></ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN VIEW ===== -->
+  <main id="mainView">
+
+    <!-- ===== HOME ===== -->
+    <section id="homeSection" class="home-hero">
+  <div class="home-hero-bg-slider">
+    <img src="images/gedung_bri.jpeg" alt="" class="home-hero-bg-slide active" onerror="this.style.display='none'">
+    <img src="images/gedung_bri2.jpeg" alt="" class="home-hero-bg-slide" onerror="this.style.display='none'">
+    <img src="images/gedung_bri3.png" alt="" class="home-hero-bg-slide" onerror="this.style.display='none'">
+  </div>
+  <div class="home-hero-overlay"></div>
+  <div class="home-hero-content hero-bri-content" id="heroBriContent">
+    <div class="hero-bri-logo-wrap">
+      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="hero-bri-logo" onerror="this.style.display='none'">
+    </div>
+    <div class="hero-bri-rule"></div>
+    <p class="hero-bri-desc">Bank Rakyat Indonesia (BRI) adalah salah satu bank milik pemerintah yang terbesar di Indonesia. Bank Rakyat Indonesia (BRI) didirikan di Purwokerto, Jawa Tengah oleh Raden Bei Aria Wirjaatmadja tanggal 16 Desember 1895.</p>
+  </div>
+</section>
+
+    <!-- ===== VISI ===== -->
+      <section id="visiSection" class="visi-section" data-header-theme="light">
+      <div class="visi-inner">
+        <div class="visi-envelope-wrap">
+          <!-- 1) BELAKANG amplop: flap terbuka (menghadap ke atas) + badan amplop -->
+          <svg class="visi-envelope-svg visi-envelope-back" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="visiBodyShade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#021d45" stop-opacity=".45"/>
+                <stop offset="1" stop-color="#021d45" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+              <polygon points="26,205 300,24 574,205" fill="#063f8f" stroke="#063f8f" stroke-width="16" stroke-linejoin="round"/>
+            <polygon points="70,200 300,52 530,200" fill="#0a4aa5"/>
+              <path d="M20,219 Q20,195 44,195 L556,195 Q580,195 580,219 L580,480 L20,480 Z" fill="#0857c3"/>
+            <path d="M20,219 Q20,195 44,195 L556,195 Q580,195 580,219 L580,255 L20,255 Z" fill="url(#visiBodyShade)"/>
+          </svg>
+
+          <!-- 2) ISI amplop: dua lembar kosong + kertas VISI. Meluncur naik saat section terlihat. -->
+          <div class="visi-stage">
+            <div class="visi-sheet visi-sheet-left"></div>
+            <div class="visi-sheet visi-sheet-right"></div>
+            <div class="visi-paper">
+              <h2 class="visi-title">VISI</h2>
+              <p class="visi-desc">
+                Deliver Sustainable <span class="visi-accent">Values</span> and<br>
+                <span class="visi-accent-light">Integrated</span> Solutions to Achieve<br>
+                Indonesia&rsquo;s Aspiration
+              </p>
+            </div>
+          </div>
+
+          <!-- 3) DEPAN amplop: kantong (dengan lipatan V) menutupi bagian bawah kertas -->
+          <svg class="visi-envelope-svg visi-envelope-front" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <clipPath id="visiPocketClip">
+                <path d="M20,250 L300,335 L580,250 L580,480 L20,480 Z"/>
+              </clipPath>
+              <filter id="visiPocketShadow" x="-5%" y="-20%" width="110%" height="140%">
+                <feDropShadow dx="0" dy="-3" stdDeviation="5" flood-color="#021d45" flood-opacity=".3"/>
+              </filter>
+            </defs>
+            <path d="M20,250 L300,335 L580,250 L580,480 L20,480 Z" fill="#0857c3" filter="url(#visiPocketShadow)"/>
+            <g clip-path="url(#visiPocketClip)">
+              <polygon points="20,250 300,335 20,480" fill="#063f8f"/>
+              <polygon points="580,250 300,335 580,480" fill="#063f8f"/>
+              <polygon points="20,480 300,335 580,480" fill="#0a66dc"/>
+              <polyline points="20,250 300,335 580,250" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="2"/>
+              <line x1="300" y1="335" x2="20" y2="480" stroke="#ffffff" stroke-opacity=".12" stroke-width="1.5"/>
+              <line x1="300" y1="335" x2="580" y2="480" stroke="#ffffff" stroke-opacity=".12" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SHOWCASE DIVISI ===== -->
+    <section id="showcaseROSection" class="showcase-section">
+      <div class="showcase-glow showcase-glow-1"></div>
+      <div class="showcase-glow showcase-glow-2"></div>
+      <div class="showcase-inner">
+        <h2 class="showcase-title">BRI REGIONAL<br>YOGYAKARTA</h2>
+        <div id="showcaseRceoBanner"></div>
+        <div id="showcaseROGrid" class="showcase-grid"></div>
+        <button type="button" class="showcase-more-btn" data-target="roBody">Klik Untuk Lihat<br>Divisi Lainnya</button>
+      </div>
+    </section>
+
+      <section id="showcaseUkerSection" class="showcase-section showcase-section-alt" data-header-theme="light">
+      <div class="showcase-glow showcase-glow-3"></div>
+      <div class="showcase-inner">
+        <h2 class="showcase-title showcase-title-blue">UNIT KERJA<br>OPERASIONAL</h2>
+        <div id="showcaseUkerGrid" class="showcase-grid showcase-grid-uker"></div>
+        <button type="button" class="showcase-more-btn" data-target="ukerBody">Klik Untuk Lihat<br>Divisi Lainnya</button>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 1: REGIONAL OFFICE (disembunyikan, akses lewat hal3/sidebar) ===== -->
+    <div class="section-title-box hidden-section">
+      <button class="section-title-box-inner" id="toggleRO" aria-expanded="true">
+        <span class="section-title-link">Materi Sosialisasi Daftar Jabatan (DUJ) BRI Regional Office Yogyakarta</span>
+        <span class="toggle-arrow"></span>
+      </button>
+    </div>
+
+    <div id="roBody" class="collapsible-body hidden-section">
+      <section id="cardsGrid" class="cards-grid"></section>
+    </div>
+
+    <!-- ===== SECTION 2: UNIT KERJA OPERASIONAL (disembunyikan, akses lewat hal4/sidebar) ===== -->
+    <div class="section-title-box hidden-section">
+      <button class="section-title-box-inner" id="toggleUker" aria-expanded="true">
+        <span class="section-title-link">Materi Sosialisasi Daftar Jabatan (DUJ) Unit Kerja Operasional</span>
+        <span class="toggle-arrow"></span>
+      </button>
+    </div>
+
+    <div id="ukerBody" class="collapsible-body hidden-section">
+      <section id="cardsGridUker" class="cards-grid"></section>
+    </div>
+
+  <!-- ===== KPI + FOOTER (satu background foto BRI) ===== -->
+  <div id="briOutro" class="bri-outro">
+    <img src="images/salam_bri.jpg" alt="" class="bri-outro-bg" onerror="this.style.display='none'">
+    <div class="bri-outro-overlay"></div>
+
+    <div class="bri-outro-content">
+
+      <!-- ===== SECTION 3: KPI ===== -->
+      <div class="section-title-box section-title-box-dark" id="kpiSection">
+        <button class="section-title-box-inner" id="toggleKPI" aria-expanded="true">
+          <span class="section-title-link">KPI Regional Office Area KC, KCP, dan BRI Unit</span>
+          <span class="toggle-arrow"></span>
+        </button>
+      </div>
+
+      <div id="kpiBody" class="collapsible-body">
+        <section class="pdf-preview-wrap pdf-preview-transparent">
+          <div id="kpiFrameMain" class="kpi-frame"></div>
+        </section>
+      </div>
+
+      <!-- ===== FOOTER ===== -->
+      <footer id="footerSection" class="site-footer site-footer-flat">
+        <div class="footer-inner">
+          <div class="footer-col footer-col-brand">
+            <h4 class="footer-office-title">Kantor Wilayah BRI Yogyakarta</h4>
+            <p class="footer-office-sub">BRI Region 11 Yogyakarta</p>
+            <p class="footer-address">Jl. Cik Di Tiro No.3, Terban, Kec. Gondokusuman,<br>Kota Yogyakarta, Daerah Istimewa Yogyakarta 55223</p>
+          </div>
+
+          <div class="footer-col footer-col-contact">
+            <h4 class="footer-heading">Hubungi Kami</h4>
+            <a href="tel:150001" class="footer-phone">&#9742; 1 500 017</a>
+            <div class="footer-social">
+              <a href="https://www.tiktok.com/@bankbri_id?_r=1&_t=ZS-9860rhrmYeg" target="_blank" rel="noopener" class="footer-social-btn" aria-label="TikTok">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16.6 5.82c-1.02-.9-1.6-2.19-1.6-3.62h-3.14v13.44c0 1.5-1.22 2.72-2.72 2.72a2.72 2.72 0 0 1 0-5.44c.28 0 .55.04.8.12V9.9a5.9 5.9 0 0 0-.8-.06A5.86 5.86 0 0 0 3.28 15.7 5.86 5.86 0 0 0 9.14 21.56a5.86 5.86 0 0 0 5.86-5.86V9.1a8.6 8.6 0 0 0 5.02 1.6V7.56c-1.24 0-2.4-.44-3.42-1.34-.36-.32-.67-.66-1-.4z"/></svg>
+              </a>
+              <a href="https://www.facebook.com/BRIofficialpage" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M13.5 21v-7.6h2.55l.38-2.96h-2.93V8.55c0-.86.24-1.44 1.47-1.44h1.57V4.46c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9v2.2H7.99v2.96h2.47V21h3.04z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/bri_regionalyogyakarta/" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+              </a>
+              <a href="https://x.com/kontakbri" target="_blank" rel="noopener" class="footer-social-btn" aria-label="X">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.9 3H21l-6.6 7.55L22.2 21h-6.1l-4.8-6.3L5.7 21H3.6l7.05-8.06L2.9 3h6.25l4.35 5.76L18.9 3zm-1.07 16.17h1.17L7.24 4.75H5.98l11.85 14.42z"/></svg>
+              </a>
+              <a href="https://www.youtube.com/channel/UCRHFE_ooDrkEiRRJbog3EjA" target="_blank" rel="noopener" class="footer-social-btn" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M22 12s0-3.03-.39-4.48a2.9 2.9 0 0 0-2.04-2.05C17.9 5 12 5 12 5s-5.9 0-7.57.47A2.9 2.9 0 0 0 2.4 7.52C2 8.97 2 12 2 12s0 3.03.39 4.48c.22.8.86 1.44 2.04 2.05C6.1 19 12 19 12 19s5.9 0 7.57-.47a2.9 2.9 0 0 0 2.04-2.05C22 15.03 22 12 22 12zM10 15V9l5.2 3-5.2 3z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-col footer-col-links">
+            <h4 class="footer-heading">Tautan</h4>
+            <ul class="footer-link-list">
+              <li><a href="https://bri.co.id/web/guest/bri-products" target="_blank" rel="noopener">Produk BRI</a></li>
+              <li><a href="https://apps.lps.go.id/BankPesertaLPSRate" target="_blank" rel="noopener">Bunga Penjaminan LPS</a></li>
+              <li><a href="https://bri.co.id/web/guest/kurs-detail" target="_blank" rel="noopener">Rates</a></li>
+              <li><a href="https://bri.co.id/web/guest/fees-and-rates" target="_blank" rel="noopener">Fees &amp; Rates</a></li>
+              <li><a href="https://whistleblowing-system.bri.co.id/" target="_blank" rel="noopener">Whistleblowing System</a></li>
+              <li><a href="https://bri.co.id/web/guest/erecruitment" target="_blank" rel="noopener">Karier</a></li>
+            </ul>
+          </div>
+
+                  <div class="footer-col footer-col-disclaimer">
+            <p>BRI berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK) &amp; Bank Indonesia (BI)</p>
+            <p>BRI merupakan peserta penjaminan Lembaga Penjaminan Simpanan (LPS). Maksimum nilai Simpanan yang dijamin LPS per nasabah adalah Rp 2 Miliar</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom-bar">
+          <div class="footer-bottom-inner">
+            <p class="footer-copyright">&copy; 2026 PT.Bank Rakyat Indonesia (Persero) Tbk. | All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+              <a href="https://bri.co.id/web/guest/en/privacy" target="_blank" rel="noopener">Privacy</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://bri.co.id/web/guest/en/term-of-use" target="_blank" rel="noopener">Term of Use</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://bri.co.id/web/guest/en/sitemap" target="_blank" rel="noopener">Sitemap</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://bri.co.id/web/guest/en/erecruitment" target="_blank" rel="noopener">Career</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://eform.bri.co.id/" target="_blank" rel="noopener">E-Form BRI</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+  <!-- ===== DETAIL VIEW ===== -->
+  <section id="detailView" class="detail-view">
+    <div class="detail-topbar">
+      <h3 id="detailTitle">Judul Jabatan</h3>
+    </div>
+
+      <div class="detail-pdf-wrap">
+      <iframe id="detailFrame" src="" title="Detail Jabatan" allow="autoplay" allowfullscreen></iframe>
+      <div id="detailKpiWrap" class="detail-kpi-wrap" style="display:none;">
+        <div id="kpiFrameDetail" class="kpi-frame"></div>
+      </div>
+
+      <div id="detailDivisionWrap" class="detail-division-wrap" style="display:none;">
+        </div>
+
+      <div class="detail-actions">
+        <a id="downloadBtn" class="back-btn download-btn-detail" href="#" download style="display:none;">
+          <span class="back-arrow">&#8595;</span> Download
+        </a>
+        <button id="backBtn" class="back-btn">
+          <span class="back-arrow">&#8592;</span> Back
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Library PDF (generate PDF KPI di browser) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <!-- fontkit: pendukung pdf-lib untuk font kustom -->
+  <script src="libs/fontkit.umd.min.js"></script>
+
+  <script src="divisions_data.js"></script>
+  <script src="script.js?v=11"></script>
+</body>
+</html>
