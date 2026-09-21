@@ -1956,6 +1956,20 @@ body {
   outline-offset: 4px;
 }
 
+/* Hover/fokus: logo berubah ke warna aksen (#71c5e8, sama dengan hover link menu)
+   sebagai penanda bahwa logo bisa diklik. Berlaku untuk logo putih maupun biru. */
+.topbar-brand img {
+  transition: filter 0.25s ease;
+}
+@media (hover: hover) {
+  .topbar-brand:hover img {
+    filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
+  }
+}
+.topbar-brand:focus-visible img {
+  filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
+}
+
 /* ===== HAMBURGER (hanya tampil di layar kecil) ===== */
 .topbar-hamburger { display: none; }
 
