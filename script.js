@@ -30,7 +30,7 @@ const KPI_SHEET_GID = "0";
 
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
-/* Elemen gambar */
+/* Elemen gambar di home*/
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
 detailImage.style.display = "none";
@@ -95,7 +95,7 @@ function downloadPdfBytes(bytes, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-/* PDF KPI */
+/* Bangun PDF KPI: tabel dari sheet + header (logo, judul) + footer */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
@@ -141,7 +141,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
         height: sheetH
       });
 
-      // Header: logo Danantara
+      // Logo Danantara
       const danW = 70;
       const danH = danantaraImg.height * (danW / danantaraImg.width);
       page.drawImage(danantaraImg, {
@@ -150,7 +150,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
         width: danW,
         height: danH
       });
-      
+
       //logo BRI
       const briW = 80;
       const briH = briImg.height * (briW / briImg.width);
@@ -399,7 +399,6 @@ function buildDivisionCard(div) {
 }
 
 /* ===== RENDER GRID CARD ===== */
-// RCEO tampil sendiri di atas grid Regional Office
 const rceoDivision = divisions[0];
 const otherDivisions = divisions.slice(1);
 
@@ -417,6 +416,7 @@ divisionsUker.forEach(div => {
   cardsGridUker.appendChild(buildDivisionCard(div));
 });
 
+// Samakan lebar card RCEO dengan card lain
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -479,23 +479,7 @@ document.querySelectorAll(".topbar-nav-link[data-scroll-target]").forEach(link =
   });
 });
 
-/* ===== TOGGLE BUKA/TUTUP SECTION ===== */
-function setupToggle(btn, body, onOpen) {
-  btn.addEventListener("click", () => {
-    const willCollapse = !body.classList.contains("collapsed");
-    body.classList.toggle("collapsed", willCollapse);
-    btn.setAttribute("aria-expanded", String(!willCollapse));
-    if (!willCollapse && typeof onOpen === "function") {
-      onOpen();
-    }
-  });
-}
-setupToggle(toggleRO, roBody);
-setupToggle(toggleUker, ukerBody);
-setupToggle(toggleKPI, kpiBody);
-
-
-/* ===== TABEL KPI LIVE ===== */
+/* ===== TABEL KPI LIVE (Google Sheet via iframe) ===== */
 function kpiFrameShellHTML(title, subtitle) {
   return `
     <div class="kpi-card">
@@ -551,7 +535,7 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // Sheet harus di-publish agar tab terkait tampil di iframe
+    // Sheets harus sudah di-publish agar tab terkait tampil di iframe
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
@@ -578,7 +562,7 @@ function initKpiInstance(containerEl, opts) {
 }
 
 
-/* Pecah label KPI menjadi judul & subjudul */
+/* Label KPI */
 function splitKpiLabel(label, fallbackSubtitle) {
   const text = (label && String(label).trim()) || fallbackSubtitle || "";
   const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
@@ -738,66 +722,7 @@ function showMain() {
 
 backBtn.addEventListener("click", showMain);
 
-/* ===== JUDUL SECTION ===== */
-(function setupStickyTitleBoxes() {
-  const topbar = document.querySelector(".topbar");
-  if (!topbar) return;
-
-  function applyTopbarHeightVar() {
-    document.documentElement.style.setProperty("--topbar-height", topbar.offsetHeight + "px");
-  }
-  applyTopbarHeightVar();
-
-  let sentinels = [];
-  let observer = null;
-
-  function teardown() {
-    if (observer) observer.disconnect();
-    sentinels.forEach(s => s.remove());
-    sentinels = [];
-  }
-
-  function init() {
-    teardown();
-    applyTopbarHeightVar();
-    const offset = topbar.offsetHeight + 1;
-
-    observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          const box = entry.target._stickyBox;
-          if (box) box.classList.toggle("is-stuck", !entry.isIntersecting);
-        });
-      },
-      { rootMargin: `-${offset}px 0px 0px 0px`, threshold: 0 }
-    );
-
-    document.querySelectorAll(".section-title-box").forEach(box => {
-      const sentinel = document.createElement("div");
-      sentinel.className = "sticky-sentinel";
-      sentinel.setAttribute("aria-hidden", "true");
-      sentinel._stickyBox = box;
-      box.parentNode.insertBefore(sentinel, box);
-      sentinels.push(sentinel);
-      observer.observe(sentinel);
-    });
-  }
-
-  init();
-
-  let resizeTimer = null;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(init, 150);
-  });
-  window.addEventListener("load", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(init, 150);
-  });
-})();
-
 /* ===== ANIMASI SCROLL ===== */
-// Hero: teks muncul berulang tiap section Home masuk layar
 (function setupHeroAnimation() {
   const heroContent = document.getElementById("heroBriContent");
   if (!heroContent) return;
