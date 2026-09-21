@@ -702,11 +702,9 @@ body {
   .section-title-box { padding: 14px 12px; }
   .section-title-box-inner { padding: 12px 16px; gap: 10px; }
 
-  .topbar { flex-wrap: wrap; padding: 10px 14px; gap: 10px; }
-  .topbar-nav { width: 100%; justify-content: center; flex-wrap: wrap; gap: 14px; }
+  .topbar { padding: 10px 14px; gap: 10px; }
   .topbar-logo-bri { height: 34px; }
   .topbar-logo-danantara { height: 17px; }
-  .topbar-dropdown-menu { left: 0; right: auto; }
 }
 
 /* ===== HOME ===== */
@@ -1944,4 +1942,131 @@ body {
   display: block;
   width: 14px;
   height: 14px;
+}
+/* ===== LOGO BRI SEBAGAI TOMBOL HOME ===== */
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.topbar-brand:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 4px;
+}
+
+/* ===== HAMBURGER (hanya tampil di layar kecil) ===== */
+.topbar-hamburger { display: none; }
+
+@media (max-width: 768px) {
+  .topbar-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    margin-left: auto;
+    padding: 9px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: color 0.25s ease;
+  }
+  .topbar-hamburger span {
+    display: block;
+    width: 100%;
+    height: 2.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+  .topbar-hamburger:focus-visible {
+    outline: 2px solid var(--color-orange);
+    outline-offset: 2px;
+  }
+  .topbar.topbar-light .topbar-hamburger,
+  .topbar.menu-open .topbar-hamburger { color: var(--color-blue); }
+
+  .topbar.menu-open .topbar-hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+  .topbar.menu-open .topbar-hamburger span:nth-child(2) { opacity: 0; }
+  .topbar.menu-open .topbar-hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+  /* Saat menu terbuka, header jadi putih polos agar menyatu dengan panel */
+  .topbar.menu-open {
+    background: #ffffff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .topbar.menu-open .logo-dark-mode { display: none; }
+  .topbar.menu-open .logo-light-mode { display: inline-block; }
+
+  /* Panel menu */
+  .topbar .topbar-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+    background: #ffffff;
+    border-top: 1px solid #e8eef8;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 14px 28px rgba(4, 20, 60, 0.18);
+  }
+  .topbar.menu-open .topbar-nav {
+    display: flex;
+    animation: topbarMenuIn 0.2s ease;
+  }
+  @keyframes topbarMenuIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .topbar .topbar-nav .topbar-nav-link {
+    width: 100%;
+    justify-content: space-between;
+    padding: 15px 20px;
+    font-size: 15px;
+    color: var(--color-blue);
+    border-bottom: 1px solid #eef2f9;
+  }
+  .topbar .topbar-nav .topbar-nav-link:hover,
+  .topbar .topbar-nav .topbar-nav-link:focus-visible {
+    color: var(--color-blue);
+    background: #f2fbff;
+  }
+  .topbar .topbar-nav > .topbar-nav-dropdown:last-child .topbar-nav-dropdown-btn { border-bottom: none; }
+
+  /* Dropdown menjadi accordion di dalam panel */
+  .topbar-nav-dropdown { width: 100%; }
+  .topbar-dropdown-menu {
+    position: static;
+    min-width: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #f7faff;
+  }
+  .topbar-nav-dropdown.open .topbar-dropdown-menu {
+    max-height: none;
+    overflow: visible;
+  }
+  .topbar-dropdown-menu li a {
+    padding: 13px 20px 13px 32px;
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar-hamburger span,
+  .topbar.menu-open .topbar-nav { transition: none; animation: none; }
 }
