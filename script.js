@@ -19,6 +19,10 @@ const detailKpiWrap = document.getElementById("detailKpiWrap");
 const downloadBtn = document.getElementById("downloadBtn");
 const detailDivisionWrap = document.getElementById("detailDivisionWrap");
 
+/* State navigasi halaman detail */
+let currentDivisionId = null;   
+let subDetailParentId = null;
+
 function lockPageScroll(lock) {
   document.documentElement.style.overflow = lock ? "hidden" : "";
   document.body.style.overflow = lock ? "hidden" : "";
@@ -253,6 +257,9 @@ function openDivisionPage(id) {
   const div = allDivisionsById[id];
   if (!div) return;
 
+  currentDivisionId = id;
+  subDetailParentId = null;
+
   detailFrame.src = "";
   detailFrame.style.display = "none";
   detailImage.src = "";
@@ -340,7 +347,6 @@ function openDivisionPage(id) {
     downloadBtn.style.display = "flex";
   }
 
-  previousScrollY = window.scrollY;
   detailView.classList.add("show");
   lockPageScroll(true);
 }
@@ -465,13 +471,45 @@ document.querySelectorAll(".topbar-nav-dropdown").forEach(dropdown => {
   });
 });
 
-document.addEventListener("click", () => closeAllNavDropdowns());
+/* ===== MENU HAMBURGER (mobile) ===== */
+const topbarEl = document.querySelector(".topbar");
+const topbarToggle = document.getElementById("topbarToggle");
+const MOBILE_MENU_QUERY = window.matchMedia("(max-width: 768px)");
 
-// Link Home & Visi: scroll ke section terkait
-document.querySelectorAll(".topbar-nav-link[data-scroll-target]").forEach(link => {
+function setMobileMenu(open) {
+  if (!topbarEl || !topbarToggle) return;
+  topbarEl.classList.toggle("menu-open", open);
+  topbarToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  topbarToggle.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
+  if (!open) closeAllNavDropdowns();
+}
+
+if (topbarToggle) {
+  topbarToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setMobileMenu(!topbarEl.classList.contains("menu-open"));
+  });
+}
+
+// Klik di luar menu menutup dropdown & hamburger
+document.addEventListener("click", () => {
+  closeAllNavDropdowns();
+  setMobileMenu(false);
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") setMobileMenu(false);
+});
+
+// Pindah ke layar lebar: pastikan menu mobile tertutup
+MOBILE_MENU_QUERY.addEventListener("change", () => setMobileMenu(false));
+
+// Logo BRI (ke Home) & link Visi: scroll ke section terkait
+document.querySelectorAll("[data-scroll-target]").forEach(link => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
-    showMain();
+    setMobileMenu(false);
+    closeDetail();
     requestAnimationFrame(() => {
       const target = document.getElementById(link.dataset.scrollTarget);
       if (target) target.scrollIntoView({ behavior: "smooth" });
@@ -583,9 +621,10 @@ initKpiInstance(document.getElementById("kpiFrameMain"), {
 
 /* ===== HALAMAN DETAIL KPI PER DIVISI ===== */
 let currentKpiDetailInstance = null;
-let previousScrollY = 0;
 
 function openKpiDetail(div) {
+  // Jika dibuka dari halaman divisi, ingat divisinya supaya Back kembali ke sana
+  subDetailParentId = detailView.classList.contains("division-mode") ? currentDivisionId : null;
   detailView.classList.remove("division-mode");
   document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
   document.querySelector(".detail-pdf-wrap").classList.add("bg-kpi");
@@ -638,7 +677,6 @@ function openKpiDetail(div) {
     height: div.kpiHeight
   });
 
-  previousScrollY = window.scrollY;
   detailView.classList.add("show");
   lockPageScroll(true);
 }
@@ -646,6 +684,8 @@ function openKpiDetail(div) {
 
 /* ===== HALAMAN DETAIL JABATAN ===== */
 function openDetail(point) {
+  // Jika dibuka dari halaman divisi, ingat divisinya supaya Back kembali ke sana
+  subDetailParentId = detailView.classList.contains("division-mode") ? currentDivisionId : null;
   detailView.classList.remove("division-mode");
   document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
   detailDivisionWrap.style.display = "none";
@@ -682,13 +722,12 @@ function openDetail(point) {
     downloadBtn.style.display = "none";
   }
 
-  previousScrollY = window.scrollY;
   detailView.classList.add("show");
   lockPageScroll(true);
 }
 
-/* Kembali ke halaman utama & reset semua state detail */
-function showMain() {
+/* Tutup overlay detail & reset semua state (tanpa mengubah posisi scroll) */
+function closeDetail() {
   if (downloadBtn._kpiClickHandler) {
     downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
     downloadBtn._kpiClickHandler = null;
@@ -706,21 +745,38 @@ function showMain() {
   downloadBtn.href = "#";
   downloadBtn.removeAttribute("download");
   downloadBtn.removeAttribute("target");
+  subDetailParentId = null;
 
   if (currentKpiDetailInstance) {
     currentKpiDetailInstance.destroy();
     currentKpiDetailInstance = null;
   }
-
-  requestAnimationFrame(() => {
-    window.scrollTo({
-      top: previousScrollY,
-      behavior: "instant"
-    });
-  });
 }
 
-backBtn.addEventListener("click", showMain);
+/* Kembali ke halaman utama, langsung ke section divisi tadi (RO / Unit Kerja) */
+function showMain() {
+  closeDetail();
+
+  const isUker = divisionsUker.some(d => d.id === currentDivisionId);
+  const section = document.getElementById(isUker ? "showcaseUkerSection" : "showcaseROSection");
+  if (!section) return;
+
+  // Lompat langsung (tanpa animasi scroll dari atas). Diulang di frame berikutnya
+  // karena sebagian browser mobile baru menghitung ulang layout setelah overflow dibuka.
+  section.scrollIntoView({ behavior: "instant", block: "start" });
+  requestAnimationFrame(() => section.scrollIntoView({ behavior: "instant", block: "start" }));
+}
+
+/* Tombol Back: sub-halaman -> halaman divisi -> halaman utama */
+function goBack() {
+  if (subDetailParentId) {
+    openDivisionPage(subDetailParentId);
+    return;
+  }
+  showMain();
+}
+
+backBtn.addEventListener("click", goBack);
 
 /* ===== ANIMASI SCROLL ===== */
 (function setupHeroAnimation() {
@@ -868,7 +924,7 @@ backBtn.addEventListener("click", showMain);
       const body = document.getElementById(targetId);
       if (!body) return;
 
-      showMain();
+      closeDetail();
       if (body.classList.contains("collapsed")) {
         body.classList.remove("collapsed");
         const toggleBtn = targetId === "roBody" ? toggleRO : toggleUker;
