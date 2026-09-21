@@ -1931,3 +1931,14 @@ body {
 #showcaseROSection .showcase-arrow:focus-visible {
   outline-color: #0857c3;
 }
+
+/* Panah bukan emoji di IOS */
+.division-kpi-arrow::before {
+  content: none;
+}
+.division-kpi-arrow svg,
+.division-point-arrow svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
