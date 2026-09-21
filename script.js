@@ -1,10 +1,6 @@
+/* ===== ELEMEN DOM ===== */
 const cardsGrid = document.getElementById("cardsGrid");
 const cardsGridUker = document.getElementById("cardsGridUker");
-const sidebarList = document.getElementById("sidebarList");
-const sidebar = document.getElementById("sidebar");
-const sidebarOverlay = document.getElementById("sidebarOverlay");
-const menuBtn = document.getElementById("menuBtn");
-const closeSidebarBtn = document.getElementById("closeSidebarBtn");
 
 const detailView = document.getElementById("detailView");
 const detailTitle = document.getElementById("detailTitle");
@@ -21,27 +17,34 @@ const toggleKPI = document.getElementById("toggleKPI");
 
 const detailKpiWrap = document.getElementById("detailKpiWrap");
 const downloadBtn = document.getElementById("downloadBtn");
+const detailDivisionWrap = document.getElementById("detailDivisionWrap");
 
-/* KONFIGURASI GOOGLE SHEETS KPI */
+function lockPageScroll(lock) {
+  document.documentElement.style.overflow = lock ? "hidden" : "";
+  document.body.style.overflow = lock ? "hidden" : "";
+}
+
+/* ===== KONFIGURASI GOOGLE SHEET KPI ===== */
 const KPI_SHEET_ID = "1EM0CudIbfuRl31pGxA7f-u0rHEz6wfy-OfyUdLxm_8Q";
 const KPI_SHEET_GID = "0";
-const DEFAULT_KPI_RANGE = { r1: 3, c1: 0, c2: 3 };
 
 const KPI_PUBLISH_KEY = "2PACX-1vTqBWenc9r5hcgH94VG-UpgiDdUbaCLtc57fFbIibtqmnetIa53Q1ovVX8DFzXuYeB78q5RqMlxl3Fw";
 
+/* Elemen gambar untuk pratinjau detail (dipasang setelah iframe) */
 const detailImage = document.createElement("img");
 detailImage.id = "detailImage";
 detailImage.style.display = "none";
 detailImage.style.width = "100%";
 detailImage.style.height = "100%";
 detailImage.style.objectFit = "contain";
-detailImage.style.background = "#fff";
+detailImage.style.background = "linear-gradient(180deg, #0857c3 0%, #71c5e8 55%, #307FE2 100%)";
 detailImage.style.padding = "24px";
 detailImage.style.boxSizing = "border-box";
 detailImage.style.maxWidth = "1100px";
 detailImage.style.margin = "0 auto";
 detailFrame.insertAdjacentElement("afterend", detailImage);
 
+/* ===== HELPER URL FILE (Google Drive / lokal) ===== */
 function isLocalOrUrl(value) {
   if (!value) return false;
   return value.startsWith("http") || value.includes("/") || value.includes(".");
@@ -61,43 +64,23 @@ function resolvePreviewUrl(id) {
   return `https://drive.google.com/file/d/${id}/preview`;
 }
 
-/* Download KHUSUS tab KPI berdasarkan gid */
+/* ===== DOWNLOAD PDF KPI ===== */
 function resolveKpiDownloadUrl(gid, format) {
   format = format || "pdf";
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* PDF dari Google Sheets per tab */
-async function fetchSheetPdfBytes(gid, range) {
-  let url =
+/* Ambil PDF export asli dari Google Sheets untuk 1 tab (gid) */
+async function fetchSheetPdfBytes(gid) {
+  const url =
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
     `?format=pdf&gid=${encodeURIComponent(gid)}` +
-    `&fitw=true&scale=2` +   
+    `&fitw=true&scale=2` +
     `&sheetnames=false&printtitle=false&pagenumbers=false&gridlines=false` +
     `&top_margin=0.00&bottom_margin=0.00&left_margin=0.00&right_margin=0.00`;
-
-  if (range) {
-    if (range.r1 != null) url += `&r1=${range.r1}`;
-    if (range.r2 != null) url += `&r2=${range.r2}`;
-    if (range.c1 != null) url += `&c1=${range.c1}`;
-    if (range.c2 != null) url += `&c2=${range.c2}`;
-  }
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 20000);
-
-  try {
-    const res = await fetch(url, { signal: controller.signal });
-    if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
-    return await res.arrayBuffer();
-  } catch (err) {
-    if (err.name === "AbortError") {
-      throw new Error("Waktu tunggu habis saat mengambil data dari Google Sheets (gid " + gid + "). Coba lagi atau cek koneksi internet.");
-    }
-    throw err;
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Gagal mengambil PDF sheet (gid " + gid + ")");
+  return await res.arrayBuffer();
 }
 
 function downloadPdfBytes(bytes, filename) {
@@ -112,14 +95,15 @@ function downloadPdfBytes(bytes, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
+/* Bangun PDF KPI: tabel dari sheet + header (logo, judul) + footer */
+async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
   downloadBtn.innerHTML = '<span class="back-arrow">&#8595;</span> Menyiapkan PDF...';
 
   try {
     const [sheetPdfBytes, logoDanantaraBytes, logoBriBytes] = await Promise.all([
-      fetchSheetPdfBytes(gid, range),
+      fetchSheetPdfBytes(gid),
       fetch("images/Danantara_black.png").then(r => r.arrayBuffer()),
       fetch("images/bri_Blue.png").then(r => r.arrayBuffer())
     ]);
@@ -145,11 +129,11 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
       const sheetW = embedded.width;
       const sheetH = embedded.height;
 
+      // Ukuran halaman mengikuti ukuran tabel
       const pageWidth = sheetW + TABLE_MARGIN_X * 2;
       const pageHeight = sheetH + HEADER_H + FOOTER_H;
       const page = outDoc.addPage([pageWidth, pageHeight]);
 
-      // Tabel ditempel di tengah
       page.drawPage(embedded, {
         x: TABLE_MARGIN_X,
         y: FOOTER_H,
@@ -157,8 +141,8 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: sheetH
       });
 
-      // Logo kiri (Danantara)
-      const danW = 80;
+      // Header: logo Danantara (kiri), logo BRI (kanan)
+      const danW = 70;
       const danH = danantaraImg.height * (danW / danantaraImg.width);
       page.drawImage(danantaraImg, {
         x: MARGIN_X,
@@ -167,7 +151,6 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: danH
       });
 
-      // Logo kanan (BRI)
       const briW = 80;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
@@ -177,20 +160,17 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         height: briH
       });
 
-      // Judul di tengah
-      if (title) {
-        const titleSize = 13;
-        const titleWidth = fontBold.widthOfTextAtSize(title, titleSize);
-        page.drawText(title, {
-          x: (pageWidth - titleWidth) / 2,
-          y: pageHeight - 26,
-          size: titleSize,
-          font: fontBold,
-          color: rgb(0, 0, 0)
-        });
-      }
+      // Header: judul & subjudul
+      const titleSize = 13;
+      const titleWidth = fontBold.widthOfTextAtSize(title, titleSize);
+      page.drawText(title, {
+        x: (pageWidth - titleWidth) / 2,
+        y: pageHeight - 26,
+        size: titleSize,
+        font: fontBold,
+        color: rgb(0, 0, 0)
+      });
 
-      // Subjudul di tengah
       if (subtitle) {
         const subSize = 9;
         const subWidth = fontNormal.widthOfTextAtSize(subtitle, subSize);
@@ -203,7 +183,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
         });
       }
 
-      // Footer: nomor halaman + tanggal
+      // Footer: tanggal cetak & nomor halaman
       const pageNumText = `Halaman ${i + 1}`;
       const dateText = `Dicetak ${new Date().toLocaleDateString("id-ID")}`;
       const pnWidth = fontNormal.widthOfTextAtSize(pageNumText, 8);
@@ -219,7 +199,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename, range }) {
     downloadPdfBytes(outBytes, filename || "KPI.pdf");
   } catch (err) {
     console.error(err);
-    alert("Gagal membuat PDF: " + err.message + "\nSilakan membuka google sheets dan download sebagai cadangan.");
+    alert("Gagal membuat PDF: " + err.message + "\nMenggunakan link download bawaan sebagai cadangan.");
     window.open(resolveKpiDownloadUrl(gid, "pdf"), "_blank");
   } finally {
     downloadBtn.innerHTML = originalLabel;
@@ -232,7 +212,7 @@ function isImageFile(value) {
   return /\.(jpg|jpeg|png|gif|webp)$/i.test(value);
 }
 
-/* download tugas tugas DUJ */
+/* ===== DOWNLOAD PDF DETAIL JABATAN ===== */
 function extractNumberFromFileId(fileId) {
   if (!fileId) return null;
   const match = String(fileId).match(/(\d+)(?=\.[a-zA-Z0-9]+$)/);
@@ -258,150 +238,113 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-/* SIDEBAR / DAFTAR ISI */
-const sectionMap = {};
-divisions.forEach(d => { sectionMap[d.id] = { body: roBody, btn: toggleRO }; });
-divisionsUker.forEach(d => { sectionMap[d.id] = { body: ukerBody, btn: toggleUker }; });
+/* Lookup semua divisi (RO & Uker) berdasarkan id */
+const allDivisionsById = {};
+divisions.forEach(d => { allDivisionsById[d.id] = d; });
+divisionsUker.forEach(d => { allDivisionsById[d.id] = d; });
 
-function expandSection(id) {
-  const sec = sectionMap[id];
-  if (sec && sec.body.classList.contains("collapsed")) {
-    sec.body.classList.remove("collapsed");
-    sec.btn.setAttribute("aria-expanded", "true");
+function eyeIconSvg() {
+  return `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3.2"/></svg>`;
+}
+
+/* ===== HALAMAN FULLSCREEN DIVISI ===== */
+function openDivisionPage(id) {
+  const div = allDivisionsById[id];
+  if (!div) return;
+
+  detailFrame.src = "";
+  detailFrame.style.display = "none";
+  detailImage.src = "";
+  detailImage.style.display = "none";
+  detailKpiWrap.style.display = "none";
+
+  if (downloadBtn._kpiClickHandler) {
+    downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
+    downloadBtn._kpiClickHandler = null;
   }
-}
-
-function flashHighlight(el) {
-  if (!el) return;
-  el.classList.remove("highlight-flash");
-  void el.offsetWidth; // reflow, biar animasi bisa diulang
-  el.classList.add("highlight-flash");
-  el.addEventListener("animationend", function handler() {
-    el.classList.remove("highlight-flash");
-    el.removeEventListener("animationend", handler);
-  });
-}
-
-/* sticky tittle box */
-function getStickyBoxFor(el) {
-  const body = el.closest(".collapsible-body");
-  if (!body) return null;
-  let sib = body.previousElementSibling;
-  while (sib && !sib.classList.contains("section-title-box")) {
-    sib = sib.previousElementSibling;
+  if (currentKpiDetailInstance) {
+    currentKpiDetailInstance.destroy();
+    currentKpiDetailInstance = null;
   }
-  return sib;
-}
 
-/* agar judul card nggak ketutup pas berhenti scroll */
-function scrollToCardClearingSticky(el) {
-  const topbar = document.querySelector(".topbar");
-  const box = getStickyBoxFor(el);
-  const extraPadding = 16;
-  const stickyOffset = (topbar ? topbar.offsetHeight : 0) + (box ? box.offsetHeight : 0) + extraPadding;
-  const rect = el.getBoundingClientRect();
-  const targetY = window.scrollY + rect.top - stickyOffset;
-  window.scrollTo({ top: Math.max(targetY, 0), behavior: "smooth" });
-}
+  const isUker = divisionsUker.some(d => d.id === id);
+  const pdfWrap = document.querySelector(".detail-pdf-wrap");
+  pdfWrap.classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
+  pdfWrap.classList.add(isUker ? "bg-hal4" : "bg-hal3");
+  detailView.classList.add("division-mode");
 
-function buildSidebarGroup(labelText, groupId, list) {
-  const groupLi = document.createElement("li");
-  groupLi.className = "sidebar-group";
+  const hasKpi = !!(div.kpiEnabled || (div.kpiGid && String(div.kpiGid).trim()));
+  const hasPoints = !!(div.points && div.points.length);
+  const showList = hasPoints || hasKpi;
 
-  const toggleBtn = document.createElement("button");
-  toggleBtn.className = "sidebar-group-toggle";
-  toggleBtn.innerHTML = `<span>${labelText}</span><span class="chevron">&#9662;</span>`;
+  detailDivisionWrap.style.display = "block";
+  detailTitle.textContent = div.title;
 
-  const subUl = document.createElement("ul");
-  subUl.className = "sidebar-subgroup";
-  subUl.id = groupId;
+  const kpiItemHtml = hasKpi ? `
+    <button type="button" class="division-kpi-box" id="divisionKpiBtn">
+      <span class="division-kpi-arrow" aria-hidden="true"></span>
+      <span class="division-kpi-caption">Key Performance Indicator</span>
+      <span class="division-kpi-desc">${escapeHtml(div.title)}</span>
+    </button>` : "";
 
-  list.forEach(div => {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    a.href = "#" + div.id;
-    a.textContent = div.title;
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      closeSidebar();
-      showMain();
-      expandSection(div.id);
-      requestAnimationFrame(() => {
-        const target = document.getElementById(div.id);
-        if (!target) return;
-        scrollToCardClearingSticky(target);
-        setTimeout(() => flashHighlight(target), 500);
-      });
+  if (showList) {
+    const pointsHtml = (div.points || []).map((point, idx) => `
+      <button type="button" class="division-point-item" data-idx="${idx}">
+        <span class="division-point-icon">${eyeIconSvg()}</span>
+        <span class="division-point-label">${escapeHtml(point.title)}</span>
+        <span class="division-point-arrow">&#8599;</span>
+      </button>
+    `).join("");
+
+    detailDivisionWrap.innerHTML = `
+      <div class="detail-division-inner">
+        <h2 class="detail-division-title">${escapeHtml(div.title)}</h2>
+        <div class="detail-division-toprow">
+          <div class="detail-division-download-block">
+            <p class="division-note">Silakan unduh berkas jabatan disini.</p>
+            <a class="division-download-btn" href="${resolveDownloadUrl(div.downloadId)}" target="_blank" rel="noopener">DOWNLOAD</a>
+          </div>
+          ${kpiItemHtml}
+        </div>
+        <div class="division-point-list">${pointsHtml}</div>
+      </div>
+    `;
+
+    detailDivisionWrap.querySelectorAll(".division-point-list .division-point-item[data-idx]").forEach(btn => {
+      const idx = Number(btn.getAttribute("data-idx"));
+      btn.addEventListener("click", () => openDetail(div.points[idx]));
     });
-    li.appendChild(a);
-    subUl.appendChild(li);
-  });
+    if (hasKpi) {
+      document.getElementById("divisionKpiBtn").addEventListener("click", () => openKpiDetail(div));
+    }
 
-  toggleBtn.addEventListener("click", () => {
-    const willOpen = !subUl.classList.contains("open");
-    subUl.classList.toggle("open", willOpen);
-    toggleBtn.classList.toggle("open", willOpen);
-  });
+    downloadBtn.style.display = "none";
+    downloadBtn.href = "#";
+    downloadBtn.removeAttribute("download");
+    downloadBtn.removeAttribute("target");
+  } else {
+    detailDivisionWrap.innerHTML = `
+      <div class="detail-division-inner">
+        <div class="division-simple-card">
+          <img src="${div.image || ''}" alt="${escapeHtml(div.title)}" onerror="this.style.display='none'">
+          <h3>${escapeHtml(div.title)}</h3>
+        </div>
+        <p class="division-simple-note">Silakan unduh berkas jabatan disini.</p>
+      </div>
+    `;
 
-  groupLi.appendChild(toggleBtn);
-  groupLi.appendChild(subUl);
-  sidebarList.appendChild(groupLi);
-}
-
-buildSidebarGroup("DUJ RO Jogja", "group-ro", divisions);
-buildSidebarGroup("DUJ Unit Kerja", "group-uker", divisionsUker);
-
-/* 3. KPI */
-function buildSidebarGroupKPI(labelText, groupId, linkText, onClick) {
-  const groupLi = document.createElement("li");
-  groupLi.className = "sidebar-group";
-
-  const toggleBtn = document.createElement("button");
-  toggleBtn.className = "sidebar-group-toggle";
-  toggleBtn.innerHTML = `<span>${labelText}</span><span class="chevron">&#9662;</span>`;
-
-  const subUl = document.createElement("ul");
-  subUl.className = "sidebar-subgroup";
-  subUl.id = groupId;
-
-  const li = document.createElement("li");
-  const a = document.createElement("a");
-  a.href = "#kpiSection";
-  a.textContent = linkText;
-  a.addEventListener("click", (e) => {
-    e.preventDefault();
-    onClick();
-  });
-  li.appendChild(a);
-  subUl.appendChild(li);
-
-  toggleBtn.addEventListener("click", () => {
-    const willOpen = !subUl.classList.contains("open");
-    subUl.classList.toggle("open", willOpen);
-    toggleBtn.classList.toggle("open", willOpen);
-  });
-
-  groupLi.appendChild(toggleBtn);
-  groupLi.appendChild(subUl);
-  sidebarList.appendChild(groupLi);
-}
-
-buildSidebarGroupKPI("KPI", "group-kpi", "KPI Regional Office Area KC, KCP dan BRI Unit", () => {
-  closeSidebar();
-  showMain();
-
-  /* box KPI*/
-  if (kpiBody.classList.contains("collapsed")) {
-    kpiBody.classList.remove("collapsed");
-    toggleKPI.setAttribute("aria-expanded", "true");
+    downloadBtn.href = resolveDownloadUrl(div.downloadId);
+    downloadBtn.target = "_blank";
+    downloadBtn.removeAttribute("download");
+    downloadBtn.style.display = "flex";
   }
 
-  requestAnimationFrame(() => {
-    document.getElementById("kpiSection").scrollIntoView({ behavior: "smooth" });
-  });
-});
+  previousScrollY = window.scrollY;
+  detailView.classList.add("show");
+  lockPageScroll(true);
+}
 
-/* CARD PER DIVISI */
+/* ===== CARD PER DIVISI ===== */
 function buildDivisionCard(div) {
   const card = document.createElement("div");
   card.className = "division-card";
@@ -411,7 +354,6 @@ function buildDivisionCard(div) {
     ? `<p class="card-note">Silakan unduh berkas jabatan disini.</p><ul class="point-list"></ul>`
     : "";
 
-  // tabel otomatis live
   const hasKpi = !!(div.kpiEnabled || (div.kpiGid && String(div.kpiGid).trim()));
   const kpiLabel = (div.kpiLabel && String(div.kpiLabel).trim()) || ("Penetapan Key Performance Indicator\n" + div.title);
   const kpiLabelHtml = kpiLabel.split("\n").map(line => escapeHtml(line)).join("<br>");
@@ -419,7 +361,6 @@ function buildDivisionCard(div) {
     ? `<button type="button" class="kpi-link-btn"><span>${kpiLabelHtml}</span><span class="kpi-link-arrow" aria-hidden="true">&#8250;</span></button>`
     : "";
 
-  // Urutan tampilan card
   card.innerHTML = `
     <img src="${div.image || ''}" alt="${div.title}" loading="lazy" onerror="this.style.display='none'">
     <h4>${div.title}</h4>
@@ -456,7 +397,8 @@ function buildDivisionCard(div) {
   return card;
 }
 
-/* RCEO sendiri ditengah atas grid Regional Office */
+/* ===== RENDER GRID CARD ===== */
+// RCEO tampil sendiri di atas grid Regional Office
 const rceoDivision = divisions[0];
 const otherDivisions = divisions.slice(1);
 
@@ -466,17 +408,15 @@ const rceoCard = buildDivisionCard(rceoDivision);
 rceoWrap.appendChild(rceoCard);
 cardsGrid.parentNode.insertBefore(rceoWrap, cardsGrid);
 
-/*grid card Regional Office*/
 otherDivisions.forEach(div => {
   cardsGrid.appendChild(buildDivisionCard(div));
 });
 
-/*grid card Unit Kerja Operasional*/
 divisionsUker.forEach(div => {
   cardsGridUker.appendChild(buildDivisionCard(div));
 });
 
-/*card RCEO*/
+// Samakan lebar card RCEO dengan card lain
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -488,20 +428,58 @@ window.addEventListener("resize", syncRceoCardWidth);
 window.addEventListener("load", syncRceoCardWidth);
 syncRceoCardWidth();
 
-/* SIDEBAR */
-function openSidebar() {
-  sidebar.classList.add("open");
-  sidebarOverlay.classList.add("show");
+/* ===== NAVIGASI TOPBAR ===== */
+function closeAllNavDropdowns() {
+  document.querySelectorAll(".topbar-nav-dropdown.open").forEach(d => d.classList.remove("open"));
 }
-function closeSidebar() {
-  sidebar.classList.remove("open");
-  sidebarOverlay.classList.remove("show");
-}
-menuBtn.addEventListener("click", openSidebar);
-closeSidebarBtn.addEventListener("click", closeSidebar);
-sidebarOverlay.addEventListener("click", closeSidebar);
 
-/* Trought up/ down */
+function buildNavDropdown(containerEl, list) {
+  if (!containerEl) return;
+  containerEl.innerHTML = "";
+  list.forEach(div => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = "#" + div.id;
+    a.textContent = div.title;
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeAllNavDropdowns();
+      openDivisionPage(div.id);
+    });
+    li.appendChild(a);
+    containerEl.appendChild(li);
+  });
+}
+
+buildNavDropdown(document.getElementById("navDropdownRO"), divisions);
+buildNavDropdown(document.getElementById("navDropdownUker"), divisionsUker);
+
+document.querySelectorAll(".topbar-nav-dropdown").forEach(dropdown => {
+  const btn = dropdown.querySelector(".topbar-nav-dropdown-btn");
+  if (!btn) return;
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const willOpen = !dropdown.classList.contains("open");
+    closeAllNavDropdowns();
+    dropdown.classList.toggle("open", willOpen);
+  });
+});
+
+document.addEventListener("click", () => closeAllNavDropdowns());
+
+// Link Home & Visi: scroll ke section terkait
+document.querySelectorAll(".topbar-nav-link[data-scroll-target]").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    showMain();
+    requestAnimationFrame(() => {
+      const target = document.getElementById(link.dataset.scrollTarget);
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+    });
+  });
+});
+
+/* ===== TOGGLE BUKA/TUTUP SECTION ===== */
 function setupToggle(btn, body, onOpen) {
   btn.addEventListener("click", () => {
     const willCollapse = !body.classList.contains("collapsed");
@@ -517,7 +495,7 @@ setupToggle(toggleUker, ukerBody);
 setupToggle(toggleKPI, kpiBody);
 
 
-/* FRAME KPI LIVE DARI GOOGLE SHEET */
+/* ===== TABEL KPI LIVE (Google Sheet via iframe) ===== */
 function kpiFrameShellHTML(title, subtitle) {
   return `
     <div class="kpi-card">
@@ -544,7 +522,6 @@ function kpiFrameShellHTML(title, subtitle) {
 
 const KPI_DEFAULT_HEIGHT = 700; 
 
-/*KPI Live */
 function initKpiInstance(containerEl, opts) {
   const gid = opts.gid;
   const title = opts.title || "KPI Regional Office";
@@ -574,7 +551,7 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // publish Google Sheetsnya
+    // Sheet harus sudah di-publish agar tab terkait tampil di iframe
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
@@ -601,7 +578,7 @@ function initKpiInstance(containerEl, opts) {
 }
 
 
-/* urutan tataletak stiap card */
+/* Pecah label KPI menjadi judul & subjudul */
 function splitKpiLabel(label, fallbackSubtitle) {
   const text = (label && String(label).trim()) || fallbackSubtitle || "";
   const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
@@ -612,7 +589,7 @@ function splitKpiLabel(label, fallbackSubtitle) {
   return { title: "Penetapan Key Performance Indicator", subtitle: lines[0] || "" };
 }
 
-/* (section "3. KPI") */
+// KPI utama (section "3. KPI")
 initKpiInstance(document.getElementById("kpiFrameMain"), {
   gid: KPI_SHEET_GID,
   title: "Penetapan Key Performance Indicator",
@@ -620,11 +597,16 @@ initKpiInstance(document.getElementById("kpiFrameMain"), {
   height: 620
 });
 
-/* buat KPI per-card */
+/* ===== HALAMAN DETAIL KPI PER DIVISI ===== */
 let currentKpiDetailInstance = null;
 let previousScrollY = 0;
 
 function openKpiDetail(div) {
+  detailView.classList.remove("division-mode");
+  document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
+  document.querySelector(".detail-pdf-wrap").classList.add("bg-kpi");
+  detailDivisionWrap.style.display = "none";
+
   detailTitle.textContent = "KPI - " + div.title;
 
   detailFrame.src = "";
@@ -634,7 +616,7 @@ function openKpiDetail(div) {
 
   detailKpiWrap.style.display = "block";
 
-  // Bersihkan handler klik dari pemakaian sebelumnya (hindari numpuk event listener)
+  // Bersihkan handler lama agar event listener tidak menumpuk
   if (downloadBtn._kpiClickHandler) {
     downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
     downloadBtn._kpiClickHandler = null;
@@ -653,8 +635,7 @@ function openKpiDetail(div) {
         gid: div.kpiGid,
         title: kpiTitleForPdf,
         subtitle: kpiSubtitleForPdf,
-        filename: sanitizeFilename(div.title) + " - KPI.pdf",
-        range: div.kpiRange || null // <-- FIX: teruskan range per-divisi dari divisions_data.js
+        filename: sanitizeFilename(div.title) + " - KPI.pdf"
       });
     };
     downloadBtn._kpiClickHandler = handler;
@@ -674,12 +655,17 @@ function openKpiDetail(div) {
   });
 
   previousScrollY = window.scrollY;
-detailView.classList.add("show");
+  detailView.classList.add("show");
+  lockPageScroll(true);
 }
 
 
-/*TAMPILAN DETAIL JABATAN*/
+/* ===== HALAMAN DETAIL JABATAN ===== */
 function openDetail(point) {
+  detailView.classList.remove("division-mode");
+  document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
+  detailDivisionWrap.style.display = "none";
+
   detailTitle.textContent = point.title;
 
   detailKpiWrap.style.display = "none";
@@ -696,7 +682,6 @@ function openDetail(point) {
     detailFrame.src = resolvePreviewUrl(point.fileId);
   }
 
-  // Bersihkan handler klik KPI kalau ada sisa dari halaman sebelumnya
   if (downloadBtn._kpiClickHandler) {
     downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
     downloadBtn._kpiClickHandler = null;
@@ -714,15 +699,22 @@ function openDetail(point) {
   }
 
   previousScrollY = window.scrollY;
-detailView.classList.add("show");
+  detailView.classList.add("show");
+  lockPageScroll(true);
 }
 
+/* Kembali ke halaman utama & reset semua state detail */
 function showMain() {
   if (downloadBtn._kpiClickHandler) {
     downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
     downloadBtn._kpiClickHandler = null;
   }
   detailView.classList.remove("show");
+  detailView.classList.remove("division-mode");
+  lockPageScroll(false);
+  document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
+  detailDivisionWrap.style.display = "none";
+  detailDivisionWrap.innerHTML = "";
   detailFrame.src = "";
   detailImage.src = "";
   detailKpiWrap.style.display = "none";
@@ -736,7 +728,6 @@ function showMain() {
     currentKpiDetailInstance = null;
   }
 
-  // Kembali ke posisi scroll sebelumnya
   requestAnimationFrame(() => {
     window.scrollTo({
       top: previousScrollY,
@@ -747,7 +738,7 @@ function showMain() {
 
 backBtn.addEventListener("click", showMain);
 
-/* sticky title box */
+/* ===== JUDUL SECTION STICKY SAAT SCROLL ===== */
 (function setupStickyTitleBoxes() {
   const topbar = document.querySelector(".topbar");
   if (!topbar) return;
@@ -803,4 +794,206 @@ backBtn.addEventListener("click", showMain);
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(init, 150);
   });
+})();
+
+/* ===== ANIMASI SCROLL ===== */
+// Hero: teks muncul berulang tiap section Home masuk layar
+(function setupHeroAnimation() {
+  const heroContent = document.getElementById("heroBriContent");
+  if (!heroContent) return;
+
+  if (!("IntersectionObserver" in window)) {
+    heroContent.classList.add("hero-animate");
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      heroContent.classList.toggle("hero-animate", entry.isIntersecting);
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(heroContent);
+})();
+
+// Visi
+(function setupVisiScrollAnimation() {
+  const visiSection = document.getElementById("visiSection");
+  if (!visiSection || !("IntersectionObserver" in window)) {
+    if (visiSection) visiSection.classList.add("in-view");
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      visiSection.classList.toggle("in-view", entry.isIntersecting);
+    });
+  }, { threshold: 0.35 });
+  observer.observe(visiSection);
+})();
+
+// Showcase RO, Uker, dan KPI
+(function setupShowcaseStarAnimation() {
+  const sections = [
+    document.getElementById("showcaseROSection"),
+    document.getElementById("showcaseUkerSection"),
+    document.getElementById("kpiSection")
+  ].filter(Boolean);
+  if (!sections.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    sections.forEach(sec => sec.classList.add("in-view"));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle("in-view", entry.isIntersecting);
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(sec => observer.observe(sec));
+})();
+
+/* ===== SHOWCASE DIVISI (kartu RO & Uker) ===== */
+(function setupShowcaseGrids() {
+  const showcaseROGrid = document.getElementById("showcaseROGrid");
+  const showcaseUkerGrid = document.getElementById("showcaseUkerGrid");
+  const showcaseRceoBanner = document.getElementById("showcaseRceoBanner");
+
+  function goToDivisionCard(id) {
+    openDivisionPage(id);
+  }
+
+  // Banner RCEO terpisah dari grid
+  function buildRceoBanner(containerEl, div) {
+    if (!containerEl || !div) return;
+    const banner = document.createElement("article");
+    banner.className = "showcase-rceo-banner";
+    banner.tabIndex = 0;
+    banner.setAttribute("role", "button");
+    banner.setAttribute("aria-label", "Buka bagian " + div.title);
+    banner.innerHTML = `
+      <span>
+        <span class="showcase-rceo-label">STRUKTUR TERTINGGI REGIONAL OFFICE</span>
+        <span class="showcase-rceo-title">${escapeHtml(div.title)}</span>
+      </span>
+      <button type="button" class="showcase-arrow" aria-label="Menuju card ${escapeHtml(div.title)}">&#8594;</button>
+    `;
+    const go = () => goToDivisionCard(div.id);
+    banner.querySelector(".showcase-arrow").addEventListener("click", (e) => {
+      e.stopPropagation();
+      go();
+    });
+    banner.addEventListener("click", go);
+    banner.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        go();
+      }
+    });
+    containerEl.appendChild(banner);
+  }
+
+  function buildShowcaseGrid(gridEl, list) {
+    if (!gridEl) return;
+    gridEl.innerHTML = "";
+
+    list.forEach((div, index) => {
+      const card = document.createElement("article");
+      card.className = "showcase-card";
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", "Buka bagian " + div.title);
+
+      card.innerHTML = `
+        <span class="showcase-num">${String(index + 1).padStart(2, "0")}</span>
+        <h3 class="showcase-card-title">${escapeHtml(div.title)}</h3>
+        <button type="button" class="showcase-arrow" aria-label="Menuju card ${escapeHtml(div.title)}">&#8594;</button>
+      `;
+
+      const go = () => goToDivisionCard(div.id);
+
+      card.querySelector(".showcase-arrow").addEventListener("click", (e) => {
+        e.stopPropagation();
+        go();
+      });
+      card.addEventListener("click", go);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          go();
+        }
+      });
+
+      gridEl.appendChild(card);
+    });
+  }
+
+  const roDivisionsWithoutRceo = divisions.filter(d => d.id !== "rceo");
+  const rceoDivision = divisions.find(d => d.id === "rceo");
+
+  buildRceoBanner(showcaseRceoBanner, rceoDivision);
+  buildShowcaseGrid(showcaseROGrid, roDivisionsWithoutRceo);
+  buildShowcaseGrid(showcaseUkerGrid, divisionsUker);
+
+  // Tombol "Klik Untuk Lihat Divisi Lainnya": buka section & scroll ke sana
+  document.querySelectorAll(".showcase-more-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      const body = document.getElementById(targetId);
+      if (!body) return;
+
+      showMain();
+      if (body.classList.contains("collapsed")) {
+        body.classList.remove("collapsed");
+        const toggleBtn = targetId === "roBody" ? toggleRO : toggleUker;
+        if (toggleBtn) toggleBtn.setAttribute("aria-expanded", "true");
+      }
+
+      requestAnimationFrame(() => {
+        const topbar = document.querySelector(".topbar");
+        let box = body.previousElementSibling;
+        while (box && !box.classList.contains("section-title-box")) {
+          box = box.previousElementSibling;
+        }
+        const anchor = box || body;
+        const offset = (topbar ? topbar.offsetHeight : 0) + 8;
+        const y = window.scrollY + anchor.getBoundingClientRect().top - offset;
+        window.scrollTo({ top: Math.max(y, 0), behavior: "smooth" });
+      });
+    });
+  });
+})();
+
+/* ===== TEMA TOPBAR (terang/gelap mengikuti background) ===== */
+(function setupTopbarThemeSwitch() {
+  const topbar = document.querySelector(".topbar");
+  const lightSections = document.querySelectorAll('[data-header-theme="light"]');
+  if (!topbar || !lightSections.length) return;
+
+  function updateTheme() {
+    const probeY = topbar.offsetHeight / 2;
+    let isLight = false;
+    lightSections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= probeY && rect.bottom >= probeY) isLight = true;
+    });
+    topbar.classList.toggle("topbar-light", isLight);
+  }
+
+  updateTheme();
+  window.addEventListener("scroll", updateTheme, { passive: true });
+  window.addEventListener("resize", updateTheme);
+})();
+
+/* ===== SLIDESHOW BACKGROUND HOME ===== */
+(function setupHeroBgSlider() {
+  const slides = document.querySelectorAll(".home-hero-bg-slide");
+  if (slides.length < 2) return;
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove("active");
+    current = (current + 1) % slides.length;
+    slides[current].classList.add("active");
+  }, 5000);
 })();
