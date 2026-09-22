@@ -10,7 +10,7 @@ const divisions = [
 },
   {
     "id": "regional-sme-banking",
-    "title": "REGIONAL SME BANKING",
+    "title": "REGIONAL SME BANKING HEAD",
     "downloadId": "files/Regional SME Banking.pdf",
     "points": [
       { "title": "REGIONAL SME BANKING HEAD", "fileId": "images/4.jpg", "pdfId": "4" },
@@ -20,7 +20,7 @@ const divisions = [
   },
   {
     "id": "regional-micro-banking",
-    "title": "REGIONAL MICRO BANKING",
+    "title": "REGIONAL MICRO BANKING HEAD",
     "downloadId": "files/Regional Micro Banking Head.pdf",
     "kpiEnabled": true,
     "kpiGid": "519583074",
@@ -36,7 +36,7 @@ const divisions = [
   },
   {
     "id": "regional-funding-retail-transaction-banking",
-    "title": "REGIONAL FUNDING & RETAIL TRANSACTION BANKING",
+    "title": "REGIONAL FUNDING & RETAIL TRANSACTION BANKING HEAD",
     "downloadId": "files/Regional Funding and Retail Banking.pdf",
     "points": [
       { "title": "REGIONAL FUNDING TRANSACTION BANKING HEAD", "fileId": "images/14.jpg", "pdfId": "14" },
@@ -47,7 +47,7 @@ const divisions = [
   },
   {
     "id": "regional-consumer-banking",
-    "title": "REGIONAL CONSUMER BANKING",
+    "title": "REGIONAL CONSUMER BANKING HEAD",
     "downloadId": "files/Regional Consumer Banking Head.pdf",
     "kpiEnabled": true,
     "kpiGid": "1194928475",
@@ -62,7 +62,7 @@ const divisions = [
   },
   {
     "id": "regional-risk-management",
-    "title": "REGIONAL RISK MANAGEMENT",
+    "title": "REGIONAL RISK MANAGEMENT HEAD",
     "downloadId": "files/Regional Risk Management.pdf",
     "points": [
       { "title": "REGIONAL RISK MANAGEMENT HEAD", "fileId": "images/24.jpg", "pdfId": "24" },
