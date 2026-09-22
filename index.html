@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Deskripsi Jabatan BRI - Regional Office Yogyakarta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,7 @@
 
     <nav class="topbar-nav" id="topbarNav">
       <a href="#visiSection" class="topbar-nav-link" data-scroll-target="visiSection">Visi</a>
+      <a href="#kpiSection" class="topbar-nav-link" data-scroll-target="kpiSection">KPI Regional Office</a>
 
       <div class="topbar-nav-dropdown">
         <button type="button" class="topbar-nav-link topbar-nav-dropdown-btn">
@@ -184,10 +185,14 @@
         </button>
       </div>
 
-      <div id="kpiBody" class="collapsible-body">
-        <section class="pdf-preview-wrap pdf-preview-transparent">
-          <div id="kpiFrameMain" class="kpi-frame"></div>
-        </section>
+      <div class="kpi-cta-wrap kpi-cta-wrap-end">
+        <button type="button" class="kpi-cta-card" id="kpiCtaCard" aria-label="Lihat Key Performance Index lebih detail">
+          <span class="kpi-cta-text">
+          <span class="kpi-cta-title">Key Performance Index</span>
+          </span>
+          <span class="kpi-cta-arrow" aria-hidden="true">&#8594;</span>
+        </button>
+          <span class="kpi-cta-caption">Silakan klik untuk melihat lebih detail</span>
       </div>
 
       <!-- ===== FOOTER ===== -->
