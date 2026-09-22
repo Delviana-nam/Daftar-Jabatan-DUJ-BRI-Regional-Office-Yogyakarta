@@ -2182,31 +2182,3 @@ body {
   .topbar-hamburger span,
   .topbar.menu-open .topbar-nav { transition: none; animation: none; }
 }
-
-/* ===== BRI OUTRO: foto "keluar" dari footer saat discroll (mirip amplop VISI) ===== */
-.bri-outro-bg,
-.bri-outro-overlay {
-  -webkit-transform: translateY(38%) translateZ(0);
-  transform: translateY(38%) translateZ(0);
-  opacity: 0;
-  will-change: transform, opacity;
-  -webkit-transition: -webkit-transform .9s cubic-bezier(.22,1.35,.36,1), opacity .6s ease .05s;
-  transition: transform .9s cubic-bezier(.22,1.35,.36,1), opacity .6s ease .05s;
-}
-.bri-outro-overlay { transition-delay: .08s; -webkit-transition-delay: .08s; }
-
-.bri-outro.in-view .bri-outro-bg,
-.bri-outro.in-view .bri-outro-overlay {
-  -webkit-transform: translateY(0) translateZ(0);
-  transform: translateY(0) translateZ(0);
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bri-outro-bg, .bri-outro-overlay {
-    transition: none;
-    -webkit-transform: translateY(0) translateZ(0);
-    transform: translateY(0) translateZ(0);
-    opacity: 1;
-  }
-}
