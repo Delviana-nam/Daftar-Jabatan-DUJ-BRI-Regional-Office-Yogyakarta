@@ -12,8 +12,8 @@ const ukerBody = document.getElementById("ukerBody");
 const toggleRO = document.getElementById("toggleRO");
 const toggleUker = document.getElementById("toggleUker");
 
-const kpiBody = document.getElementById("kpiBody");
 const toggleKPI = document.getElementById("toggleKPI");
+const kpiCtaCard = document.getElementById("kpiCtaCard");
 
 const detailKpiWrap = document.getElementById("detailKpiWrap");
 const downloadBtn = document.getElementById("downloadBtn");
@@ -156,7 +156,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
       });
 
       //logo BRI
-      const briW = 80;
+      const briW = 70;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
         x: pageWidth - MARGIN_X - briW,
@@ -516,6 +516,19 @@ document.querySelectorAll("[data-scroll-target]").forEach(link => {
   });
 });
 
+/* ===== CARD AJAKAN KLIK KPI: buka laman detail KPI (sama seperti KPI per divisi) ===== */
+const kpiMainEntry = {
+  id: "kpi-utama",
+  title: "Regional Office Area KC, KCP, dan BRI Unit",
+  kpiGid: KPI_SHEET_GID,
+  kpiLabel: "Penetapan Key Performance Indicator\nRegional Office, Area, Kantor Cabang, Kantor Cabang Pembantu, dan BRI Unit Tahun 2026",
+  kpiHeight: 620
+};
+
+if (kpiCtaCard) {
+  kpiCtaCard.addEventListener("click", () => openKpiDetail(kpiMainEntry));
+}
+
 /* ===== TABEL KPI LIVE (Google Sheet via iframe) ===== */
 function kpiFrameShellHTML(title, subtitle) {
   return `
@@ -609,14 +622,6 @@ function splitKpiLabel(label, fallbackSubtitle) {
 
   return { title: "Penetapan Key Performance Indicator", subtitle: lines[0] || "" };
 }
-
-// KPI utama (section "3. KPI")
-initKpiInstance(document.getElementById("kpiFrameMain"), {
-  gid: KPI_SHEET_GID,
-  title: "Penetapan Key Performance Indicator",
-  subtitle: "Regional Office, Area, Kantor Cabang, Kantor Cabang Pembantu, dan BRI Unit Tahun 2026",
-  height: 620
-});
 
 /* ===== HALAMAN DETAIL KPI PER DIVISI ===== */
 let currentKpiDetailInstance = null;
@@ -760,8 +765,6 @@ function showMain() {
   const section = document.getElementById(isUker ? "showcaseUkerSection" : "showcaseROSection");
   if (!section) return;
 
-  // Lompat langsung (tanpa animasi scroll dari atas). Diulang di frame berikutnya
-  // karena sebagian browser mobile baru menghitung ulang layout setelah overflow dibuka.
   section.scrollIntoView({ behavior: "instant", block: "start" });
   requestAnimationFrame(() => section.scrollIntoView({ behavior: "instant", block: "start" }));
 }
@@ -981,3 +984,34 @@ backBtn.addEventListener("click", goBack);
 function arrowUpRightSvg() {
   return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>`;
 }
+
+// Foto dekat footer (BRI Outro): efek "keluar" saat discroll, mirip amplop VISI
+(function setupBriOutroScrollAnimation() {
+  const briOutro = document.getElementById("briOutro");
+  const footerAnchor = document.getElementById("footerSection") || briOutro;
+  if (!briOutro || !footerAnchor || !("IntersectionObserver" in window)) {
+    if (briOutro) briOutro.classList.add("in-view");
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      briOutro.classList.toggle("in-view", entry.isIntersecting);
+    });
+  }, { threshold: 0.1 });
+  observer.observe(footerAnchor);
+})();
+
+//fade + slide up
+(function setupFooterScrollAnimation() {
+  const footerSection = document.getElementById("footerSection");
+  if (!footerSection || !("IntersectionObserver" in window)) {
+    if (footerSection) footerSection.classList.add("in-view");
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      footerSection.classList.toggle("in-view", entry.isIntersecting);
+    });
+  }, { threshold: 0.15 });
+  observer.observe(footerSection);
+})();
