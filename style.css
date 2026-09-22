@@ -47,6 +47,7 @@
 
 html {
   overflow-x: hidden;
+  width: 100%;
   max-width: 100%;
   overscroll-behavior-x: none;
 }
@@ -55,7 +56,9 @@ body {
   font-family: 'Inter';
   color: var(--color-text);
   background: var(--color-white);
+  width: 100%;
   max-width: 100%;
+  position: relative;
 }
 
 /* ===== HEADER ===== */
@@ -1038,7 +1041,7 @@ body {
 /* ===== BRI OUTRO ===== */
 .bri-outro {
   position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, #0857c3 100%);
+  background: #0857c3;
 }
 
 .bri-outro-bg {
@@ -1046,12 +1049,13 @@ body {
   left: 0;
   bottom: -2px;
   width: 100%;
-  height: 392px;
+  height: 440px;
   object-fit: cover;
   object-position: center 35%;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0px, black 210px);
-  mask-image: linear-gradient(to bottom, transparent 0px, black 210px);
+  border-radius: 50% 50% 0 0 / 42px 42px 0 0;
+  box-shadow: 0 -24px 48px rgba(4,8,28,.34);
   transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .bri-outro-overlay {
@@ -1059,24 +1063,27 @@ body {
   left: 0;
   bottom: -2px;
   width: 100%;
-  height: 392px;
+  height: 440px;
+  border-radius: 50% 50% 0 0 / 42px 42px 0 0;
   background: linear-gradient(180deg,
-    rgba(4,8,28,0) 0px,
-    rgba(4,8,28,.2) 210px,
-    rgba(4,8,28,.45) 300px,
-    rgba(4,8,28,.78) 392px);
+    rgba(4,8,28,.18) 0px,
+    rgba(4,8,28,.32) 210px,
+    rgba(4,8,28,.55) 320px,
+    rgba(4,8,28,.85) 440px);
   transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
 @media (max-width: 700px) {
-  .bri-outro-bg { height: 380px; object-position: center 25%; }
-  .bri-outro-overlay { height: 320px; }
+  .bri-outro-bg { height: 420px; object-position: center 25%; }
+  .bri-outro-overlay { height: 420px; }
 }
 
 /* judul KPI */
 .section-title-box-dark {
   background: transparent;
+  padding-top: 70px;
 }
 .section-title-box-dark .section-title-box-inner {
   background: transparent;
@@ -1087,8 +1094,8 @@ body {
 }
 .section-title-box-dark .toggle-arrow { display: none; }
 .section-title-box-dark .section-title-link {
-  color: #0857c3;
-  font-size: 44px;
+  color: #ffffff;
+  font-size: 36px;
   font-weight: 900;
   line-height: 1.12;
   letter-spacing: .5px;
@@ -1103,6 +1110,89 @@ body {
 }
 .pdf-preview-transparent { background: transparent; }
 
+/* Card ajakan klik KPI (gaya sama seperti card RCEO) */
+.kpi-cta-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  margin: 36px 0 4px;
+}
+
+.kpi-cta-wrap-end {
+  margin-bottom: 240px;
+}
+.kpi-cta-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  max-width: 420px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: transparent;
+  border: 3px solid #ffffff;
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  text-align: left;
+  transition: transform .32s cubic-bezier(.34,1.45,.64,1), background .3s ease,
+              border-color .3s ease, box-shadow .3s ease, color .3s ease;
+}
+.kpi-cta-card:hover,
+.kpi-cta-card:focus-visible {
+  transform: translateY(-6px);
+  background: #ffffff;
+  color: #0857c3;
+  box-shadow: 0 -24px 48px rgba(4,8,28,.34);
+}
+.kpi-cta-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .2px;
+}
+.kpi-cta-caption {
+  display: block;
+  margin-top: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: .8;
+  text-align: center;
+}
+.kpi-cta-arrow {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  background: rgba(255,255,255,.12);
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .28s ease, color .28s ease, transform .28s ease, border-color .28s ease;
+}
+.kpi-cta-card:hover .kpi-cta-arrow,
+.kpi-cta-card:focus-visible .kpi-cta-arrow {
+  background: #ffffff;
+  color: #0857c3;
+  border-color: #ffffff;
+  transform: translateX(5px);
+}
+.kpi-cta-card:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kpi-cta-card { transition: none; }
+}
+
 /* footer tanpa background */
 .site-footer-flat {
   background: transparent;
@@ -1111,6 +1201,9 @@ body {
 }
 @media (max-width: 600px) {
   .site-footer-flat { padding: 20px 18px 26px; }
+}
+@media (max-width: 700px) {
+  .kpi-cta-wrap-end { margin-bottom: 140px; }
 }
 
 /* ===== SHOWCASE DIVISI (hal3 & hal4) ===== */
@@ -1132,6 +1225,10 @@ body {
 #showcaseUkerSection {
    background-image: url("images/hal4.jpg");
   overflow: visible;
+}
+@media (max-width: 900px) {
+  /* Cegah glow dekoratif "bocor" ke luar layar & memicu geser horizontal di HP */
+  #showcaseUkerSection { overflow: hidden; }
 }
 
 .showcase-glow {
@@ -2084,4 +2181,32 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .topbar-hamburger span,
   .topbar.menu-open .topbar-nav { transition: none; animation: none; }
+}
+
+/* ===== BRI OUTRO: foto "keluar" dari footer saat discroll (mirip amplop VISI) ===== */
+.bri-outro-bg,
+.bri-outro-overlay {
+  -webkit-transform: translateY(38%) translateZ(0);
+  transform: translateY(38%) translateZ(0);
+  opacity: 0;
+  will-change: transform, opacity;
+  -webkit-transition: -webkit-transform .9s cubic-bezier(.22,1.35,.36,1), opacity .6s ease .05s;
+  transition: transform .9s cubic-bezier(.22,1.35,.36,1), opacity .6s ease .05s;
+}
+.bri-outro-overlay { transition-delay: .08s; -webkit-transition-delay: .08s; }
+
+.bri-outro.in-view .bri-outro-bg,
+.bri-outro.in-view .bri-outro-overlay {
+  -webkit-transform: translateY(0) translateZ(0);
+  transform: translateY(0) translateZ(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bri-outro-bg, .bri-outro-overlay {
+    transition: none;
+    -webkit-transform: translateY(0) translateZ(0);
+    transform: translateY(0) translateZ(0);
+    opacity: 1;
+  }
 }
