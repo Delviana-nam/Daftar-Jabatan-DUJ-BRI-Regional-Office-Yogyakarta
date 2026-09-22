@@ -298,7 +298,6 @@ function openDivisionPage(id) {
   if (showList) {
     const pointsHtml = (div.points || []).map((point, idx) => `
       <button type="button" class="division-point-item" data-idx="${idx}">
-        <span class="division-point-icon">${eyeIconSvg()}</span>
         <span class="division-point-label">${escapeHtml(point.title)}</span>
         <span class="division-point-arrow">${arrowUpRightSvg()}</span>
       </button>
