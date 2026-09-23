@@ -22,6 +22,7 @@ const detailDivisionWrap = document.getElementById("detailDivisionWrap");
 /* State navigasi halaman detail */
 let currentDivisionId = null;   
 let subDetailParentId = null;
+let isMainKpiOpen = false;
 
 function lockPageScroll(lock) {
   document.documentElement.style.overflow = lock ? "hidden" : "";
@@ -627,7 +628,7 @@ function splitKpiLabel(label, fallbackSubtitle) {
 let currentKpiDetailInstance = null;
 
 function openKpiDetail(div) {
-  // Jika dibuka dari halaman divisi, ingat divisinya supaya Back kembali ke sana
+  isMainKpiOpen = (div === kpiMainEntry);
   subDetailParentId = detailView.classList.contains("division-mode") ? currentDivisionId : null;
   detailView.classList.remove("division-mode");
   document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
@@ -750,6 +751,7 @@ function closeDetail() {
   downloadBtn.removeAttribute("download");
   downloadBtn.removeAttribute("target");
   subDetailParentId = null;
+  isMainKpiOpen = false;
 
   if (currentKpiDetailInstance) {
     currentKpiDetailInstance.destroy();
@@ -769,10 +771,18 @@ function showMain() {
   requestAnimationFrame(() => section.scrollIntoView({ behavior: "instant", block: "start" }));
 }
 
-/* Tombol Back: sub-halaman -> halaman divisi -> halaman utama */
 function goBack() {
   if (subDetailParentId) {
     openDivisionPage(subDetailParentId);
+    return;
+  }
+  if (isMainKpiOpen) {
+    closeDetail();
+    const kpiSection = document.getElementById("kpiSection");
+    if (kpiSection) {
+      kpiSection.scrollIntoView({ behavior: "instant", block: "start" });
+      requestAnimationFrame(() => kpiSection.scrollIntoView({ behavior: "instant", block: "start" }));
+    }
     return;
   }
   showMain();
