@@ -157,7 +157,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
       });
 
       //logo BRI
-      const briW = 65;
+      const briW = 70;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
         x: pageWidth - MARGIN_X - briW,
@@ -842,7 +842,7 @@ backBtn.addEventListener("click", goBack);
     entries.forEach(entry => {
       entry.target.classList.toggle("in-view", entry.isIntersecting);
     });
-  }, { threshold: 0.15, rootMargin: "0px 0px -10% 0px" });
+  }, { threshold: 0.35 });
 
   sections.forEach(sec => observer.observe(sec));
 })();
