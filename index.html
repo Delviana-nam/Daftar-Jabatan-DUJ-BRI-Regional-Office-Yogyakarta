@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=19">
+<link rel="stylesheet" href="style.css?v=20">
 </head>
 <body>
 
@@ -172,28 +172,32 @@
 
   <!-- ===== KPI + FOOTER (satu background foto BRI) ===== -->
   <div id="briOutro" class="bri-outro">
+    <img src="images/gedung.png" alt="" class="kpi-regional-area-bg" onerror="this.style.display='none'">
     <img src="images/salam_bri.jpg" alt="" class="bri-outro-bg" onerror="this.style.display='none'">
     <div class="bri-outro-overlay"></div>
 
     <div class="bri-outro-content">
 
       <!-- ===== SECTION 3: KPI ===== -->
-      <div class="section-title-box section-title-box-dark" id="kpiSection">
-        <button class="section-title-box-inner" id="toggleKPI" aria-expanded="true">
-          <span class="section-title-link">KPI Regional Office Area KC, KCP, dan BRI Unit</span>
-          <span class="toggle-arrow"></span>
-        </button>
-      </div>
+<div class="kpi-regional-area">
 
-      <div class="kpi-cta-wrap kpi-cta-wrap-end">
-        <button type="button" class="kpi-cta-card" id="kpiCtaCard" aria-label="Lihat Key Performance Index lebih detail">
-          <span class="kpi-cta-text">
-          <span class="kpi-cta-title">Key Performance Index</span>
-          </span>
-          <span class="kpi-cta-arrow" aria-hidden="true">&#8594;</span>
-        </button>
-          <span class="kpi-cta-caption">Silakan klik untuk melihat lebih detail</span>
-      </div>
+  <div class="section-title-box section-title-box-dark" id="kpiSection">
+    <button class="section-title-box-inner" id="toggleKPI" aria-expanded="true">
+      <span class="section-title-link">KPI Regional Office Area KC, KCP, dan BRI Unit</span>
+      <span class="toggle-arrow"></span>
+    </button>
+  </div>
+
+  <div class="kpi-cta-wrap kpi-cta-wrap-end">
+    <button type="button" class="kpi-cta-card" id="kpiCtaCard" aria-label="Lihat Key Performance Index lebih detail">
+      <span class="kpi-cta-text">
+      <span class="kpi-cta-title">Key Performance Index</span>
+      </span>
+      <span class="kpi-cta-arrow" aria-hidden="true">&#8594;</span>
+    </button>
+      <span class="kpi-cta-caption">Silakan klik untuk melihat lebih detail</span>
+  </div>
+</div>
 
       <!-- ===== FOOTER ===== -->
       <footer id="footerSection" class="site-footer site-footer-flat">
@@ -299,6 +303,6 @@
   <script src="libs/fontkit.umd.min.js"></script>
 
   <script src="divisions_data.js"></script>
-  <script src="script.js?v=12"></script>
+  <script src="script.js?v=13"></script>
 </body>
 </html>
