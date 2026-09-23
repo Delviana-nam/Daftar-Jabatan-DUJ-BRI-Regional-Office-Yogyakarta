@@ -68,7 +68,6 @@ body {
   justify-content: space-between;
   gap: 20px;
   padding: 12px 24px;
-  padding-top: calc(12px + env(safe-area-inset-top, 0px));
   background: rgba(255, 255, 255, 0.15);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -84,17 +83,14 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  min-width: 0;
 }
 .topbar-logo-danantara {
   height: 30px;
   width: auto;
-  flex-shrink: 0;
 }
 .topbar-logo-bri {
   height: 40px;
   width: auto;
-  flex-shrink: 0;
 }
 
 /* ===== NAVIGASI TOPBAR (link & dropdown) ===== */
@@ -141,7 +137,6 @@ body {
   top: calc(100% + 14px);
   right: 0;
   min-width: 260px;
-  max-width: min(320px, 92vw);
   max-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -177,13 +172,6 @@ body {
   background: #f2fbff;
 }
 
-/* Tablet (potret iPad & sejenis) - jaga agar menu tidak sesak sebelum masuk mode hamburger */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .topbar { padding-left: 18px; padding-right: 18px; }
-  .topbar-nav { gap: 14px; }
-  .topbar-nav-link { font-size: 13px; }
-}
-
 @media (max-width: 900px) {
   .topbar-nav { gap: 16px; }
   .topbar-nav-link { font-size: 13.5px; }
@@ -198,7 +186,7 @@ body {
 }
 .hero-text h2 {
   color: var(--color-blue);
-  font-size: clamp(22px, 4.2vw, 34px);
+  font-size: 34px;
   font-weight: 800;
   line-height: 1.3;
 }
@@ -275,8 +263,6 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   padding: 30px 40px 60px;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
 .division-card {
@@ -307,7 +293,6 @@ body {
 }
 .rceo-wrap .division-card {
   width: 100%;
-  max-width: 1320px;
 }
 
 .division-card img {
@@ -319,7 +304,7 @@ body {
 
 .division-card h4 {
   color: var(--color-blue);
-  font-size: clamp(17px, 2.4vw, 20px);
+  font-size: 20px;
   font-weight: 800;
   text-align: center;
   margin: 16px 14px;
@@ -538,11 +523,11 @@ body {
 .kpi-title {
   text-align: center;
   color: var(--color-blue);
-  font-size: clamp(15px, 2.4vw, 19px);
+  font-size: 19px;
   line-height: 1.25;
   margin: 2px 0 8px;
 }
-.kpi-title span { display: block; font-size: clamp(12.5px, 2vw, 16px); white-space: pre-line; }
+.kpi-title span { display: block; font-size: 16px; white-space: pre-line; }
 
 /* Tombol KPI */
 .kpi-link-btn span:first-child {
@@ -587,8 +572,6 @@ body {
 
 .kpi-table-scroll {
   overflow: hidden;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   border-radius: 8px;
   border: 1px solid #cfe0ef;
   position: relative;
@@ -619,11 +602,6 @@ body {
   .kpi-logo-bri { height: 32px; }
   .kpi-toolbar { font-size: 11px; justify-content: center; margin-bottom: 6px; }
   .kpi-action-btn { padding: 5px 10px; font-size: 11px; }
-  .kpi-sheet-iframe { height: 480px !important; }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .kpi-sheet-iframe { height: 560px !important; }
 }
 
 
@@ -643,7 +621,6 @@ body {
   align-items: center;
   gap: 14px;
   padding: 14px 20px;
-  padding-top: calc(14px + env(safe-area-inset-top, 0px));
   background: var(--color-header-bg);
   color: var(--color-white);
 }
@@ -667,7 +644,7 @@ body {
 .detail-actions {
   position: fixed;
   left: 24px;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  bottom: 24px;
   z-index: 65;
   display: flex;
   flex-direction: column;
@@ -708,7 +685,7 @@ body {
 @media (max-width: 600px) {
   .detail-actions {
     left: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    bottom: 16px;
     gap: 8px;
   }
   .back-btn {
@@ -725,24 +702,19 @@ body {
 @media (max-width: 600px) {
   .hero-text h2 { font-size: 22px; }
   .cards-grid { grid-template-columns: 1fr; padding: 30px 20px 40px; }
-  .division-card img { height: 190px; }
   .section-title-link { font-size: 14px; }
   .section-title-box { padding: 14px 12px; }
   .section-title-box-inner { padding: 12px 16px; gap: 10px; }
 
-  .topbar { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); gap: 10px; }
+  .topbar { padding: 10px 14px; gap: 10px; }
   .topbar-logo-bri { height: 34px; }
   .topbar-logo-danantara { height: 17px; }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .division-card img { height: 200px; }
 }
 
 /* ===== HOME ===== */
 .home-hero {
   position: relative;
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -776,7 +748,7 @@ body {
 }
 .home-hero-content h2 {
   color: var(--color-white);
-  font-size: clamp(22px, 4.2vw, 34px);
+  font-size: 34px;
   font-weight: 800;
   line-height: 1.3;
 }
@@ -788,7 +760,7 @@ body {
 
 @media (max-width: 600px) {
   .home-hero-content h2 { font-size: 22px; }
-  .home-hero { min-height: 100svh; }
+  .home-hero { min-height: 100vh; }
   .struktur-body { padding: 24px 16px 40px; }
 }
 
@@ -839,7 +811,7 @@ body {
 .hero-line {
   display: block;
   color: #fff;
-  font-size: clamp(24px, 5.2vw, 38px);
+  font-size: 38px;
   font-weight: 900;
   line-height: 1.15;
   opacity: 0;
@@ -865,7 +837,7 @@ body {
   margin: 0 auto;
   text-align: center;
   color: #eaf1ff;
-  font-size: clamp(12.5px, 1.8vw, 14px);
+  font-size: 14px;
   line-height: 1.7;
 }
 
@@ -874,6 +846,7 @@ body {
   .hero-bri-logo { height: 76px; }
   .hero-bri-divider { width: 60px; min-height: 3px; }
   .hero-bri-headline { align-items: center; text-align: center; }
+  .hero-line { font-size: 26px; }
   .hero-bri-desc { font-size: 13px; }
 }
 
@@ -894,7 +867,7 @@ body {
   text-align: left;
 }
 .visi-title {
-  font-size: clamp(34px, 7vw, 72px);
+  font-size: 72px;
   font-weight: 900;
   font-family: 'Inter';
   letter-spacing: -1px;
@@ -905,7 +878,7 @@ body {
   transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.34,1.65,.64,1);
 }
 .visi-desc {
-  font-size: clamp(19px, 3.4vw, 34px);
+  font-size: 34px;
   line-height: 1.45;
   color: #2b2f36;
   font-weight: 400;
@@ -1023,7 +996,6 @@ body {
   background: #0857c3;
   margin: 40px -12px -34px;
   padding: 16px 8px;
-  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
 .footer-bottom-inner {
   max-width: 1500px;
@@ -1059,11 +1031,43 @@ body {
 }
 
 @media (max-width: 900px) {
-  .footer-inner { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { gap: 20px; }
+  .footer-office-title { font-size: 13px; }
+  .footer-office-sub,
+  .footer-address,
+  .footer-link-list a,
+  .footer-col-disclaimer p { font-size: 10px; }
+  .footer-heading { font-size: 11.5px; margin-bottom: 8px; }
+  .footer-phone { font-size: 11.5px; margin-bottom: 8px; }
+  .footer-social-btn { width: 22px; height: 22px; }
+  .footer-link-list li { margin-bottom: 6px; }
 }
 @media (max-width: 600px) {
-  .footer-inner { grid-template-columns: 1fr; text-align: left; }
-  .site-footer { padding: 44px 18px 26px; }
+  .footer-inner {
+    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-areas:
+      "brand brand"
+      "contact ."
+      "links ."
+      "disclaimer disclaimer";
+    gap: 14px 10px;
+  }
+  .footer-col-brand { grid-area: brand; }
+  .footer-col-contact { grid-area: contact; }
+  .footer-col-links { grid-area: links; }
+  .footer-col-disclaimer { grid-area: disclaimer; }
+
+  .site-footer { padding: 44px 10px 26px; }
+  .footer-office-title { font-size: 12px; }
+  .footer-office-sub,
+  .footer-address,
+  .footer-link-list a,
+  .footer-col-disclaimer p { font-size: 9.5px; line-height: 1.45; }
+  .footer-heading { font-size: 12px; margin-bottom: 8px; }
+  .footer-phone { font-size: 12px; margin-bottom: 8px; }
+  .footer-social-btn { width: 22px; height: 22px; }
+  .footer-social-btn svg { width: 12px; height: 12px; }
+  .footer-link-list li { margin-bottom: 7px; }
 }
 
 /* ===== BRI OUTRO ===== */
@@ -1081,6 +1085,9 @@ body {
   object-fit: contain;
   opacity: .10;
   z-index: 0;
+} 
+@media (max-width: 700px) {
+  .kpi-regional-area-bg { width: 250%; }
 }
 
 .bri-outro-bg {
@@ -1121,9 +1128,16 @@ body {
   z-index: 3;
 }
 
+@media (max-width: 900px) and (min-width: 701px) {
+  .bri-outro-bg { height: 520px; object-position: center 30%; }
+  .bri-outro-overlay { height: 520px; }
+}
+
 @media (max-width: 700px) {
-  .bri-outro-bg { height: 420px; object-position: center 25%; }
-  .bri-outro-overlay { height: 420px; }
+  .bri-outro-bg { height: 550px; object-position: center 20%; }
+  .bri-outro-overlay { height: 550px; }
+  .footer-office-title,
+  .footer-office-sub { display: none; }
 }
 
 /* judul KPI */
@@ -1141,7 +1155,7 @@ body {
 .section-title-box-dark .toggle-arrow { display: none; }
 .section-title-box-dark .section-title-link {
   color: #ffffff;
-  font-size: clamp(22px, 4.4vw, 36px);
+  font-size: 36px;
   font-weight: 900;
   line-height: 1.12;
   letter-spacing: .5px;
@@ -1149,6 +1163,9 @@ body {
   opacity: 0;
   transform: scale(0.5);
   transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.34,1.65,.64,1);
+}
+@media (max-width: 700px) {
+  .section-title-box-dark .section-title-link { font-size: 27px; }
 }
 #kpiSection.in-view .section-title-link {
   opacity: 1;
@@ -1210,6 +1227,21 @@ body {
   color: #ffffff;
   opacity: .8;
   text-align: center;
+}
+@media (max-width: 700px) {
+  .kpi-cta-caption { font-size: 12.5px; }
+}
+@media (max-width: 700px) {
+  .kpi-cta-card {
+    max-width: 360px;
+    padding: 14px 18px;
+    border-radius: 13px;
+    border-width: 2px;
+    gap: 12px;
+  }
+  .kpi-cta-title { font-size: 15px; }
+  .kpi-cta-caption { font-size: 15px; }
+  .kpi-cta-arrow { width: 32px; height: 32px; font-size: 15px; }
 }
 .kpi-cta-arrow {
   flex: 0 0 auto;
@@ -1330,14 +1362,14 @@ body {
 }
 .showcase-rceo-title {
   color: #ffffff;
-  font-size: clamp(16px, 2.6vw, 20px);
+  font-size: 20px;
   font-weight: 900;
   letter-spacing: .3px;
 }
 .showcase-rceo-banner .showcase-arrow { position: static; flex: 0 0 auto; }
 .showcase-title {
   color: #ffffff;
-  font-size: clamp(26px, 5vw, 44px);
+  font-size: 44px;
   font-weight: 900;
   line-height: 1.12;
   letter-spacing: .5px;
@@ -1399,7 +1431,7 @@ body {
 .showcase-card:focus-visible::after { transform: scaleX(1); }
 
 .showcase-num {
-  font-size: clamp(26px, 4vw, 34px);
+  font-size: 34px;
   font-weight: 900;
   line-height: 1;
   color: rgba(255,255,255,.55);
@@ -1515,13 +1547,44 @@ body {
     background-size: cover;
     background-position: center;
   }
-  .showcase-section { padding: 70px 18px 80px; }
-  .showcase-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-  .showcase-card { padding: 20px 18px 62px; }
-}
 
-@media (max-width: 380px) {
-  .showcase-grid { grid-template-columns: 1fr; }
+  /* Perkecil card showcase (RO & Uker) di HP, judul tetap besar */
+  .showcase-title {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+
+  .showcase-grid {
+    gap: 12px;
+  }
+
+  .showcase-card {
+    padding: 14px 14px 46px;
+    border-radius: 12px;
+    gap: 6px;
+  }
+
+  .showcase-card::after {
+    left: 14px;
+    width: 34px;
+  }
+
+  .showcase-num {
+    font-size: 20px;
+  }
+
+  .showcase-card-title {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .showcase-arrow {
+    width: 30px;
+    height: 30px;
+    right: 12px;
+    bottom: 12px;
+    font-size: 14px;
+  }
 }
 
 .hidden-section { display: none !important; }
@@ -1552,7 +1615,6 @@ body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding: 70px 24px 130px;
-  padding-top: calc(70px + env(safe-area-inset-top, 0px));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -1707,7 +1769,7 @@ body {
 }
 .detail-division-title {
   color: #ffffff;
-  font-size: clamp(21px, 4vw, 32px);
+  font-size: 32px;
   font-weight: 900;
   letter-spacing: .5px;
   text-transform: uppercase;
@@ -1828,9 +1890,8 @@ body {
 .division-simple-note { color: #dceeff; font-size: 13.5px; font-style: italic; }
 
 @media (max-width: 600px) {
-  .detail-division-wrap { padding: 56px 16px 130px; padding-top: calc(56px + env(safe-area-inset-top, 0px)); }
+  .detail-division-wrap { padding: 56px 16px 130px; }
   .detail-division-title { font-size: 24px; }
-  .division-download-btn { padding: 14px 44px; }
 }
 
 /* ===== TEMA TOPBAR (terang/gelap) ===== */
@@ -2219,7 +2280,6 @@ body {
   .topbar-dropdown-menu {
     position: static;
     min-width: 0;
-    max-width: none;
     border-radius: 0;
     box-shadow: none;
     background: #f7faff;
@@ -2237,23 +2297,4 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .topbar-hamburger span,
   .topbar.menu-open .topbar-nav { transition: none; animation: none; }
-}
-
-/* ===== PENYESUAIAN TAMBAHAN: TABLET (iPad potret/landscape, 601px-1024px) ===== */
-@media (min-width: 601px) and (max-width: 1024px) {
-  .showcase-inner,
-  .footer-inner,
-  .cards-grid {
-    max-width: 100%;
-  }
-  .kpi-frame { max-width: 100%; margin-left: 16px; margin-right: 16px; }
-  .detail-kpi-wrap { padding-left: 16px; padding-right: 16px; }
-  .visi-inner { padding-left: 24px; padding-right: 24px; }
-}
-
-/* ===== Cegah elemen besar memicu scroll horizontal di layar sangat sempit ===== */
-@media (max-width: 400px) {
-  .kpi-cta-card { padding: 16px 18px; }
-  .division-kpi-box { max-width: 100%; }
-  .detail-division-toprow { gap: 14px; }
 }
