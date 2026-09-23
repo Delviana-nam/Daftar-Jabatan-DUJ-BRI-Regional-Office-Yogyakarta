@@ -842,7 +842,7 @@ backBtn.addEventListener("click", goBack);
     entries.forEach(entry => {
       entry.target.classList.toggle("in-view", entry.isIntersecting);
     });
-  }, { threshold: 0.35 });
+  }, { threshold: 0.1 });
 
   sections.forEach(sec => observer.observe(sec));
 })();
