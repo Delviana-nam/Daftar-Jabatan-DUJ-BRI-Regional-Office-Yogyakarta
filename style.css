@@ -1,2259 +1,309 @@
-/* ===== FONT: INTER ===== */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('fonts/inter-latin-ext-wght-normal.woff2') format('woff2');
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('fonts/inter-latin-wght-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: italic;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('fonts/inter-latin-ext-wght-italic.woff2') format('woff2');
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: italic;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('fonts/inter-latin-wght-italic.woff2') format('woff2');
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-*, *::before, *::after { font-family: 'Inter'; }
-
-:root {
-  --color-header-bg: #307FE2;
-  --color-orange: #71c5e8;
-  --color-blue: #0857c3;
-  --color-bg-section: #ffffff; 
-  --color-white: #ffffff;
-  --color-text: #333333;
-  --color-accent: #71c5e8; 
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100%;
-  overscroll-behavior-x: none;
-}
-
-body {
-  font-family: 'Inter';
-  color: var(--color-text);
-  background: var(--color-white);
-  width: 100%;
-  max-width: 100%;
-  position: relative;
-}
-
-/* ===== HEADER ===== */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 12px 24px;
-  padding-top: calc(12px + env(safe-area-inset-top, 0px));
-  background: rgba(255, 255, 255, 0.15);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  color: var(--color-white);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 50;
-}
-
-.topbar-logos {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-}
-.topbar-logo-danantara {
-  height: 30px;
-  width: auto;
-  flex-shrink: 0;
-}
-.topbar-logo-bri {
-  height: 40px;
-  width: auto;
-  flex-shrink: 0;
-}
-
-/* ===== NAVIGASI TOPBAR (link & dropdown) ===== */
-.topbar-nav {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  margin-left: auto;
-}
-.topbar-nav-link {
-  background: none;
-  border: none;
-  color: var(--color-white);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: .2px;
-  text-decoration: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 2px;
-  white-space: nowrap;
-}
-.topbar-nav-link:hover,
-.topbar-nav-link:focus-visible {
-  color: var(--color-orange);
-}
-.topbar-nav-caret {
-  font-size: 11px;
-  transition: transform 0.2s ease;
-}
-.topbar-nav-dropdown.open .topbar-nav-caret {
-  transform: rotate(180deg);
-}
-
-.topbar-nav-dropdown {
-  position: relative;
-}
-.topbar-dropdown-menu {
-  list-style: none;
-  position: absolute;
-  top: calc(100% + 14px);
-  right: 0;
-  min-width: 260px;
-  max-width: min(320px, 92vw);
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-  transition: max-height 0.25s ease, opacity 0.2s ease;
-  z-index: 55;
-}
-.topbar-nav-dropdown.open .topbar-dropdown-menu {
-  max-height: 420px;
-  opacity: 1;
-  visibility: visible;
-  overflow-y: auto;
-}
-.topbar-dropdown-menu li a {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 12px 18px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--color-text);
-  text-decoration: none;
-  border-bottom: 1px solid #f0eeec;
-}
-.topbar-dropdown-menu li:last-child a {
-  border-bottom: none;
-}
-.topbar-dropdown-menu li a:hover {
-  color: var(--color-blue);
-  background: #f2fbff;
-}
-
-/* Tablet (potret iPad & sejenis) - jaga agar menu tidak sesak sebelum masuk mode hamburger */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .topbar { padding-left: 18px; padding-right: 18px; }
-  .topbar-nav { gap: 14px; }
-  .topbar-nav-link { font-size: 13px; }
-}
-
-@media (max-width: 900px) {
-  .topbar-nav { gap: 16px; }
-  .topbar-nav-link { font-size: 13.5px; }
-}
-
-/* ===== HERO ===== */
-.hero {
-  position: relative;
-  padding: 50px 30px 40px;
-  text-align: center;
-  background: linear-gradient(180deg, #ffffff 0%, #f6f2ee 100%);
-}
-.hero-text h2 {
-  color: var(--color-blue);
-  font-size: clamp(22px, 4.2vw, 34px);
-  font-weight: 800;
-  line-height: 1.3;
-}
-.hero-sub {
-  margin-top: 14px;
-  font-style: italic;
-  color: #555;
-}
-
-/* ===== JUDUL SECTION ===== */
-.section-title-box {
-  width: 100%;
-  background: var(--color-bg-section);
-  padding: 20px 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.section-title-box-inner {
-  width: 100%;
-  max-width: 620px;
-  background: var(--color-white);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 22px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  font-family: inherit;
-}
-
-.section-title-link {
-  color: #307FE2;
-  font-size: 16px;
-  font-weight: 700;
-  transition: color 0.15s ease;
-  text-align: left;
-}
-
-/* Panah & panel collapsible */
-.toggle-arrow {
-  flex-shrink: 0;
-  width: 10px;
-  height: 10px;
-  border-right: 2px solid #307FE2;
-  border-bottom: 2px solid #307FE2;
-  transform: rotate(-135deg);
-  transition: transform 0.3s ease;
-  margin-top: 4px;
-}
-.section-title-box-inner[aria-expanded="false"] .toggle-arrow {
-  transform: rotate(45deg);
-  margin-top: -4px;
-}
-
-.collapsible-body {
-  overflow: hidden;
-  max-height: 20000px;
-  opacity: 1;
-  transition: max-height 0.4s ease, opacity 0.3s ease;
-}
-.collapsible-body.collapsed {
-  max-height: 0;
-  opacity: 0;
-}
-
-/* ===== CARDS GRID ===== */
-.cards-grid {
-  background: var(--color-bg-section);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding: 30px 40px 60px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.division-card {
-  background: var(--color-white);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  display: flex;
-  flex-direction: column;
-  scroll-margin-top: 90px;
-}
-
-@keyframes card-highlight-flash {
-  0%   { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 0 rgba(8,87,195,0); }
-  20%  { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 5px rgba(8,87,195,0.85); }
-  60%  { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 5px rgba(8,87,195,0.85); }
-  100% { box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 0 rgba(8,87,195,0); }
-}
-.division-card.highlight-flash {
-  animation: card-highlight-flash 0.55s ease-in-out 3;
-}
-
-.rceo-wrap {
-  background: var(--color-bg-section);
-  display: flex;
-  justify-content: center;
-  padding: 40px 40px 0px;
-}
-.rceo-wrap .division-card {
-  width: 100%;
-  max-width: 1320px;
-}
-
-.division-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  background: #f0f0f0;
-}
-
-.division-card h4 {
-  color: var(--color-blue);
-  font-size: clamp(17px, 2.4vw, 20px);
-  font-weight: 800;
-  text-align: center;
-  margin: 16px 14px;
-}
-
-.download-btn {
-  display: block;
-  text-align: center;
-  background: var(--color-orange);
-  color: var(--color-white);
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 14px;
-  margin: 0 20px 14px;
-  border-radius: 4px;
-  text-decoration: none;
-}
-.download-btn:hover { filter: brightness(0.95); }
-
-.kpi-link-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: calc(100% - 40px);
-  margin: 0 20px 12px;
-  background: #ffffff;
-  color: var(--color-blue);
-  border: 2px solid #71c5e8;
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  font-family: inherit;
-}
-.kpi-link-btn:hover,
-.kpi-link-btn:active {
-  background: #f2fbff;
-}
-.kpi-link-arrow {
-  font-size: 34px;
-  line-height: 1;
-  flex-shrink: 0;
-  color: var(--color-orange);
-  font-weight: 700;
-}
-
-@media (max-width: 600px) {
-  .kpi-link-arrow { font-size: 28px; }
-}
-
-.card-note {
-  font-style: italic;
-  font-size: 14px;
-  padding: 0 20px;
-  color: #555;
-}
-
-.point-list {
-  list-style: none;
-  padding: 10px 20px 24px;
-}
-.point-list li {
-  margin-top: 10px;
-}
-.point-list button,
-.point-list a {
-  background: none;
-  border: none;
-  text-align: left;
-  color: var(--color-text);
-  font-size: 14px;
-  cursor: pointer;
-  padding: 4px 0 4px 26px;
-  position: relative;
-  width: 100%;
-  display: block;
-  text-decoration: none;
-  font-family: inherit;
-}
-.point-list button::before,
-.point-list a::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 20px;
-  height: 12px;
-  transform: translateY(-50%);
-  background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath fill-rule='evenodd' fill='%23fff' d='M12,1 C6,1 1,7 1,7 C1,7 6,13 12,13 C18,13 23,7 23,7 C23,7 18,1 12,1 Z M8.2,7 A3.8,3.8 0 1,0 15.8,7 A3.8,3.8 0 1,0 8.2,7 Z'/%3E%3Ccircle cx='12' cy='7' r='1.6' fill='%23fff'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath fill-rule='evenodd' fill='%23fff' d='M12,1 C6,1 1,7 1,7 C1,7 6,13 12,13 C18,13 23,7 23,7 C23,7 18,1 12,1 Z M8.2,7 A3.8,3.8 0 1,0 15.8,7 A3.8,3.8 0 1,0 8.2,7 Z'/%3E%3Ccircle cx='12' cy='7' r='1.6' fill='%23fff'/%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  transition: background-color 0.2s ease;
-}
-
-.point-list button::after,
-.point-list a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 22px;
-  height: 5px;
-  transform: translateY(-6px);
-  opacity: 0;
-  background-color: currentColor;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 980 226'%3E%3Cg stroke='%23fff' stroke-width='48' stroke-linecap='round' fill='none'%3E%3Cline x1='490' y1='160' x2='490' y2='30'/%3E%3Cline x1='357' y1='170' x2='290' y2='40'/%3E%3Cline x1='623' y1='170' x2='690' y2='40'/%3E%3Cline x1='224' y1='198' x2='110' y2='75'/%3E%3Cline x1='756' y1='198' x2='870' y2='75'/%3E%3C/g%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 980 226'%3E%3Cg stroke='%23fff' stroke-width='48' stroke-linecap='round' fill='none'%3E%3Cline x1='490' y1='160' x2='490' y2='30'/%3E%3Cline x1='357' y1='170' x2='290' y2='40'/%3E%3Cline x1='623' y1='170' x2='690' y2='40'/%3E%3Cline x1='224' y1='198' x2='110' y2='75'/%3E%3Cline x1='756' y1='198' x2='870' y2='75'/%3E%3C/g%3E%3C/svg%3E");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-}
-
-.point-list button:hover::after,
-.point-list a:hover::after,
-.point-list button:active::after,
-.point-list a:active::after {
-  opacity: 1;
-  transform: translateY(-11.5px);
-}
-
-.point-list button:hover,
-.point-list a:hover,
-.point-list button:active,
-.point-list a:active {
-  color: var(--color-accent);
-}
-.point-list button:hover::before,
-.point-list a:hover::before,
-.point-list button:active::before,
-.point-list a:active::before {
-  opacity: 1;
-}
-
-/* ===== SECTION KPI ===== */
-.pdf-preview-wrap {
-  background: var(--color-bg-section);
-  padding: 0 40px 60px;
-  -webkit-overflow-scrolling: touch;
-  overflow: hidden;
-}
-.pdf-preview-image {
-  width: 100%;
-  max-width: 900px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  background: #fff;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 600px) {
-  .pdf-preview-wrap { padding: 0 16px 40px; }
-  .pdf-preview-image { padding: 10px; }
-}
-
-/* ===== FRAME KPI (live dari Google Sheet) ===== */
-.kpi-frame {
-  max-width: 950px;
-  margin: 24px auto 0;
-  border: 3px solid var(--color-header-bg);
-  border-radius: 22px;
-  padding: 6px;
-  background: linear-gradient(180deg, var(--color-accent), #ffffff 40px);
-  overflow: hidden;
-}
-
-.detail-kpi-wrap {
-  height: 100%;
-  max-width: 1050px;
-  overflow-y: auto;
-  padding: 20px 20px 90px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.detail-kpi-wrap::-webkit-scrollbar {
-  display: none;           
-}
-.detail-kpi-wrap .kpi-frame { max-width: 100%; margin-top: 0; }
-
-.kpi-card {
-  background: #ffffff;
-  border-radius: 13px;
-  padding: 5px 18px 10px;
-}
-
-.kpi-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 2px;
-}
-.kpi-brand { display: flex; align-items: center; gap: 10px; min-width: 110px; }
-.kpi-brand-right { justify-content: flex-end; }
-.kpi-logo-danantara { height: 28px; width: auto; }
-.kpi-logo-bri { height: 40px; width: auto; }
-
-.kpi-title {
-  text-align: center;
-  color: var(--color-blue);
-  font-size: clamp(15px, 2.4vw, 19px);
-  line-height: 1.25;
-  margin: 2px 0 8px;
-}
-.kpi-title span { display: block; font-size: clamp(12.5px, 2vw, 16px); white-space: pre-line; }
-
-/* Tombol KPI */
-.kpi-link-btn span:first-child {
-  white-space: pre-line;
-  line-height: 1.35;
-}
-
-.kpi-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 12.5px;
-  color: #5c6b7a;
-}
-.kpi-toolbar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.kpi-action-btn {
-  border: 1px solid #c7d3de;
-  background: #fff;
-  color: var(--color-text);
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  font-family: inherit;
-}
-.kpi-action-btn:hover { background: #f3f6fa; }
-
-.kpi-err-box {
-  padding: 12px;
-  text-align: center;
-  color: #c0392b;
-  font-size: 13.5px;
-  background: #fdeceb;
-  border-radius: 8px;
-  margin-bottom: 12px;
-}
-
-.kpi-table-scroll {
-  overflow: hidden;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 8px;
-  border: 1px solid #cfe0ef;
-  position: relative;
-  background: #fff;
-}
-
-/* Tabel KPI live (iframe Google Sheet) */
-.kpi-sheet-iframe {
-  display: block;
-  width: 100%;
-  height: 700px;
-  border: none;
-  background: #fff;
-}
-
-.kpi-empty {
-  padding: 22px;
-  text-align: center;
-  color: #5c6b7a;
-  font-size: 13px;
-}
-
-@media (max-width: 600px) {
-  .kpi-card { padding: 10px 10px 12px; }
-  .kpi-title { font-size: 16px; margin: 2px 0 6px; }
-  .kpi-title span { font-size: 13px; }
-  .kpi-logo-danantara { height: 18px; }
-  .kpi-logo-bri { height: 32px; }
-  .kpi-toolbar { font-size: 11px; justify-content: center; margin-bottom: 6px; }
-  .kpi-action-btn { padding: 5px 10px; font-size: 11px; }
-  .kpi-sheet-iframe { height: 480px !important; }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .kpi-sheet-iframe { height: 560px !important; }
-}
-
-
-/* ===== DETAIL VIEW (overlay fullscreen) ===== */
-.detail-view {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--color-white);
-  z-index: 60;
-  flex-direction: column;
-}
-.detail-view.show { display: flex; }
-
-.detail-topbar {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 20px;
-  padding-top: calc(14px + env(safe-area-inset-top, 0px));
-  background: var(--color-header-bg);
-  color: var(--color-white);
-}
-#detailTitle { font-size: 16px; font-weight: 600; }
-
-.detail-pdf-wrap {
-  flex: 1;
-  min-height: 0;
-  position: relative;
-  background: linear-gradient(180deg, #0857c3 0%, #71c5e8 55%, #307FE2 100%);
-}
-
-.detail-pdf-wrap iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
-
-/* Tombol Back */
-.detail-actions {
-  position: fixed;
-  left: 24px;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  z-index: 65;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.back-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-blue);
-  border: none;
-  color: var(--color-white);
-  padding: 10px 20px;
-  font-weight: 700;
-  font-size: 14px;
-  border-radius: 30px;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-  transition: filter 0.15s ease, transform 0.15s ease;
-}
-.back-btn:hover {
-  filter: brightness(1.1);
-  transform: translateX(-2px);
-}
-.back-arrow {
-  font-size: 18px;
-  line-height: 1;
-}
-
-/* Tombol Download */
-.download-btn-detail {
-  background: var(--color-orange);
-}
-
-@media (max-width: 600px) {
-  .detail-actions {
-    left: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    gap: 8px;
-  }
-  .back-btn {
-    padding: 9px 16px;
-    font-size: 13px;
-  }
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .cards-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 600px) {
-  .hero-text h2 { font-size: 22px; }
-  .cards-grid { grid-template-columns: 1fr; padding: 30px 20px 40px; }
-  .division-card img { height: 190px; }
-  .section-title-link { font-size: 14px; }
-  .section-title-box { padding: 14px 12px; }
-  .section-title-box-inner { padding: 12px 16px; gap: 10px; }
-
-  .topbar { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); gap: 10px; }
-  .topbar-logo-bri { height: 34px; }
-  .topbar-logo-danantara { height: 17px; }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .division-card img { height: 200px; }
-}
-
-/* ===== HOME ===== */
-.home-hero {
-  position: relative;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  background: linear-gradient(135deg, #1a1a1a, #333333);
-}
-.home-hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.home-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10,14,20,0.35), rgba(6,9,14,0.72));
-}
-.home-hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 40px 24px;
-  max-width: 720px;
-}
-.home-hero-logo {
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
-  margin-bottom: 18px;
-}
-.home-hero-content h2 {
-  color: var(--color-white);
-  font-size: clamp(22px, 4.2vw, 34px);
-  font-weight: 800;
-  line-height: 1.3;
-}
-.home-hero-content .hero-sub {
-  color: #eaf1ff;
-  margin-top: 14px;
-  font-style: italic;
-}
-
-@media (max-width: 600px) {
-  .home-hero-content h2 { font-size: 22px; }
-  .home-hero { min-height: 100svh; }
-  .struktur-body { padding: 24px 16px 40px; }
-}
-
-/* ===== HERO BRI ===== */
-.hero-bri-content { max-width: 1000px; width: 100%; }
-.hero-bri-top {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: 26px;
-  flex-wrap: wrap;
-}
-.hero-bri-logo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.hero-bri-logo { height: 120px; width: auto; }
-.hero-bri-logo-text {
-  color: #fff;
-  font-weight: 600;
-  font-size: 14px;
-  white-space: nowrap;
-}
-.hero-bri-divider {
-  width: 4px;
-  min-height: 60px;
-  background: var(--color-accent);
-  border-radius: 3px;
-  transform: scaleY(0);
-  transform-origin: top;
-  opacity: 0;
-  transition: transform .5s ease, opacity .5s ease;
-}
-.hero-bri-content.hero-animate .hero-bri-divider {
-  transform: scaleY(1);
-  opacity: 1;
-}
-.hero-bri-headline {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  text-align: left;
-}
-.hero-line {
-  display: block;
-  color: #fff;
-  font-size: clamp(24px, 5.2vw, 38px);
-  font-weight: 900;
-  line-height: 1.15;
-  opacity: 0;
-  transform: translateX(-36px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.22,1,.36,1);
-}
-.hero-bri-content.hero-animate .hero-line-1 { transition-delay: .25s; }
-.hero-bri-content.hero-animate .hero-line-2 { transition-delay: .4s; }
-.hero-bri-content.hero-animate .hero-line-3 { transition-delay: .55s; }
-.hero-bri-content.hero-animate .hero-line {
-  opacity: 1;
-  transform: translateX(0);
-}
-.hero-bri-rule {
-  width: 100%;
-  max-width: 900px;
-  height: 1px;
-  background: rgba(255,255,255,0.5);
-  margin: 26px auto 18px;
-}
-.hero-bri-desc {
-  max-width: 820px;
-  margin: 0 auto;
-  text-align: center;
-  color: #eaf1ff;
-  font-size: clamp(12.5px, 1.8vw, 14px);
-  line-height: 1.7;
-}
-
-@media (max-width: 700px) {
-  .hero-bri-top { flex-direction: column; align-items: center; gap: 14px; }
-  .hero-bri-logo { height: 76px; }
-  .hero-bri-divider { width: 60px; min-height: 3px; }
-  .hero-bri-headline { align-items: center; text-align: center; }
-  .hero-bri-desc { font-size: 13px; }
-}
-
-/* ===== VISI ===== */
-.visi-section {
-  position: relative;
-  background: #ffffff;
-  padding: 130px 20px 0;
-  overflow: hidden;
-  margin-top: -70px;
-  border-radius: 48px;
-  z-index: 2;
-}
-.visi-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 40px;
-  text-align: left;
-}
-.visi-title {
-  font-size: clamp(34px, 7vw, 72px);
-  font-weight: 900;
-  font-family: 'Inter';
-  letter-spacing: -1px;
-  color: #1a1a1a;
-  margin-bottom: 46px;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.34,1.65,.64,1);
-}
-.visi-desc {
-  font-size: clamp(19px, 3.4vw, 34px);
-  line-height: 1.45;
-  color: #2b2f36;
-  font-weight: 400;
-  opacity: 0;
-  transform: scale(0.82);
-  transition: opacity 0.55s ease .18s, transform 0.6s cubic-bezier(.34,1.65,.64,1) .18s;
-}
-.visi-section.in-view .visi-title,
-.visi-section.in-view .visi-desc {
-  opacity: 1;
-  transform: scale(1);
-}
-.visi-accent { color: #4f7fe0; }
-.visi-accent-light { color: #9fc0f0; }
-
-
-@media (prefers-reduced-motion: reduce) {
-  .visi-title, .visi-desc, .deco-star { transition: none; }
-}
-
-@media (max-width: 700px) {
-  .visi-section { padding: 60px 20px 70px; }
-  .visi-inner { padding: 140px 0 0; text-align: center; }
-  .visi-star-deco { right: 50%; transform: translateX(50%); }
-  .visi-title { font-size: 42px; margin-bottom: 26px; }
-  .visi-desc { font-size: 20px; }
-  .visi-desc br { display: none; }
-}
-
-
-/* ===== FOOTER ===== */
-.site-footer {
-  position: relative;
-  overflow: hidden;
-  color: #fff;
-  background: linear-gradient(135deg, #0a1440, #0a1a3d);
-  padding: 56px 12px 34px;
-}
-.footer-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.footer-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(6,12,40,0.55), rgba(10,20,64,0.92));
-}
-.footer-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 1300px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.3fr 0.9fr 0.9fr 1.4fr;
-  gap: 60px;
-}
-.footer-logo { height: 30px; width: auto; margin-bottom: 6px; }
-.footer-logo-text { display: block; font-size: 12px; color: #feffff; margin-bottom: 18px; }
-.footer-office-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
-.footer-office-sub { font-size: 12.5px; color: #feffff; margin-bottom: 10px; }
-.footer-address { font-size: 12.5px; color: #feffff; line-height: 1.6; }
-
-.footer-heading { font-size: 14px; font-weight: 800; margin-bottom: 14px; }
-.footer-phone {
-  display: inline-block;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.footer-social { display: flex; gap: 8px; flex-wrap: wrap; }
-.footer-social-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 900;
-  text-decoration: none;
-}
-.footer-social-btn:hover { background: rgba(255,255,255,0.15); }
-.footer-social-btn {
-  color: #fff;
-}
-.footer-social-btn svg {
-  display: block;
-}
-.footer-link-list { list-style: none; }
-.footer-link-list li { margin-bottom: 10px; }
-.footer-link-list a {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 13px;
-}
-.footer-link-list a:hover { color: var(--color-accent); }
-
-.footer-col-disclaimer p {
-  font-size: 12px;
-  line-height: 1.6;
-  color: #ffffff;
-  margin-bottom: 14px;
-}
-
-.footer-bottom-bar {
-  position: relative;
-  z-index: 2;
-  background: #0857c3;
-  margin: 40px -12px -34px;
-  padding: 16px 8px;
-  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-}
-.footer-bottom-inner {
-  max-width: 1500px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.footer-copyright {
-  font-size: 13px;
-  color: #ffffff;
-  margin: 0;
-}
-.footer-bottom-links {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.footer-bottom-links a {
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-}
-.footer-bottom-links a:hover { text-decoration: underline; }
-.footer-bottom-dot { color: #ffffff; opacity: .6; font-size: 12px; }
-
-@media (max-width: 700px) {
-  .footer-bottom-inner { justify-content: center; text-align: center; }
-}
-
-@media (max-width: 900px) {
-  .footer-inner { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .footer-inner { grid-template-columns: 1fr; text-align: left; }
-  .site-footer { padding: 44px 18px 26px; }
-}
-
-/* ===== BRI OUTRO ===== */
-.bri-outro {
-  position: relative;
-  background: #0857c3;
-}
-.kpi-regional-area-bg {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  opacity: .10;
-  z-index: 0;
-}
-
-.bri-outro-bg {
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 440px;
-  object-fit: cover;
-  object-position: center 35%;
-  border-radius: 50% 50% 0 0 / 42px 42px 0 0;
-  box-shadow: 0 -24px 48px rgba(4,8,28,.34);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  z-index: 1;
-}
-.bri-outro-overlay {
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 440px;
-  border-radius: 50% 50% 0 0 / 42px 42px 0 0;
-  background: linear-gradient(180deg,
-    rgba(4,8,28,.18) 0px,
-    rgba(4,8,28,.32) 210px,
-    rgba(4,8,28,.55) 320px,
-    rgba(4,8,28,.85) 440px);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  z-index: 2;
-}
-
-.bri-outro-content {
-  position: relative;
-  z-index: 3;
-}
-
-@media (max-width: 700px) {
-  .bri-outro-bg { height: 420px; object-position: center 25%; }
-  .bri-outro-overlay { height: 420px; }
-}
-
-/* judul KPI */
-.section-title-box-dark {
-  background: transparent;
-  padding-top: 70px;
-}
-.section-title-box-dark .section-title-box-inner {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  justify-content: center;
-}
-.section-title-box-dark .toggle-arrow { display: none; }
-.section-title-box-dark .section-title-link {
-  color: #ffffff;
-  font-size: clamp(22px, 4.4vw, 36px);
-  font-weight: 900;
-  line-height: 1.12;
-  letter-spacing: .5px;
-  text-align: center;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.34,1.65,.64,1);
-}
-#kpiSection.in-view .section-title-link {
-  opacity: 1;
-  transform: scale(1);
-}
-.pdf-preview-transparent { background: transparent; }
-
-/* Card ajakan klik KPI (gaya sama seperti card RCEO) */
-.kpi-cta-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-  margin: 36px 0 4px;
-}
-
-.kpi-cta-wrap-end {
-  margin-bottom: 240px;
-}
-.kpi-cta-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  width: 100%;
-  max-width: 420px;
-  padding: 18px 22px;
-  border-radius: 16px;
-  background: transparent;
-  border: 3px solid #ffffff;
-  color: #ffffff;
-  cursor: pointer;
-  outline: none;
-  font-family: inherit;
-  text-align: left;
-  transition: transform .32s cubic-bezier(.34,1.45,.64,1), background .3s ease,
-              border-color .3s ease, box-shadow .3s ease, color .3s ease;
-}
-.kpi-cta-card:hover,
-.kpi-cta-card:focus-visible {
-  transform: translateY(-6px);
-  background: #ffffff;
-  color: #0857c3;
-  box-shadow: 0 -24px 48px rgba(4,8,28,.34);
-}
-.kpi-cta-title {
-  display: block;
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: .2px;
-}
-.kpi-cta-caption {
-  display: block;
-  margin-top: 12px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #ffffff;
-  opacity: .8;
-  text-align: center;
-}
-.kpi-cta-arrow {
-  flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1.5px solid #ffffff;
-  background: rgba(255,255,255,.12);
-  color: #ffffff;
-  font-size: 18px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .28s ease, color .28s ease, transform .28s ease, border-color .28s ease;
-}
-.kpi-cta-card:hover .kpi-cta-arrow,
-.kpi-cta-card:focus-visible .kpi-cta-arrow {
-  background: #ffffff;
-  color: #0857c3;
-  border-color: #ffffff;
-  transform: translateX(5px);
-}
-.kpi-cta-card:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
-
-@media (prefers-reduced-motion: reduce) {
-  .kpi-cta-card { transition: none; }
-}
-
-/* footer tanpa background */
-.site-footer-flat {
-  background: transparent;
-  overflow: visible;
-  padding-top: 20px 56px 34px;
-}
-@media (max-width: 600px) {
-  .site-footer-flat { padding: 20px 18px 26px; }
-}
-@media (max-width: 700px) {
-  .kpi-cta-wrap-end { margin-bottom: 140px; }
-}
-
-/* ===== SHOWCASE DIVISI (hal3 & hal4) ===== */
-.showcase-section {
-  position: relative;
-  overflow: hidden;
-  padding: 90px 24px 100px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #04143c;
-}
-
-#showcaseROSection {
-  background-image: url("images/hal3.jpg");
-  margin-top: -48px;
-  padding-top: 138px;
-}
-#showcaseUkerSection {
-   background-image: url("images/hal4.jpg");
-  overflow: visible;
-}
-@media (max-width: 900px) {
-  /* Cegah glow dekoratif "bocor" ke luar layar & memicu geser horizontal di HP */
-  #showcaseUkerSection { overflow: hidden; }
-}
-
-.showcase-glow {
-  position: absolute;
-  z-index: 1;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-}
-.showcase-glow-1 { width: 460px; height: 460px; background: #1f6dff; opacity: .35;  top: -150px; left: -120px; }
-.showcase-glow-2 { width: 400px; height: 400px; background: #00c2ff; opacity: .2; bottom: -170px; right: -110px; }
-.showcase-glow-3 { width: 520px; height: 520px; background: #7fc4ff; opacity: .18; top: -190px; right: -150px; }
-
-.showcase-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-
-/* RCEO Card */
-.showcase-rceo-banner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin: 0 auto 30px;
-  padding: 22px 26px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.1);
-  border: 2px solid #ffffff;
-  cursor: pointer;
-  outline: none;
-  transition: transform .32s cubic-bezier(.34,1.45,.64,1), background .3s ease, border-color .3s ease, box-shadow .3s ease;
-}
-
-.showcase-rceo-banner:hover,
-.showcase-rceo-banner:focus-visible {
-  transform: translateY(-9px);
-  background: #1e6fd6;
-  border-color: rgba(127,196,255,.85);
-  box-shadow: 0 20px 40px rgba(0,0,0,.38);
-}
-
-.showcase-rceo-label {
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.6px;
-  display: block;
-  margin-bottom: 4px;
-}
-.showcase-rceo-title {
-  color: #ffffff;
-  font-size: clamp(16px, 2.6vw, 20px);
-  font-weight: 900;
-  letter-spacing: .3px;
-}
-.showcase-rceo-banner .showcase-arrow { position: static; flex: 0 0 auto; }
-.showcase-title {
-  color: #ffffff;
-  font-size: clamp(26px, 5vw, 44px);
-  font-weight: 900;
-  line-height: 1.12;
-  letter-spacing: .5px;
-  text-align: center;
-  margin-bottom: 48px;
-  text-shadow: 0 6px 26px rgba(0,0,0,.35);
-  opacity: 0;
-  transform: scale(0.5);
-  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.34,1.65,.64,1);
-}
-#showcaseROSection.in-view .showcase-title,
-#showcaseUkerSection.in-view .showcase-title {
-  opacity: 1;
-  transform: scale(1);
-}
-.showcase-title-blue { color: #dcecff; }
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
-  gap: 22px;
-}
-
-.showcase-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 24px 22px 70px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.1);
-  border: 3px solid #ffffff;
-  cursor: pointer;
-  outline: none;
-  transition: transform .32s cubic-bezier(.34,1.45,.64,1),
-              background .3s ease, border-color .3s ease, box-shadow .3s ease;
-}
-.showcase-card::after {
-  content: "";
-  position: absolute;
-  left: 22px;
-  top: 0;
-  width: 46px;
-  height: 3px;
-  border-radius: 0 0 3px 3px;
-  background: #7fc4ff;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform .32s ease;
-}
-.showcase-card:hover,
-.showcase-card:focus-visible {
-  transform: translateY(-9px);
-  background: #1e6fd6;
-  border-color: rgba(127,196,255,.85);
-  box-shadow: 0 20px 40px rgba(0,0,0,.38);
-}
-.showcase-card:hover::after,
-.showcase-card:focus-visible::after { transform: scaleX(1); }
-
-.showcase-num {
-  font-size: clamp(26px, 4vw, 34px);
-  font-weight: 900;
-  line-height: 1;
-  color: rgba(255,255,255,.55);
-  transition: color .3s ease;
-}
-.showcase-card:hover .showcase-num,
-.showcase-card:focus-visible .showcase-num { color: #ffffff; }
-
-.showcase-card-title {
-  color: #ffffff;
-  font-size: 16.5px;
-  font-weight: 800;
-  line-height: 1.38;
-  letter-spacing: .3px;
-}
-
-.showcase-arrow {
-  position: absolute;
-  right: 18px;
-  bottom: 18px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.45);
-  background: rgba(255,255,255,.12);
-  color: #ffffff;
-  font-size: 19px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background .28s ease, color .28s ease, transform .28s ease, border-color .28s ease;
-}
-.showcase-card:hover .showcase-arrow,
-.showcase-card:focus-visible .showcase-arrow,
-.showcase-rceo-banner:hover .showcase-arrow,
-.showcase-rceo-banner:focus-visible .showcase-arrow,
-.showcase-arrow:hover {
-  background: #ffffff;
-  color: #0857c3;
-  border-color: #ffffff;
-  transform: translateX(5px);
-}
-
-.showcase-arrow:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
-
-/* section Unit Kerja Operasional */
-#showcaseUkerSection .showcase-card {
-  border: 3px solid #307FE2;
-}
-#showcaseUkerSection .showcase-card:hover,
-#showcaseUkerSection .showcase-card:focus-visible {
-  border-color: #307FE2;
-}
-#showcaseUkerSection .showcase-num {
-  color: #307FE2;
-}
-#showcaseUkerSection .showcase-card:hover .showcase-num,
-#showcaseUkerSection .showcase-card:focus-visible .showcase-num {
-  color: #ffffff;
-}
-#showcaseUkerSection .showcase-card-title {
-  color: #307FE2;
-}
-#showcaseUkerSection .showcase-card:hover .showcase-card-title,
-#showcaseUkerSection .showcase-card:focus-visible .showcase-card-title {
-  color: #ffffff;
-}
-#showcaseUkerSection .showcase-title-blue {
-  text-shadow: none;
-  color: #307FE2;
-}
-#showcaseUkerSection .showcase-arrow {
-  border-color: #307FE2;
-  color: #307FE2;
-}
-#showcaseUkerSection .showcase-card:hover .showcase-arrow,
-#showcaseUkerSection .showcase-card:focus-visible .showcase-arrow,
-#showcaseUkerSection .showcase-arrow:hover {
-  background: #ffffff;
-  color: #307FE2;
-  border-color: #ffffff;
-}
-
-.showcase-more-btn {
-  display: block;
-  margin: 50px auto 0;
-  padding: 14px 32px;
-  border-radius: 999px;
-  border: 1.5px solid rgba(255,255,255,.55);
-  background: transparent;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: .6px;
-  line-height: 1.45;
-  text-align: center;
-  cursor: pointer;
-  transition: background .28s ease, color .28s ease, transform .28s ease, border-color .28s ease;
-}
-.showcase-more-btn:hover {
-  background: #ffffff;
-  color: #0857c3;
-  border-color: #ffffff;
-  transform: translateY(-3px);
-}
-
-@media (max-width: 700px) {
-  #showcaseROSection {
-    background-image: url("images/hal3.jpg");
-    background-size: cover;
-    background-position: center;
-  }
-  .showcase-section { padding: 70px 18px 80px; }
-  .showcase-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-  .showcase-card { padding: 20px 18px 62px; }
-}
-
-@media (max-width: 380px) {
-  .showcase-grid { grid-template-columns: 1fr; }
-}
-
-.hidden-section { display: none !important; }
-.showcase-more-btn { display: none; }
-
-/* ===== HALAMAN DIVISI ===== */
-.detail-view.division-mode .detail-topbar { display: none; }
-
-.detail-pdf-wrap.bg-hal3 {
-  background-image: url("images/hal3.jpg");
-  background-size: cover;
-  background-position: center;
-}
-.detail-pdf-wrap.bg-hal4 {
-  background-image: url("images/hal4.jpg");
-  background-size: cover;
-  background-position: center;
-}
-.detail-pdf-wrap.bg-kpi {
-  background-image: linear-gradient(180deg, #0857c3 0%, #71c5e8 55%, #307FE2 100%);
-  background-size: cover;
-  background-position: center;
-}
-
-.detail-division-wrap {
-  position: relative;
-  height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 70px 24px 130px;
-  padding-top: calc(70px + env(safe-area-inset-top, 0px));
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-.detail-division-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 620px;
-  margin: 0 auto;
-  text-align: center;
-}
-.detail-division-toprow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 34px;
-}
-.detail-division-download-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.detail-division-download-block .division-note { margin-bottom: 10px; }
-
-.division-kpi-box {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;                          
-  width: 100%;
-  max-width: 360px;                 
-  min-height: 88px;                 
-  border: 2.5px solid #ffffff;
-  border-radius: 10px;
-  background: rgba(255,255,255,.08);
-  color: #ffffff;
-  padding: 18px 48px 18px 26px;     
-  font-size: 15px;                 
-  font-weight: 700;                 
-  cursor: pointer;
-  font-family: inherit;
-  text-align: center;
-  transition: transform .25s ease, border-color .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
-}
-.division-kpi-caption {
-  font-size: clamp(16px, 4.5vw, 18px); 
-  font-weight: 800;                      
-}
-
-.division-kpi-box:hover,
-.division-kpi-box:focus-visible {
-  transform: translateY(-3px);
-  border-color: #ffffff;
-  background: #ffffff;
-  color: #0857c3;
-  box-shadow: 0 10px 22px rgba(0,0,0,.28);
-}
-.division-kpi-arrow {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2.5px solid #ffffff;
-  background: rgba(255,255,255,.15);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 1000;
-  transition: border-color .25s ease, background .25s ease, color .25s ease;
-}
-.division-kpi-box:hover .division-kpi-arrow,
-.division-kpi-box:focus-visible .division-kpi-arrow {
-  border-color: #0857c3;
-  background: rgba(8,87,195,.08);
-  color: #0857c3;
-}
-
-.division-kpi-arrow::before {
-  content: "↗";
-  transform: translate(-0.5px, -0.20px);
-}
-
-.detail-pdf-wrap.bg-hal4 .division-kpi-box {
-  border-color: #0857c3;
-  background: rgba(8,87,195,.06);
-  color: #0857c3;
-}
-.detail-pdf-wrap.bg-hal4 .division-kpi-box:hover,
-.detail-pdf-wrap.bg-hal4 .division-kpi-box:focus-visible {
-  background: #0857c3;
-  border-color: #0857c3;
-  color: #ffffff;
-}
-.detail-pdf-wrap.bg-hal4 .division-kpi-arrow {
-  border-color: #0857c3;
-  background: rgba(8,87,195,.06);
-  color: #0857c3;
-}
-
-/*divisi Unit Kerja*/
-.detail-pdf-wrap.bg-hal4 .division-point-item {
-  background: rgba(8,87,195,.06);
-  border-color: #0857c3;
-  color: #0857c3;
-}
-.detail-pdf-wrap.bg-hal4 .division-point-item:hover,
-.detail-pdf-wrap.bg-hal4 .division-point-item:focus-visible {
-  background: #0857c3;
-  border-color: #0857c3;
-  color: #ffffff;
-}
-.detail-pdf-wrap.bg-hal4 .division-point-arrow {
-  border-color: #0857c3;
-  background: rgba(8,87,195,.06);
-  color: #0857c3;
-}
-.detail-pdf-wrap.bg-hal4 .division-point-item:hover .division-point-arrow,
-.detail-pdf-wrap.bg-hal4 .division-point-item:focus-visible .division-point-arrow {
-  border-color: #ffffff;
-  background: rgba(255,255,255,.18);
-  color: #ffffff;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-kpi-box:hover .division-kpi-arrow,
-.detail-pdf-wrap.bg-hal4 .division-kpi-box:focus-visible .division-kpi-arrow {
-  border-color: #ffffff;
-  background: rgba(255,255,255,.18);
-  color: #ffffff;
-}
-
-
-.detail-division-fixed {
-  flex-shrink: 0;
-  margin-bottom: 20px;
-}
-.detail-division-scroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 150px;
-}
-.detail-division-title {
-  color: #ffffff;
-  font-size: clamp(21px, 4vw, 32px);
-  font-weight: 900;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  text-shadow: 0 4px 14px rgba(0,0,0,.3);
-  margin-bottom: 34px;
-}
-.division-point-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 40px;
-  text-align: left;
-}
-.division-point-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 16px 18px;
-  border-radius: 12px;
-  background: rgba(255,255,255,.08);
-  border: 2px solid rgba(255,255,255,.85);
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 14.5px;
-  letter-spacing: .3px;
-  cursor: pointer;
-  font-family: inherit;
-  box-shadow: none;
-  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
-}
-.division-point-item:hover,
-.division-point-item:focus-visible {
-  transform: translateY(-4px);
-  background: #ffffff;
-  color: #0857c3;
-  border-color: #ffffff;
-  box-shadow: 0 10px 22px rgba(0,0,0,.28);
-}
-.division-point-icon {
-  flex-shrink: 0;
-  display: flex;
-  opacity: .9;
-  color: inherit;
-}
-.division-point-label { flex: 1; text-align: left; text-transform: uppercase; }
-.division-point-arrow {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  border: 1.5px solid #ffffff;
-  background: rgba(255,255,255,.15);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  transition: border-color .25s ease, background .25s ease, color .25s ease;
-}
-.division-point-item:hover .division-point-arrow,
-.division-point-item:focus-visible .division-point-arrow {
-  border-color: #0857c3;
-  background: rgba(8,87,195,.08);
-  color: #0857c3;
-} 
-
-.division-note {
-  font-style: italic;
-  color: #ffffff;
-  margin-bottom: 18px;
-  font-size: 14px;
-}
-
-.division-download-btn {
-  display: inline-block;
-  padding: 16px 60px;
-  background: var(--color-accent);
-  color: #0857c3;
-  font-weight: 800;
-  letter-spacing: 1.4px;
-  border-radius: 8px;
-  text-decoration: none;
-  box-shadow: none;
-  transition: transform .2s ease, filter .2s ease;
-}
-.division-download-btn:hover {
-  transform: translateY(-2px);
-  background: #0857c3;
-  color: #ffffff;
-  filter: none;
-}
-
-/* Regional Office */
-.detail-pdf-wrap.bg-hal3 .division-download-btn:hover,
-.detail-pdf-wrap.bg-hal3 .division-download-btn:active,
-.detail-pdf-wrap.bg-hal3 .division-download-btn:focus-visible {
-  background: #ffffff;
-  color: #0857c3;
-}
-
-.division-simple-card {
-  max-width: 360px;
-  margin: 0 auto 24px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.25);
-  border-radius: 16px;
-  overflow: hidden;
-}
-.division-simple-card img { width: 100%; height: 200px; object-fit: cover; }
-.division-simple-card h3 {
-  color: #ffffff;
-  padding: 18px 16px;
-  font-size: 19px;
-  font-weight: 800;
-  text-align: center;
-}
-.division-simple-note { color: #dceeff; font-size: 13.5px; font-style: italic; }
-
-@media (max-width: 600px) {
-  .detail-division-wrap { padding: 56px 16px 130px; padding-top: calc(56px + env(safe-area-inset-top, 0px)); }
-  .detail-division-title { font-size: 24px; }
-  .division-download-btn { padding: 14px 44px; }
-}
-
-/* ===== TEMA TOPBAR (terang/gelap) ===== */
-.logo-light-mode { display: none; }
-.topbar-nav-link,
-.topbar-nav-caret {
-  transition: color 0.25s ease;
-}
-
-.topbar.topbar-light .logo-dark-mode { display: none; }
-.topbar.topbar-light .logo-light-mode { display: inline-block; }
-
-.topbar.topbar-light .topbar-nav-link { color: var(--color-blue); }
-.topbar.topbar-light .topbar-nav-link:hover,
-.topbar.topbar-light .topbar-nav-link:focus-visible { color: var(--color-orange); }
-/* ===== Tema biru khusus halaman divisi Unit Kerja (bg-hal4) ===== */
-.detail-pdf-wrap.bg-hal4 .detail-division-title {
-  color: #0857c3;
-  text-shadow: none;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-note {
-  color: #0857c3;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-kpi-box {
-  border-color: #0857c3;
-  background: transparent; 
-  color: #0857c3;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-point-item {
-  background: transparent;   
-  border-color: #0857c3;
-  color: #0857c3;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-kpi-box:hover,
-.detail-pdf-wrap.bg-hal4 .division-kpi-box:focus-visible {
-  box-shadow: none;
-}
-.detail-pdf-wrap.bg-hal4 .division-kpi-arrow {
-  border-color: #0857c3;
-  background: transparent;
-  color: #0857c3;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-point-arrow {
-  border-color: #0857c3;
-  background: transparent;
-  color: #0857c3;
-}
-.detail-pdf-wrap.bg-hal4 .division-point-item:hover,
-.detail-pdf-wrap.bg-hal4 .division-point-item:focus-visible {
-  box-shadow: none;
-}
-
-.detail-pdf-wrap.bg-hal4 .division-point-arrow {
-  border-width: 3px;
-}
-.detail-pdf-wrap.bg-hal4 .division-download-btn {
-  box-shadow: none;
-  border: 3px solid transparent;
-}
-.detail-pdf-wrap.bg-hal4 .division-download-btn:hover {
-  border-color: #0857c3;
-}
-
-/* ===== SLIDER BACKGROUND HOME ===== */
-.home-hero-bg-slider {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.home-hero-bg-slide {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-.home-hero-bg-slide.active {
-  opacity: 1;
-}
-
-/* ===== VISI: animasi amplop (belakang → isi → depan) ===== */
-.visi-envelope-wrap {
-  position: relative;
-  max-width: 760px;
-  margin: 0 auto;
-  container-type: inline-size;
-}
-
-.visi-envelope-svg { display: block; width: 100%; height: auto; }
-.visi-envelope-svg.visi-envelope-back { position: relative; z-index: 1; }
-.visi-envelope-svg.visi-envelope-front {
-  position: absolute;
-  inset: 0;
-  z-index: 3;          
-  pointer-events: none;
-}
-
-.visi-stage {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  clip-path: inset(-20% -20% 0 -20%);
-}
-
-/* Lembar kertas A4 */
-.visi-sheet,
-.visi-paper {
-  position: absolute;
-  left: 18%;
-  right: 18%;
-  top: 9.4%;
-  height: 59.4%;
-  border-radius: 6px;
-  transform-origin: 50% 100%;
-  transform: translateY(108%);
-  will-change: transform;
-}
-
-.visi-sheet {
-  border: 1px solid #d3e0f3;
-  box-shadow: 0 8px 18px rgba(2, 29, 69, .18);
-  transition: transform .9s cubic-bezier(.22,1.35,.36,1);
-}
-.visi-sheet-left  { background: #e6eefb; transition-delay: .05s; }
-.visi-sheet-right { background: #d9e6f8; transition-delay: .15s; }
-
-.visi-paper {
-  z-index: 2;
-  background: #ffffff;
-  border: 1px solid #dfe6f0;
-  box-shadow: 0 10px 26px rgba(2, 29, 69, .22);
-  padding: 4cqw 4cqw 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  transition: transform .9s cubic-bezier(.22,1.35,.36,1) .25s;
-}
-
-/* efek pada bagian visi */
-.visi-section.in-view .visi-sheet-left  { transform: translate(-4%, 3%) rotate(-7deg); }
-.visi-section.in-view .visi-sheet-right { transform: translate(4%, 1%)  rotate(6deg); }
-.visi-section.in-view .visi-paper       { transform: translateY(0); }
-
-.visi-paper .visi-title {
-  font-size: 34px;
-  font-size: 9cqw;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  margin: 0 0 2cqw;
-  color: #0b2a5b;
-  opacity: 0;
-  transform: scale(0.6);
-  transition: opacity .5s ease .75s, transform .6s cubic-bezier(.34,1.65,.64,1) .75s;
-}
-.visi-paper .visi-desc {
-  font-size: 15px;
-  font-size: 3.3cqw;
-  line-height: 1.4;
-  font-weight: 600;
-  color: #1f2937;
-  text-wrap: balance;
-  opacity: 0;
-  transform: scale(0.6);
-  transition: opacity .5s ease .85s, transform .6s cubic-bezier(.34,1.65,.64,1) .85s;
-}
-.visi-paper .visi-accent { color: #0857c3; }
-.visi-paper .visi-accent-light { color: #2f80e8; }
-
-.visi-section.in-view .visi-paper .visi-title,
-.visi-section.in-view .visi-paper .visi-desc {
-  opacity: 1;
-  transform: scale(1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .visi-sheet, .visi-paper,
-  .visi-paper .visi-title, .visi-paper .visi-desc { transition: none; }
-}
-
-@media (max-width: 700px) {
-  .visi-section { padding: 60px 14px 0; border-radius: 32px; }
-  .visi-inner { padding: 0; }
-  .visi-envelope-wrap { max-width: 100%; }
-  .visi-sheet, .visi-paper { left: 6%; right: 6%; }
-  .visi-paper { padding: 4cqw 3cqw 0; }
-  .visi-paper .visi-title { font-size: 9.5cqw; }
-  .visi-paper .visi-desc { font-size: 4.3cqw; }
-  .visi-paper .visi-desc br { display: none; }
-} 
-
-/* ===== Showcase Regional Office (RCEO + 01–06): hover -> kotak putih, teks biru ===== */
-#showcaseROSection .showcase-card,
-#showcaseROSection .showcase-rceo-banner {
-  transition: transform .32s cubic-bezier(.34,1.45,.64,1),
-              background .3s ease, border-color .3s ease, box-shadow .3s ease;
-}
-#showcaseROSection .showcase-num,
-#showcaseROSection .showcase-card-title,
-#showcaseROSection .showcase-rceo-label,
-#showcaseROSection .showcase-rceo-title {
-  transition: color .3s ease;
-}
-
-/* kotak jadi putih */
-#showcaseROSection .showcase-card:hover,
-#showcaseROSection .showcase-card:focus-visible,
-#showcaseROSection .showcase-rceo-banner:hover,
-#showcaseROSection .showcase-rceo-banner:focus-visible {
-  background: #ffffff;
-  border-color: #ffffff;
-}
-
-/* semua teks jadi biru #0857c3 */
-#showcaseROSection .showcase-card:hover .showcase-num,
-#showcaseROSection .showcase-card:focus-visible .showcase-num,
-#showcaseROSection .showcase-card:hover .showcase-card-title,
-#showcaseROSection .showcase-card:focus-visible .showcase-card-title,
-#showcaseROSection .showcase-rceo-banner:hover .showcase-rceo-label,
-#showcaseROSection .showcase-rceo-banner:focus-visible .showcase-rceo-label,
-#showcaseROSection .showcase-rceo-banner:hover .showcase-rceo-title,
-#showcaseROSection .showcase-rceo-banner:focus-visible .showcase-rceo-title {
-  color: #0857c3;
-}
-
-#showcaseROSection .showcase-card::after {
-  background: #0857c3;
-}
-#showcaseROSection .showcase-card:hover .showcase-arrow,
-#showcaseROSection .showcase-card:focus-visible .showcase-arrow,
-#showcaseROSection .showcase-rceo-banner:hover .showcase-arrow,
-#showcaseROSection .showcase-rceo-banner:focus-visible .showcase-arrow {
-  background: rgba(8,87,195,.08);
-  border-color: #0857c3;
-  color: #0857c3;
-}
-#showcaseROSection .showcase-card .showcase-arrow:hover,
-#showcaseROSection .showcase-rceo-banner .showcase-arrow:hover {
-  background: #0857c3;
-  border-color: #0857c3;
-  color: #ffffff;
-}
-#showcaseROSection .showcase-arrow:focus-visible {
-  outline-color: #0857c3;
-}
-
-/* Panah bukan emoji di IOS */
-.division-kpi-arrow::before {
-  content: none;
-}
-.division-kpi-arrow svg,
-.division-point-arrow svg {
-  display: block;
-  width: 14px;
-  height: 14px;
-}
-/* ===== LOGO BRI SEBAGAI TOMBOL HOME ===== */
-.topbar-brand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 6px;
-}
-.topbar-brand:focus-visible {
-  outline: 2px solid var(--color-orange);
-  outline-offset: 4px;
-}
-
-/* Hover/fokus: logo berubah ke warna aksen (#71c5e8, sama dengan hover link menu)
-   sebagai penanda bahwa logo bisa diklik. Berlaku untuk logo putih maupun biru. */
-.topbar-brand img {
-  transition: filter 0.25s ease;
-}
-@media (hover: hover) {
-  .topbar-brand:hover img {
-    filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
-  }
-}
-.topbar-brand:focus-visible img {
-  filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
-}
-
-/* ===== HAMBURGER (hanya tampil di layar kecil) ===== */
-.topbar-hamburger { display: none; }
-
-@media (max-width: 768px) {
-  .topbar-hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 40px;
-    height: 40px;
-    margin-left: auto;
-    padding: 9px;
-    background: none;
-    border: none;
-    border-radius: 8px;
-    color: var(--color-white);
-    cursor: pointer;
-    transition: color 0.25s ease;
-  }
-  .topbar-hamburger span {
-    display: block;
-    width: 100%;
-    height: 2.5px;
-    border-radius: 2px;
-    background: currentColor;
-    transition: transform 0.25s ease, opacity 0.2s ease;
-  }
-  .topbar-hamburger:focus-visible {
-    outline: 2px solid var(--color-orange);
-    outline-offset: 2px;
-  }
-  .topbar.topbar-light .topbar-hamburger,
-  .topbar.menu-open .topbar-hamburger { color: var(--color-blue); }
-
-  .topbar.menu-open .topbar-hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-  .topbar.menu-open .topbar-hamburger span:nth-child(2) { opacity: 0; }
-  .topbar.menu-open .topbar-hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-
-  /* Saat menu terbuka, header jadi putih polos agar menyatu dengan panel */
-  .topbar.menu-open {
-    background: #ffffff;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-  .topbar.menu-open .logo-dark-mode { display: none; }
-  .topbar.menu-open .logo-light-mode { display: inline-block; }
-
-  /* Panel menu */
-  .topbar .topbar-nav {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    max-height: calc(100vh - 60px);
-    max-height: calc(100dvh - 60px);
-    overflow-y: auto;
-    background: #ffffff;
-    border-top: 1px solid #e8eef8;
-    border-radius: 0 0 16px 16px;
-    box-shadow: 0 14px 28px rgba(4, 20, 60, 0.18);
-  }
-  .topbar.menu-open .topbar-nav {
-    display: flex;
-    animation: topbarMenuIn 0.2s ease;
-  }
-  @keyframes topbarMenuIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .topbar .topbar-nav .topbar-nav-link {
-    width: 100%;
-    justify-content: space-between;
-    padding: 15px 20px;
-    font-size: 15px;
-    color: var(--color-blue);
-    border-bottom: 1px solid #eef2f9;
-  }
-  .topbar .topbar-nav .topbar-nav-link:hover,
-  .topbar .topbar-nav .topbar-nav-link:focus-visible {
-    color: var(--color-blue);
-    background: #f2fbff;
-  }
-  .topbar .topbar-nav > .topbar-nav-dropdown:last-child .topbar-nav-dropdown-btn { border-bottom: none; }
-
-  /* Dropdown menjadi accordion di dalam panel */
-  .topbar-nav-dropdown { width: 100%; }
-  .topbar-dropdown-menu {
-    position: static;
-    min-width: 0;
-    max-width: none;
-    border-radius: 0;
-    box-shadow: none;
-    background: #f7faff;
-  }
-  .topbar-nav-dropdown.open .topbar-dropdown-menu {
-    max-height: none;
-    overflow: visible;
-  }
-  .topbar-dropdown-menu li a {
-    padding: 13px 20px 13px 32px;
-    font-size: 13.5px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .topbar-hamburger span,
-  .topbar.menu-open .topbar-nav { transition: none; animation: none; }
-}
-
-/* ===== PENYESUAIAN TAMBAHAN: TABLET (iPad potret/landscape, 601px-1024px) ===== */
-@media (min-width: 601px) and (max-width: 1024px) {
-  .showcase-inner,
-  .footer-inner,
-  .cards-grid {
-    max-width: 100%;
-  }
-  .kpi-frame { max-width: 100%; margin-left: 16px; margin-right: 16px; }
-  .detail-kpi-wrap { padding-left: 16px; padding-right: 16px; }
-  .visi-inner { padding-left: 24px; padding-right: 24px; }
-}
-
-/* ===== Cegah elemen besar memicu scroll horizontal di layar sangat sempit ===== */
-@media (max-width: 400px) {
-  .kpi-cta-card { padding: 16px 18px; }
-  .division-kpi-box { max-width: 100%; }
-  .detail-division-toprow { gap: 14px; }
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Deskripsi Jabatan BRI - Regional Office Yogyakarta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="images/Logo_BRI_white.png" as="image" fetchpriority="high">
+<link rel="stylesheet" href="style.css?v=21">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="topbar">
+    <div class="topbar-logos">
+      <img src="images/white_logo_danantara.png" alt="Logo Danantara" class="topbar-logo-danantara logo-dark-mode" onerror="this.style.display='none'">
+      <img src="images/Danantara_black.png" alt="Logo Danantara" class="topbar-logo-danantara logo-light-mode" onerror="this.style.display='none'">
+      <a href="#homeSection" class="topbar-brand" data-scroll-target="homeSection" aria-label="Kembali ke Home">
+        <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="topbar-logo-bri logo-dark-mode" onerror="this.style.display='none'">
+        <img src="images/bri_Blue.png" alt="Logo BRI" class="topbar-logo-bri logo-light-mode" onerror="this.style.display='none'">
+      </a>
+    </div>
+
+    <button type="button" class="topbar-hamburger" id="topbarToggle" aria-label="Buka menu" aria-expanded="false" aria-controls="topbarNav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="topbar-nav" id="topbarNav">
+      <a href="#visiSection" class="topbar-nav-link" data-scroll-target="visiSection">Visi</a>
+      <a href="#kpiSection" class="topbar-nav-link" data-scroll-target="kpiSection">KPI Regional Office</a>
+
+      <div class="topbar-nav-dropdown">
+        <button type="button" class="topbar-nav-link topbar-nav-dropdown-btn">
+          DUJ RO Yogyakarta <span class="topbar-nav-caret">&#9662;</span>
+        </button>
+        <ul class="topbar-dropdown-menu" id="navDropdownRO"></ul>
+      </div>
+
+      <div class="topbar-nav-dropdown">
+        <button type="button" class="topbar-nav-link topbar-nav-dropdown-btn">
+          DUJ Unit Kerja <span class="topbar-nav-caret">&#9662;</span>
+        </button>
+        <ul class="topbar-dropdown-menu" id="navDropdownUker"></ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN VIEW ===== -->
+  <main id="mainView">
+
+    <!-- ===== HOME ===== -->
+    <section id="homeSection" class="home-hero">
+  <div class="home-hero-bg-slider">
+    <img src="images/gedung_bri.jpeg" alt="" class="home-hero-bg-slide active" fetchpriority="high" onerror="this.style.display='none'">
+    <img src="images/gedung_bri2.jpeg" alt="" class="home-hero-bg-slide" loading="lazy" fetchpriority="low" onerror="this.style.display='none'">
+    <img src="images/gedung_bri3.png" alt="" class="home-hero-bg-slide" loading="lazy" fetchpriority="low" onerror="this.style.display='none'">
+  </div>
+  <div class="home-hero-overlay"></div>
+  <div class="home-hero-content hero-bri-content" id="heroBriContent">
+    <div class="hero-bri-logo-wrap">
+      <img src="images/Logo_BRI_white.png" alt="Logo BRI" class="hero-bri-logo" fetchpriority="high" onerror="this.style.display='none'">
+    </div>
+    <div class="hero-bri-rule"></div>
+    <p class="hero-bri-desc">Bank Rakyat Indonesia (BRI) adalah...</p>
+  </div>
+</section>
+
+    <!-- ===== VISI ===== -->
+      <section id="visiSection" class="visi-section" data-header-theme="light">
+      <div class="visi-inner">
+        <div class="visi-envelope-wrap">
+          <!-- 1) BELAKANG amplop: flap terbuka (menghadap ke atas) + badan amplop -->
+          <svg class="visi-envelope-svg visi-envelope-back" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="visiBodyShade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#021d45" stop-opacity=".45"/>
+                <stop offset="1" stop-color="#021d45" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+              <polygon points="26,205 300,24 574,205" fill="#063f8f" stroke="#063f8f" stroke-width="16" stroke-linejoin="round"/>
+            <polygon points="70,200 300,52 530,200" fill="#0a4aa5"/>
+              <path d="M20,219 Q20,195 44,195 L556,195 Q580,195 580,219 L580,480 L20,480 Z" fill="#0857c3"/>
+            <path d="M20,219 Q20,195 44,195 L556,195 Q580,195 580,219 L580,255 L20,255 Z" fill="url(#visiBodyShade)"/>
+          </svg>
+
+          <!-- 2) ISI amplop: dua lembar kosong + kertas VISI. Meluncur naik saat section terlihat. -->
+          <div class="visi-stage">
+            <div class="visi-sheet visi-sheet-left"></div>
+            <div class="visi-sheet visi-sheet-right"></div>
+            <div class="visi-paper">
+              <h2 class="visi-title">VISI</h2>
+              <p class="visi-desc">
+                Deliver Sustainable <span class="visi-accent">Values</span> and<br>
+                <span class="visi-accent-light">Integrated</span> Solutions to Achieve<br>
+                Indonesia&rsquo;s Aspiration
+              </p>
+            </div>
+          </div>
+
+          <!-- 3) DEPAN amplop: kantong (dengan lipatan V) menutupi bagian bawah kertas -->
+          <svg class="visi-envelope-svg visi-envelope-front" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <clipPath id="visiPocketClip">
+                <path d="M20,250 L300,335 L580,250 L580,480 L20,480 Z"/>
+              </clipPath>
+              <filter id="visiPocketShadow" x="-5%" y="-20%" width="110%" height="140%">
+                <feDropShadow dx="0" dy="-3" stdDeviation="5" flood-color="#021d45" flood-opacity=".3"/>
+              </filter>
+            </defs>
+            <path d="M20,250 L300,335 L580,250 L580,480 L20,480 Z" fill="#0857c3" filter="url(#visiPocketShadow)"/>
+            <g clip-path="url(#visiPocketClip)">
+              <polygon points="20,250 300,335 20,480" fill="#063f8f"/>
+              <polygon points="580,250 300,335 580,480" fill="#063f8f"/>
+              <polygon points="20,480 300,335 580,480" fill="#0a66dc"/>
+              <polyline points="20,250 300,335 580,250" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="2"/>
+              <line x1="300" y1="335" x2="20" y2="480" stroke="#ffffff" stroke-opacity=".12" stroke-width="1.5"/>
+              <line x1="300" y1="335" x2="580" y2="480" stroke="#ffffff" stroke-opacity=".12" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SHOWCASE DIVISI ===== -->
+    <section id="showcaseROSection" class="showcase-section">
+      <div class="showcase-glow showcase-glow-1"></div>
+      <div class="showcase-glow showcase-glow-2"></div>
+      <div class="showcase-inner">
+        <h2 class="showcase-title">BRI REGIONAL<br>YOGYAKARTA</h2>
+        <div id="showcaseRceoBanner"></div>
+        <div id="showcaseROGrid" class="showcase-grid"></div>
+        <button type="button" class="showcase-more-btn" data-target="roBody">Klik Untuk Lihat<br>Divisi Lainnya</button>
+      </div>
+    </section>
+
+      <section id="showcaseUkerSection" class="showcase-section showcase-section-alt" data-header-theme="light">
+      <div class="showcase-glow showcase-glow-3"></div>
+      <div class="showcase-inner">
+        <h2 class="showcase-title showcase-title-blue">UNIT KERJA<br>OPERASIONAL</h2>
+        <div id="showcaseUkerGrid" class="showcase-grid showcase-grid-uker"></div>
+        <button type="button" class="showcase-more-btn" data-target="ukerBody">Klik Untuk Lihat<br>Divisi Lainnya</button>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 1: REGIONAL OFFICE (disembunyikan, akses lewat hal3/sidebar) ===== -->
+    <div class="section-title-box hidden-section">
+      <button class="section-title-box-inner" id="toggleRO" aria-expanded="true">
+        <span class="section-title-link">Materi Sosialisasi Daftar Jabatan (DUJ) BRI Regional Office Yogyakarta</span>
+        <span class="toggle-arrow"></span>
+      </button>
+    </div>
+
+    <div id="roBody" class="collapsible-body hidden-section">
+      <section id="cardsGrid" class="cards-grid"></section>
+    </div>
+
+    <!-- ===== SECTION 2: UNIT KERJA OPERASIONAL (disembunyikan, akses lewat hal4/sidebar) ===== -->
+    <div class="section-title-box hidden-section">
+      <button class="section-title-box-inner" id="toggleUker" aria-expanded="true">
+        <span class="section-title-link">Materi Sosialisasi Daftar Jabatan (DUJ) Unit Kerja Operasional</span>
+        <span class="toggle-arrow"></span>
+      </button>
+    </div>
+
+    <div id="ukerBody" class="collapsible-body hidden-section">
+      <section id="cardsGridUker" class="cards-grid"></section>
+    </div>
+
+  <!-- ===== KPI + FOOTER (satu background foto BRI) ===== -->
+  <div id="briOutro" class="bri-outro">
+    <img src="images/gedung.png" alt="" class="kpi-regional-area-bg" onerror="this.style.display='none'">
+    <img src="images/salam_bri.jpg" alt="" class="bri-outro-bg" onerror="this.style.display='none'">
+    <div class="bri-outro-overlay"></div>
+
+    <div class="bri-outro-content">
+
+      <!-- ===== SECTION 3: KPI ===== -->
+<div class="kpi-regional-area">
+
+  <div class="section-title-box section-title-box-dark" id="kpiSection">
+    <button class="section-title-box-inner" id="toggleKPI" aria-expanded="true">
+      <span class="section-title-link">KPI Regional Office Area KC, KCP, dan BRI Unit</span>
+      <span class="toggle-arrow"></span>
+    </button>
+  </div>
+
+  <div class="kpi-cta-wrap kpi-cta-wrap-end">
+    <button type="button" class="kpi-cta-card" id="kpiCtaCard" aria-label="Lihat Key Performance Index lebih detail">
+      <span class="kpi-cta-text">
+      <span class="kpi-cta-title">Key Performance Index</span>
+      </span>
+      <span class="kpi-cta-arrow" aria-hidden="true">&#8594;</span>
+    </button>
+      <span class="kpi-cta-caption">Silakan klik untuk melihat lebih detail</span>
+  </div>
+</div>
+
+      <!-- ===== FOOTER ===== -->
+      <footer id="footerSection" class="site-footer site-footer-flat">
+        <div class="footer-inner">
+          <div class="footer-col footer-col-brand">
+            <h4 class="footer-office-title">Kantor Wilayah BRI Yogyakarta</h4>
+            <p class="footer-office-sub">BRI Region 11 Yogyakarta</p>
+            <p class="footer-address">Jl. Cik Di Tiro No.3, Terban, Kec. Gondokusuman,<br>Kota Yogyakarta, Daerah Istimewa Yogyakarta 55223</p>
+          </div>
+
+          <div class="footer-col footer-col-contact">
+            <h4 class="footer-heading">Hubungi Kami</h4>
+            <a href="tel:150001" class="footer-phone">&#9742; 1 500 017</a>
+            <div class="footer-social">
+              <a href="https://www.tiktok.com/@bankbri_id?_r=1&_t=ZS-9860rhrmYeg" target="_blank" rel="noopener" class="footer-social-btn" aria-label="TikTok">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M16.6 5.82c-1.02-.9-1.6-2.19-1.6-3.62h-3.14v13.44c0 1.5-1.22 2.72-2.72 2.72a2.72 2.72 0 0 1 0-5.44c.28 0 .55.04.8.12V9.9a5.9 5.9 0 0 0-.8-.06A5.86 5.86 0 0 0 3.28 15.7 5.86 5.86 0 0 0 9.14 21.56a5.86 5.86 0 0 0 5.86-5.86V9.1a8.6 8.6 0 0 0 5.02 1.6V7.56c-1.24 0-2.4-.44-3.42-1.34-.36-.32-.67-.66-1-.4z"/></svg>
+              </a>
+              <a href="https://www.facebook.com/BRIofficialpage" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M13.5 21v-7.6h2.55l.38-2.96h-2.93V8.55c0-.86.24-1.44 1.47-1.44h1.57V4.46c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9v2.2H7.99v2.96h2.47V21h3.04z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/bri_regionalyogyakarta/" target="_blank" rel="noopener" class="footer-social-btn" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+              </a>
+              <a href="https://x.com/kontakbri" target="_blank" rel="noopener" class="footer-social-btn" aria-label="X">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18.9 3H21l-6.6 7.55L22.2 21h-6.1l-4.8-6.3L5.7 21H3.6l7.05-8.06L2.9 3h6.25l4.35 5.76L18.9 3zm-1.07 16.17h1.17L7.24 4.75H5.98l11.85 14.42z"/></svg>
+              </a>
+              <a href="https://www.youtube.com/channel/UCRHFE_ooDrkEiRRJbog3EjA" target="_blank" rel="noopener" class="footer-social-btn" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M22 12s0-3.03-.39-4.48a2.9 2.9 0 0 0-2.04-2.05C17.9 5 12 5 12 5s-5.9 0-7.57.47A2.9 2.9 0 0 0 2.4 7.52C2 8.97 2 12 2 12s0 3.03.39 4.48c.22.8.86 1.44 2.04 2.05C6.1 19 12 19 12 19s5.9 0 7.57-.47a2.9 2.9 0 0 0 2.04-2.05C22 15.03 22 12 22 12zM10 15V9l5.2 3-5.2 3z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-col footer-col-links">
+            <h4 class="footer-heading">Tautan</h4>
+            <ul class="footer-link-list">
+              <li><a href="https://bri.co.id/web/guest/bri-products" target="_blank" rel="noopener">Produk BRI</a></li>
+              <li><a href="https://apps.lps.go.id/BankPesertaLPSRate" target="_blank" rel="noopener">Bunga Penjaminan LPS</a></li>
+              <li><a href="https://bri.co.id/web/guest/kurs-detail" target="_blank" rel="noopener">Rates</a></li>
+              <li><a href="https://bri.co.id/web/guest/fees-and-rates" target="_blank" rel="noopener">Fees &amp; Rates</a></li>
+              <li><a href="https://whistleblowing-system.bri.co.id/" target="_blank" rel="noopener">Whistleblowing System</a></li>
+              <li><a href="https://bri.co.id/web/guest/erecruitment" target="_blank" rel="noopener">Karier</a></li>
+            </ul>
+          </div>
+
+                  <div class="footer-col footer-col-disclaimer">
+            <p>BRI berizin dan diawasi oleh Otoritas Jasa Keuangan (OJK) &amp; Bank Indonesia (BI)</p>
+            <p>BRI merupakan peserta penjaminan Lembaga Penjaminan Simpanan (LPS). Maksimum nilai Simpanan yang dijamin LPS per nasabah adalah Rp 2 Miliar</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom-bar">
+          <div class="footer-bottom-inner">
+            <p class="footer-copyright">&copy; 2026 PT.Bank Rakyat Indonesia (Persero) Tbk. | All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+              <a href="https://bri.co.id/web/guest/en/privacy" target="_blank" rel="noopener">Privacy</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://bri.co.id/web/guest/en/term-of-use" target="_blank" rel="noopener">Term of Use</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://bri.co.id/web/guest/en/sitemap" target="_blank" rel="noopener">Sitemap</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://bri.co.id/web/guest/en/erecruitment" target="_blank" rel="noopener">Career</a>
+              <span class="footer-bottom-dot">&bull;</span>
+              <a href="https://eform.bri.co.id/" target="_blank" rel="noopener">E-Form BRI</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+  <!-- ===== DETAIL VIEW ===== -->
+  <section id="detailView" class="detail-view">
+    <div class="detail-topbar">
+      <h3 id="detailTitle">Judul Jabatan</h3>
+    </div>
+
+      <div class="detail-pdf-wrap">
+      <iframe id="detailFrame" src="" title="Detail Jabatan" allow="autoplay" allowfullscreen></iframe>
+      <div id="detailKpiWrap" class="detail-kpi-wrap" style="display:none;">
+        <div id="kpiFrameDetail" class="kpi-frame"></div>
+      </div>
+
+      <div id="detailDivisionWrap" class="detail-division-wrap" style="display:none;">
+        </div>
+
+      <div class="detail-actions">
+        <a id="downloadBtn" class="back-btn download-btn-detail" href="#" download style="display:none;">
+          <span class="back-arrow">&#8595;</span> Download
+        </a>
+        <button id="backBtn" class="back-btn">
+          <span class="back-arrow">&#8592;</span> Back
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Library PDF (generate PDF KPI di browser) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <!-- fontkit: pendukung pdf-lib untuk font kustom -->
+  <script src="libs/fontkit.umd.min.js"></script>
+
+  <script src="divisions_data.js"></script>
+  <script src="script.js?v=13"></script>
+</body>
+</html>
