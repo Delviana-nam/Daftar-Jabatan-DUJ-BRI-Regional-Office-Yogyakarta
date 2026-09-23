@@ -178,6 +178,16 @@ body {
 }
 
 /* Tablet (potret iPad & sejenis) - jaga agar menu tidak sesak sebelum masuk mode hamburger */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .topbar { padding-left: 18px; padding-right: 18px; }
+  .topbar-nav { gap: 14px; }
+  .topbar-nav-link { font-size: 13px; }
+}
+
+@media (max-width: 900px) {
+  .topbar-nav { gap: 16px; }
+  .topbar-nav-link { font-size: 13.5px; }
+}
 
 /* ===== HERO ===== */
 .hero {
@@ -358,6 +368,10 @@ body {
   font-weight: 700;
 }
 
+@media (max-width: 600px) {
+  .kpi-link-arrow { font-size: 28px; }
+}
+
 .card-note {
   font-style: italic;
   font-size: 14px;
@@ -470,6 +484,11 @@ body {
   background: #fff;
   padding: 16px;
   box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .pdf-preview-wrap { padding: 0 16px 40px; }
+  .pdf-preview-image { padding: 10px; }
 }
 
 /* ===== FRAME KPI (live dari Google Sheet) ===== */
@@ -592,6 +611,22 @@ body {
   font-size: 13px;
 }
 
+@media (max-width: 600px) {
+  .kpi-card { padding: 10px 10px 12px; }
+  .kpi-title { font-size: 16px; margin: 2px 0 6px; }
+  .kpi-title span { font-size: 13px; }
+  .kpi-logo-danantara { height: 18px; }
+  .kpi-logo-bri { height: 32px; }
+  .kpi-toolbar { font-size: 11px; justify-content: center; margin-bottom: 6px; }
+  .kpi-action-btn { padding: 5px 10px; font-size: 11px; }
+  .kpi-sheet-iframe { height: 480px !important; }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .kpi-sheet-iframe { height: 560px !important; }
+}
+
+
 /* ===== DETAIL VIEW (overlay fullscreen) ===== */
 .detail-view {
   display: none;
@@ -670,7 +705,39 @@ body {
   background: var(--color-orange);
 }
 
+@media (max-width: 600px) {
+  .detail-actions {
+    left: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+  }
+  .back-btn {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+}
+
 /* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .hero-text h2 { font-size: 22px; }
+  .cards-grid { grid-template-columns: 1fr; padding: 30px 20px 40px; }
+  .division-card img { height: 190px; }
+  .section-title-link { font-size: 14px; }
+  .section-title-box { padding: 14px 12px; }
+  .section-title-box-inner { padding: 12px 16px; gap: 10px; }
+
+  .topbar { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); gap: 10px; }
+  .topbar-logo-bri { height: 34px; }
+  .topbar-logo-danantara { height: 17px; }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .division-card img { height: 200px; }
+}
 
 /* ===== HOME ===== */
 .home-hero {
@@ -717,6 +784,12 @@ body {
   color: #eaf1ff;
   margin-top: 14px;
   font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .home-hero-content h2 { font-size: 22px; }
+  .home-hero { min-height: 100svh; }
+  .struktur-body { padding: 24px 16px 40px; }
 }
 
 /* ===== HERO BRI ===== */
@@ -796,6 +869,14 @@ body {
   line-height: 1.7;
 }
 
+@media (max-width: 700px) {
+  .hero-bri-top { flex-direction: column; align-items: center; gap: 14px; }
+  .hero-bri-logo { height: 76px; }
+  .hero-bri-divider { width: 60px; min-height: 3px; }
+  .hero-bri-headline { align-items: center; text-align: center; }
+  .hero-bri-desc { font-size: 13px; }
+}
+
 /* ===== VISI ===== */
 .visi-section {
   position: relative;
@@ -839,6 +920,21 @@ body {
 }
 .visi-accent { color: #4f7fe0; }
 .visi-accent-light { color: #9fc0f0; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .visi-title, .visi-desc, .deco-star { transition: none; }
+}
+
+@media (max-width: 700px) {
+  .visi-section { padding: 60px 20px 70px; }
+  .visi-inner { padding: 140px 0 0; text-align: center; }
+  .visi-star-deco { right: 50%; transform: translateX(50%); }
+  .visi-title { font-size: 42px; margin-bottom: 26px; }
+  .visi-desc { font-size: 20px; }
+  .visi-desc br { display: none; }
+}
+
 
 /* ===== FOOTER ===== */
 .site-footer {
@@ -958,20 +1054,44 @@ body {
 .footer-bottom-links a:hover { text-decoration: underline; }
 .footer-bottom-dot { color: #ffffff; opacity: .6; font-size: 12px; }
 
+@media (max-width: 700px) {
+  .footer-bottom-inner { justify-content: center; text-align: center; }
+}
+
+@media (max-width: 900px) {
+  .footer-inner { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .footer-inner { grid-template-columns: 1fr; text-align: left; }
+  .site-footer { padding: 44px 18px 26px; }
+}
+
 /* ===== BRI OUTRO ===== */
 .bri-outro {
   position: relative;
   background: #0857c3;
 }
+.kpi-regional-area-bg {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  opacity: .10;
+  z-index: 0;
+}
+
 .bri-outro-bg {
   position: absolute;
-  inset: 0;
+  left: 0;
+  bottom: -2px;
   width: 100%;
-  height: 100%;
-  height: 100%;
+  height: 440px;
   object-fit: cover;
-  object-position: center clamp(18%, 12vw, 30%);
-  border-radius: clamp(40px, 8vw, 60px) clamp(40px, 8vw, 60px) 0 0;
+  object-position: center 35%;
+  border-radius: 50% 50% 0 0 / 42px 42px 0 0;
   box-shadow: 0 -24px 48px rgba(4,8,28,.34);
   transform: translateZ(0);
   -webkit-backface-visibility: hidden;
@@ -980,13 +1100,16 @@ body {
 }
 .bri-outro-overlay {
   position: absolute;
-  inset: 0;
-  border-radius: clamp(40px, 8vw, 60px) clamp(40px, 8vw, 60px) 0 0;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 440px;
+  border-radius: 50% 50% 0 0 / 42px 42px 0 0;
   background: linear-gradient(180deg,
-    rgba(4,8,28,.15) 0%,
-    rgba(4,8,28,.35) 35%,
-    rgba(4,8,28,.6) 65%,
-    rgba(4,8,28,.9) 100%);
+    rgba(4,8,28,.18) 0px,
+    rgba(4,8,28,.32) 210px,
+    rgba(4,8,28,.55) 320px,
+    rgba(4,8,28,.85) 440px);
   transform: translateZ(0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -996,7 +1119,12 @@ body {
 .bri-outro-content {
   position: relative;
   z-index: 3;
-} 
+}
+
+@media (max-width: 700px) {
+  .bri-outro-bg { height: 420px; object-position: center 25%; }
+  .bri-outro-overlay { height: 420px; }
+}
 
 /* judul KPI */
 .section-title-box-dark {
@@ -1107,11 +1235,21 @@ body {
 }
 .kpi-cta-card:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
+@media (prefers-reduced-motion: reduce) {
+  .kpi-cta-card { transition: none; }
+}
+
 /* footer tanpa background */
 .site-footer-flat {
   background: transparent;
   overflow: visible;
   padding-top: 20px 56px 34px;
+}
+@media (max-width: 600px) {
+  .site-footer-flat { padding: 20px 18px 26px; }
+}
+@media (max-width: 700px) {
+  .kpi-cta-wrap-end { margin-bottom: 140px; }
 }
 
 /* ===== SHOWCASE DIVISI (hal3 & hal4) ===== */
@@ -1133,6 +1271,10 @@ body {
 #showcaseUkerSection {
    background-image: url("images/hal4.jpg");
   overflow: visible;
+}
+@media (max-width: 900px) {
+  /* Cegah glow dekoratif "bocor" ke luar layar & memicu geser horizontal di HP */
+  #showcaseUkerSection { overflow: hidden; }
 }
 
 .showcase-glow {
@@ -1367,6 +1509,21 @@ body {
   transform: translateY(-3px);
 }
 
+@media (max-width: 700px) {
+  #showcaseROSection {
+    background-image: url("images/hal3.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+  .showcase-section { padding: 70px 18px 80px; }
+  .showcase-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .showcase-card { padding: 20px 18px 62px; }
+}
+
+@media (max-width: 380px) {
+  .showcase-grid { grid-template-columns: 1fr; }
+}
+
 .hidden-section { display: none !important; }
 .showcase-more-btn { display: none; }
 
@@ -1536,6 +1693,7 @@ body {
   color: #ffffff;
 }
 
+
 .detail-division-fixed {
   flex-shrink: 0;
   margin-bottom: 20px;
@@ -1668,6 +1826,12 @@ body {
   text-align: center;
 }
 .division-simple-note { color: #dceeff; font-size: 13.5px; font-style: italic; }
+
+@media (max-width: 600px) {
+  .detail-division-wrap { padding: 56px 16px 130px; padding-top: calc(56px + env(safe-area-inset-top, 0px)); }
+  .detail-division-title { font-size: 24px; }
+  .division-download-btn { padding: 14px 44px; }
+}
 
 /* ===== TEMA TOPBAR (terang/gelap) ===== */
 .logo-light-mode { display: none; }
@@ -1851,7 +2015,21 @@ body {
   transform: scale(1);
 }
 
- 
+@media (prefers-reduced-motion: reduce) {
+  .visi-sheet, .visi-paper,
+  .visi-paper .visi-title, .visi-paper .visi-desc { transition: none; }
+}
+
+@media (max-width: 700px) {
+  .visi-section { padding: 60px 14px 0; border-radius: 32px; }
+  .visi-inner { padding: 0; }
+  .visi-envelope-wrap { max-width: 100%; }
+  .visi-sheet, .visi-paper { left: 6%; right: 6%; }
+  .visi-paper { padding: 4cqw 3cqw 0; }
+  .visi-paper .visi-title { font-size: 9.5cqw; }
+  .visi-paper .visi-desc { font-size: 4.3cqw; }
+  .visi-paper .visi-desc br { display: none; }
+} 
 
 /* ===== Showcase Regional Office (RCEO + 01–06): hover -> kotak putih, teks biru ===== */
 #showcaseROSection .showcase-card,
@@ -1936,7 +2114,11 @@ body {
 .topbar-brand img {
   transition: filter 0.25s ease;
 }
-
+@media (hover: hover) {
+  .topbar-brand:hover img {
+    filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
+  }
+}
 .topbar-brand:focus-visible img {
   filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
 }
@@ -1944,77 +2126,8 @@ body {
 /* ===== HAMBURGER (hanya tampil di layar kecil) ===== */
 .topbar-hamburger { display: none; }
 
-/* ===== PENYESUAIAN TAMBAHAN: TABLET (iPad potret/landscape, 601px-1024px) ===== */
-
-/* ===== Cegah elemen besar memicu scroll horizontal di layar sangat sempit ===== */
-
-/* KHUSUS TAMPILAN HP */
-
-
-/* ============================================================
-   RESPONSIVE STYLES
-   Semua @media query dikumpulkan di sini (dipisah per breakpoint)
-   supaya gampang dicari & diubah. Style di atas (tanpa @media)
-   = tampilan default/desktop.
-   Urutan: dari layar besar -> kecil, jadi override mobile
-   tetap menang di lebar yang lebih sempit.
-   ============================================================ */
-
-/* ---------- TABLET BESAR / LAYAR KECIL (769px - 1024px) ---------- */
-/* asal: Tablet (potret iPad & sejenis) - jaga agar menu tidak sesak sebelum masuk mode hamburger (baris lama ~181) */
-@media (min-width: 769px) and (max-width: 1024px) {
-.topbar { padding-left: 18px; padding-right: 18px; }
-  .topbar-nav { gap: 14px; }
-  .topbar-nav-link { font-size: 13px; }
-}
-
-/* ---------- TABLET (601px - 1024px) ---------- */
-/* asal: ===== PENYESUAIAN TAMBAHAN: TABLET (iPad potret/landscape, 601px-1024px) ===== (baris lama ~2220) */
-@media (min-width: 601px) and (max-width: 1024px) {
-.showcase-inner,
-  .footer-inner,
-  .cards-grid {
-    max-width: 100%;
-  }
-  .kpi-frame { max-width: 100%; margin-left: 16px; margin-right: 16px; }
-  .detail-kpi-wrap { padding-left: 16px; padding-right: 16px; }
-  .visi-inner { padding-left: 24px; padding-right: 24px; }
-}
-
-/* ---------- TABLET (<= 900px) ---------- */
-/* asal: Tablet (potret iPad & sejenis) - jaga agar menu tidak sesak sebelum masuk mode hamburger (baris lama ~187) */
-@media (max-width: 900px) {
-.topbar-nav { gap: 16px; }
-  .topbar-nav-link { font-size: 13.5px; }
-}
-/* asal: ===== RESPONSIVE ===== (baris lama ~721) */
-@media (max-width: 900px) {
-.cards-grid { grid-template-columns: repeat(2, 1fr); }
-}
-/* asal: .footer-bottom-inner (baris lama ~1057) */
-@media (max-width: 900px) {
-.footer-inner { grid-template-columns: repeat(2, 1fr); }
-}
-/* asal: ===== SHOWCASE DIVISI (hal3 & hal4) ===== (baris lama ~1251) */
-@media (max-width: 900px) {
-/* Cegah glow dekoratif "bocor" ke luar layar & memicu geser horizontal di HP */
-  #showcaseUkerSection { overflow: hidden; }
-}
-
-/* ---------- TABLET SAJA (601px - 900px) ---------- */
-/* asal: .kpi-sheet-iframe (baris lama ~625) */
-@media (min-width: 601px) and (max-width: 900px) {
-.kpi-sheet-iframe { height: 560px !important; }
-}
-/* asal: .topbar-logo-danantara (baris lama ~738) */
-@media (min-width: 601px) and (max-width: 900px) {
-.division-card img { height: 200px; }
-}
-
-/* ---------- MOBILE BESAR / TABLET KECIL (<= 768px) ---------- */
-/* asal: ===== HAMBURGER (hanya tampil di layar kecil) ===== (baris lama ~2106) */
 @media (max-width: 768px) {
-.topbar-hamburger {
+  .topbar-hamburger {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2121,174 +2234,26 @@ body {
   }
 }
 
-/* ---------- MOBILE (<= 700px) ---------- */
-/* asal: .hero-bri-desc (baris lama ~868) */
-@media (max-width: 700px) {
-.hero-bri-top { flex-direction: column; align-items: center; gap: 14px; }
-  .hero-bri-logo { height: 100px; }
-  .hero-bri-divider { width: 60px; min-height: 3px; }
-  .hero-bri-headline { align-items: center; text-align: center; }
-  .hero-bri-desc { font-size: 13px; }
-}
-/* asal: .visi-title, .visi-desc, .deco-star (baris lama ~925) */
-@media (max-width: 700px) {
-.visi-section { padding: 60px 20px 70px; }
-  .visi-inner { padding: 140px 0 0; text-align: center; }
-  .visi-star-deco { right: 50%; transform: translateX(50%); }
-  .visi-title { font-size: 42px; margin-bottom: 26px; }
-  .visi-desc { font-size: 20px; }
-  .visi-desc br { display: none; }
-}
-/* asal: .footer-bottom-dot (baris lama ~1053) */
-@media (max-width: 700px) {
-.footer-bottom-inner { justify-content: center; text-align: center; }
-}
-/* asal: footer tanpa background (baris lama ~1227) */
-@media (max-width: 700px) {
-.kpi-cta-wrap-end { margin-bottom: 140px; }
-}
-/* asal: .showcase-more-btn:hover (baris lama ~1488) */
-@media (max-width: 700px) {
-#showcaseROSection {
-    background-image: url("images/hal3.jpg");
-    background-size: cover;
-    background-position: center;
-  }
-  .showcase-section { padding: 70px 18px 80px; }
-  .showcase-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-  .showcase-card { padding: 20px 18px 62px; }
-}
-/* asal: .visi-paper .visi-title, .visi-paper .visi-desc (baris lama ~1999) */
-@media (max-width: 700px) {
-.visi-section { padding: 60px 14px 0; border-radius: 32px; }
-  .visi-inner { padding: 0; }
-  .visi-envelope-wrap { max-width: 100%; }
-  .visi-sheet { left: 6%; right: 6%; }
-  .visi-paper { left: 2%; right: 2%; }
-  .visi-paper { padding: 4cqw 3cqw 0; }
-  .visi-paper .visi-title { font-size: 9.5cqw; }
-  .visi-paper .visi-desc { font-size: 4.3cqw; }
-  .visi-paper .visi-desc br { display: none; }
-}
-/* asal: KHUSUS TAMPILAN HP (baris lama ~2239) */
-@media (max-width: 700px) {
-/* Hero homepage */
-  .home-hero { min-height: 78svh; }
-  .home-hero-content h2 { font-size: 22px; }
-  .hero-bri-logo { height: 58px; }
-  .hero-bri-desc { font-size: 12px; }
-
-  /* Judul besar section BRI Regional Yogya & Unit Kerja: dipertegas --- */
-  .showcase-title { font-size: 38px; }
-
-  /* --- Kotak kartu (RCEO, 01-06, dst) diperkecil; tulisan di dalamnya tetap normal --- */
-  .showcase-grid { gap: 12px; }
-  .showcase-card { padding: 16px 14px 52px; border-radius: 12px; }
-  .showcase-rceo-banner { padding: 16px 18px; margin-bottom: 20px; }
-
-  /* --- Judul section KPI --- */
-  .section-title-box-dark .section-title-link { font-size: 26px; }
-}
-
-/* ---------- MOBILE KECIL (<= 600px) ---------- */
-/* asal: .kpi-link-arrow (baris lama ~371) */
-@media (max-width: 600px) {
-.kpi-link-arrow { font-size: 28px; }
-}
-/* asal: ===== SECTION KPI ===== (baris lama ~489) */
-@media (max-width: 600px) {
-.pdf-preview-wrap { padding: 0 16px 40px; }
-  .pdf-preview-image { padding: 10px; }
-}
-/* asal: Tabel KPI live (iframe Google Sheet) (baris lama ~614) */
-@media (max-width: 600px) {
-.kpi-card { padding: 10px 10px 12px; }
-  .kpi-title { font-size: 16px; margin: 2px 0 6px; }
-  .kpi-title span { font-size: 13px; }
-  .kpi-logo-danantara { height: 18px; }
-  .kpi-logo-bri { height: 32px; }
-  .kpi-toolbar { font-size: 11px; justify-content: center; margin-bottom: 6px; }
-  .kpi-action-btn { padding: 5px 10px; font-size: 11px; }
-  .kpi-sheet-iframe { height: 480px !important; }
-}
-/* asal: Tombol Download (baris lama ~708) */
-@media (max-width: 600px) {
-.detail-actions {
-    left: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    gap: 8px;
-  }
-  .back-btn {
-    padding: 9px 16px;
-    font-size: 13px;
-  }
-}
-/* asal: ===== RESPONSIVE ===== (baris lama ~725) */
-@media (max-width: 600px) {
-.hero-text h2 { font-size: 22px; }
-  .cards-grid { grid-template-columns: 1fr; padding: 30px 20px 40px; }
-  .division-card img { height: 190px; }
-  .section-title-link { font-size: 14px; }
-  .section-title-box { padding: 14px 12px; }
-  .section-title-box-inner { padding: 12px 16px; gap: 10px; }
-
-  .topbar { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); gap: 10px; }
-  .topbar-logo-bri { height: 34px; }
-  .topbar-logo-danantara { height: 17px; }
-}
-/* asal: .footer-inner (baris lama ~1060) */
-@media (max-width: 600px) {
-.footer-inner { grid-template-columns: 1fr; text-align: left; }
-  .site-footer { padding: 44px 18px 26px; }
-}
-/* asal: footer tanpa background (baris lama ~1224) */
-@media (max-width: 600px) {
-.site-footer-flat { padding: 20px 18px 26px; }
-}
-/* asal: .division-simple-note (baris lama ~1806) */
-@media (max-width: 600px) {
-.detail-division-wrap { padding: 56px 16px 130px; padding-top: calc(56px + env(safe-area-inset-top, 0px)); }
-  .detail-division-title { font-size: 24px; }
-  .division-download-btn { padding: 14px 44px; }
-}
-
-/* ---------- MOBILE SANGAT KECIL (<= 400px) ---------- */
-/* asal: ===== Cegah elemen besar memicu scroll horizontal di layar sangat sempit ===== (baris lama ~2232) */
-@media (max-width: 400px) {
-.kpi-cta-card { padding: 16px 18px; }
-  .division-kpi-box { max-width: 100%; }
-  .detail-division-toprow { gap: 14px; }
-}
-
-/* ---------- MOBILE SANGAT KECIL - HP LAYAR SEMPIT (<= 380px) ---------- */
-/* asal: .showcase-card (baris lama ~1499) */
-@media (max-width: 380px) {
-.showcase-grid { grid-template-columns: 1fr; }
-}
-
-/* ---------- PREFERENSI PENGGUNA (motion / hover) ---------- */
-/* asal: .visi-accent-light (baris lama ~921) */
 @media (prefers-reduced-motion: reduce) {
-.visi-title, .visi-desc, .deco-star { transition: none; }
-}
-/* asal: .kpi-cta-card:focus-visible (baris lama ~1214) */
-@media (prefers-reduced-motion: reduce) {
-.kpi-cta-card { transition: none; }
-}
-/* asal: .visi-section.in-view .visi-paper .visi-desc (baris lama ~1994) */
-@media (prefers-reduced-motion: reduce) {
-.visi-sheet, .visi-paper,
-  .visi-paper .visi-title, .visi-paper .visi-desc { transition: none; }
-}
-/* asal: Dropdown menjadi accordion di dalam panel (baris lama ~2214) */
-@media (prefers-reduced-motion: reduce) {
-.topbar-hamburger span,
+  .topbar-hamburger span,
   .topbar.menu-open .topbar-nav { transition: none; animation: none; }
 }
-/* asal: Hover/fokus: logo berubah ke warna aksen (#71c5e8, sama dengan hover link menu)
-   sebagai penanda bahwa logo bisa diklik. Berlaku untuk logo putih maupun biru. (baris lama ~2094) */
-@media (hover: hover) {
-.topbar-brand:hover img {
-    filter: brightness(0) saturate(100%) invert(78%) sepia(30%) saturate(520%) hue-rotate(163deg) brightness(80%) contrast(138%);
+
+/* ===== PENYESUAIAN TAMBAHAN: TABLET (iPad potret/landscape, 601px-1024px) ===== */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .showcase-inner,
+  .footer-inner,
+  .cards-grid {
+    max-width: 100%;
   }
+  .kpi-frame { max-width: 100%; margin-left: 16px; margin-right: 16px; }
+  .detail-kpi-wrap { padding-left: 16px; padding-right: 16px; }
+  .visi-inner { padding-left: 24px; padding-right: 24px; }
+}
+
+/* ===== Cegah elemen besar memicu scroll horizontal di layar sangat sempit ===== */
+@media (max-width: 400px) {
+  .kpi-cta-card { padding: 16px 18px; }
+  .division-kpi-box { max-width: 100%; }
+  .detail-division-toprow { gap: 14px; }
 }
