@@ -1148,9 +1148,9 @@ body {
 }
 
 @media (max-width: 700px) {
-  .bri-outro-bg { height: 580px; object-position: center 10%; }
+  .bri-outro-bg { height: 575px; object-position: center 10%; }
   .bri-outro-overlay {
-    height: 580px;
+    height: 575px;
     background: linear-gradient(180deg,
       rgba(4,8,28,.35) 0px,
       rgba(4,8,28,.5) 210px,
@@ -1373,15 +1373,15 @@ body {
 
 .showcase-rceo-label {
   color: #ffffff;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 1.6px;
+  letter-spacing: normal;
   display: block;
   margin-bottom: 4px;
 }
 .showcase-rceo-title {
   color: #ffffff;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 900;
   letter-spacing: .3px;
 }
