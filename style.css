@@ -1007,7 +1007,7 @@ body {
   gap: 10px;
 }
 .footer-copyright {
-  font-size: 13px;
+  font-size: 12px;
   color: #ffffff;
   margin: 0;
 }
@@ -1019,7 +1019,7 @@ body {
 }
 .footer-bottom-links a {
   color: #ffffff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   text-decoration: none;
 }
@@ -1037,7 +1037,7 @@ body {
   .footer-address,
   .footer-link-list a,
   .footer-col-disclaimer p { font-size: 10px; }
-  .footer-heading { font-size: 11.5px; margin-bottom: 8px; }
+  .footer-heading { font-size: 15px; margin-bottom: 8px; }
   .footer-phone { font-size: 11.5px; margin-bottom: 8px; }
   .footer-social-btn { width: 22px; height: 22px; }
   .footer-link-list li { margin-bottom: 6px; }
@@ -1097,7 +1097,7 @@ body {
   z-index: 0;
 } 
 @media (max-width: 700px) {
-  .kpi-regional-area-bg { width: 300%; top: 25%; }
+  .kpi-regional-area-bg { width: 300%; top: 30%; }
 }
 @media (max-width: 900px) and (min-width: 701px) {
   .kpi-regional-area-bg {
@@ -1143,19 +1143,19 @@ body {
 }
 
 @media (max-width: 900px) and (min-width: 701px) {
-  .bri-outro-bg { height: 520px; object-position: center 30%; }
-  .bri-outro-overlay { height: 520px; }
+  .bri-outro-bg { height: 900px; object-position: center 20%; }
+  .bri-outro-overlay { height: 900px; }
 }
 
 @media (max-width: 700px) {
-  .bri-outro-bg { height: 550px; object-position: center 20%; }
+  .bri-outro-bg { height: 600px; object-position: center 10%; }
   .bri-outro-overlay {
-    height: 550px;
+    height: 600px;
     background: linear-gradient(180deg,
       rgba(4,8,28,.35) 0px,
       rgba(4,8,28,.5) 210px,
       rgba(4,8,28,.7) 320px,
-      rgba(4,8,28,.92) 550px);
+      rgba(4,8,28,.92) 700px);
   }
 }
 
@@ -2211,8 +2211,7 @@ body {
   .topbar.menu-open .topbar-hamburger span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
   .topbar.menu-open .topbar-hamburger span:nth-child(2) { opacity: 0; }
   .topbar.menu-open .topbar-hamburger span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
-
-  /* Saat menu terbuka, header jadi putih polos agar menyatu dengan panel */
+  
   .topbar.menu-open {
     background: #ffffff;
     -webkit-backdrop-filter: none;
