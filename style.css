@@ -1148,9 +1148,9 @@ body {
 }
 
 @media (max-width: 700px) {
-  .bri-outro-bg { height: 600px; object-position: center 10%; }
+  .bri-outro-bg { height: 550px; object-position: center 10%; }
   .bri-outro-overlay {
-    height: 600px;
+    height: 550px;
     background: linear-gradient(180deg,
       rgba(4,8,28,.35) 0px,
       rgba(4,8,28,.5) 210px,
