@@ -49,7 +49,7 @@ detailImage.style.maxWidth = "1100px";
 detailImage.style.margin = "0 auto";
 detailFrame.insertAdjacentElement("afterend", detailImage);
 
-/* ===== HELPER URL FILE (Google Drive / lokal) ===== */
+/* ===== HELPER URL FILE ===== */
 function isLocalOrUrl(value) {
   if (!value) return false;
   return value.startsWith("http") || value.includes("/") || value.includes(".");
@@ -75,7 +75,7 @@ function resolveKpiDownloadUrl(gid, format) {
   return `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export?format=${format}&gid=${encodeURIComponent(gid)}`;
 }
 
-/* Ambil PDF export asli dari Google Sheets untuk 1 tab (gid) */
+/* PDF export realtime */
 async function fetchSheetPdfBytes(gid) {
   const url =
     `https://docs.google.com/spreadsheets/d/${KPI_SHEET_ID}/export` +
@@ -100,7 +100,7 @@ function downloadPdfBytes(bytes, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-/* Bangun PDF KPI: tabel dari sheet + header (logo, judul) + footer */
+/* PDF KPI: tabel dari sheet + header (logo, judul) + footer */
 async function generateKpiPdf({ gid, title, subtitle, filename }) {
   if (downloadBtn.classList) downloadBtn.classList.add("is-loading");
   const originalLabel = downloadBtn.innerHTML;
@@ -157,7 +157,7 @@ async function generateKpiPdf({ gid, title, subtitle, filename }) {
       });
 
       //logo BRI
-      const briW = 70;
+      const briW = 60;
       const briH = briImg.height * (briW / briImg.width);
       page.drawImage(briImg, {
         x: pageWidth - MARGIN_X - briW,
@@ -422,7 +422,7 @@ divisionsUker.forEach(div => {
   cardsGridUker.appendChild(buildDivisionCard(div));
 });
 
-// Samakan lebar card RCEO dengan card lain
+// lebar card RCEO
 function syncRceoCardWidth() {
   const sampleCard = cardsGrid.querySelector(".division-card");
   if (sampleCard) {
@@ -491,7 +491,7 @@ if (topbarToggle) {
   });
 }
 
-// Klik di luar menu menutup dropdown & hamburger
+// dropdown & hamburger
 document.addEventListener("click", () => {
   closeAllNavDropdowns();
   setMobileMenu(false);
@@ -501,10 +501,10 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") setMobileMenu(false);
 });
 
-// Pindah ke layar lebar: pastikan menu mobile tertutup
+// Pindah ke layar lebar
 MOBILE_MENU_QUERY.addEventListener("change", () => setMobileMenu(false));
 
-// Logo BRI (ke Home) & link Visi: scroll ke section terkait
+// Logo BRI (ke Home) & link Visi
 document.querySelectorAll("[data-scroll-target]").forEach(link => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
@@ -517,7 +517,7 @@ document.querySelectorAll("[data-scroll-target]").forEach(link => {
   });
 });
 
-/* ===== CARD AJAKAN KLIK KPI: buka laman detail KPI (sama seperti KPI per divisi) ===== */
+/* ===== CARD AJAKAN KLIK KPI ===== */
 const kpiMainEntry = {
   id: "kpi-utama",
   title: "Regional Office Area KC, KCP, dan BRI Unit",
@@ -530,7 +530,7 @@ if (kpiCtaCard) {
   kpiCtaCard.addEventListener("click", () => openKpiDetail(kpiMainEntry));
 }
 
-/* ===== TABEL KPI LIVE (Google Sheet via iframe) ===== */
+/* ===== TABEL KPI LIVE ===== */
 function kpiFrameShellHTML(title, subtitle) {
   return `
     <div class="kpi-card">
@@ -586,7 +586,7 @@ function initKpiInstance(containerEl, opts) {
     }
     showErr("");
 
-    // Sheets harus sudah di-publish agar tab terkait tampil di iframe
+    //  publish sheets
     const src = `https://docs.google.com/spreadsheets/d/e/${KPI_PUBLISH_KEY}/pubhtml?gid=${encodeURIComponent(gid)}&single=true&widget=false&headers=false&chrome=false&_=${Date.now()}`;
     const iframe = document.createElement("iframe");
     iframe.className = "kpi-sheet-iframe";
@@ -612,8 +612,6 @@ function initKpiInstance(containerEl, opts) {
   };
 }
 
-
-/* Label KPI */
 function splitKpiLabel(label, fallbackSubtitle) {
   const text = (label && String(label).trim()) || fallbackSubtitle || "";
   const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
@@ -644,7 +642,7 @@ function openKpiDetail(div) {
 
   detailKpiWrap.style.display = "block";
 
-  // Bersihkan handler lama agar event listener tidak menumpuk
+  //agar event listener tidak menumpuk
   if (downloadBtn._kpiClickHandler) {
     downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
     downloadBtn._kpiClickHandler = null;
@@ -689,7 +687,6 @@ function openKpiDetail(div) {
 
 /* ===== HALAMAN DETAIL JABATAN ===== */
 function openDetail(point) {
-  // Jika dibuka dari halaman divisi, ingat divisinya supaya Back kembali ke sana
   subDetailParentId = detailView.classList.contains("division-mode") ? currentDivisionId : null;
   detailView.classList.remove("division-mode");
   document.querySelector(".detail-pdf-wrap").classList.remove("bg-hal3", "bg-hal4", "bg-kpi");
@@ -731,7 +728,6 @@ function openDetail(point) {
   lockPageScroll(true);
 }
 
-/* Tutup overlay detail & reset semua state (tanpa mengubah posisi scroll) */
 function closeDetail() {
   if (downloadBtn._kpiClickHandler) {
     downloadBtn.removeEventListener("click", downloadBtn._kpiClickHandler);
@@ -759,7 +755,7 @@ function closeDetail() {
   }
 }
 
-/* Kembali ke halaman utama, langsung ke section divisi tadi (RO / Unit Kerja) */
+/* Kembali ke halaman utama */
 function showMain() {
   closeDetail();
 
@@ -929,7 +925,6 @@ backBtn.addEventListener("click", goBack);
   buildShowcaseGrid(showcaseROGrid, roDivisionsWithoutRceo);
   buildShowcaseGrid(showcaseUkerGrid, divisionsUker);
 
-  // Tombol "Klik Untuk Lihat Divisi Lainnya": buka section & scroll ke sana
   document.querySelectorAll(".showcase-more-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-target");
@@ -958,7 +953,7 @@ backBtn.addEventListener("click", goBack);
   });
 })();
 
-/* ===== TEMA TOPBAR (terang/gelap mengikuti background) ===== */
+/* ===== TOPBAR mengikuti background ===== */
 (function setupTopbarThemeSwitch() {
   const topbar = document.querySelector(".topbar");
   const lightSections = document.querySelectorAll('[data-header-theme="light"]');
